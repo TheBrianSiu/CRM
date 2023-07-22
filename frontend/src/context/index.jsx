@@ -43,7 +43,7 @@ export function MaterialTailwindControllerProvider({ children }) {
   const [controller, dispatch] = React.useReducer(reducer, initialState);
   const value = React.useMemo(
     () => [controller, dispatch],
-    [controller, dispatch]
+    [controller, dispatch],
   );
 
   return (
@@ -58,7 +58,7 @@ export function useMaterialTailwindController() {
 
   if (!context) {
     throw new Error(
-      "useMaterialTailwindController should be used inside the MaterialTailwindControllerProvider."
+      "useMaterialTailwindController should be used inside the MaterialTailwindControllerProvider.",
     );
   }
 

@@ -155,7 +155,7 @@ export function Profile() {
                     <CardHeader
                       floated={false}
                       color="gray"
-                      className="mx-0 mt-0 mb-4 h-64 xl:h-40"
+                      className="mx-0 mb-4 mt-0 h-64 xl:h-40"
                     >
                       <img
                         src={img}
@@ -163,7 +163,7 @@ export function Profile() {
                         className="h-full w-full object-cover"
                       />
                     </CardHeader>
-                    <CardBody className="py-0 px-1">
+                    <CardBody className="px-1 py-0">
                       <Typography
                         variant="small"
                         className="font-normal text-blue-gray-500"
@@ -173,7 +173,7 @@ export function Profile() {
                       <Typography
                         variant="h5"
                         color="blue-gray"
-                        className="mt-1 mb-2"
+                        className="mb-2 mt-1"
                       >
                         {title}
                       </Typography>
@@ -184,7 +184,7 @@ export function Profile() {
                         {description}
                       </Typography>
                     </CardBody>
-                    <CardFooter className="mt-6 flex items-center justify-between py-0 px-1">
+                    <CardFooter className="mt-6 flex items-center justify-between px-1 py-0">
                       <Link to={route}>
                         <Button variant="outlined" size="sm">
                           view project
@@ -207,7 +207,7 @@ export function Profile() {
                       </div>
                     </CardFooter>
                   </Card>
-                )
+                ),
               )}
             </div>
           </div>

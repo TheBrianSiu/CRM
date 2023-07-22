@@ -57,7 +57,7 @@ export function Configurator() {
 
   React.useEffect(() => {
     const stars = fetch(
-      "https://api.github.com/repos/creativetimofficial/material-tailwind-dashboard-react"
+      "https://api.github.com/repos/creativetimofficial/material-tailwind-dashboard-react",
     )
       .then((response) => response.json())
       .then((data) => setStars(formatNumber(data.stargazers_count, 1)));
@@ -65,11 +65,11 @@ export function Configurator() {
 
   return (
     <aside
-      className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-2.5 shadow-lg transition-transform duration-300 ${
+      className={`fixed right-0 top-0 z-50 h-screen w-96 bg-white px-2.5 shadow-lg transition-transform duration-300 ${
         openConfigurator ? "translate-x-0" : "translate-x-96"
       }`}
     >
-      <div className="flex items-start justify-between px-6 pt-8 pb-6">
+      <div className="flex items-start justify-between px-6 pb-6 pt-8">
         <div>
           <Typography variant="h5" color="blue-gray">
             Dashboard Configurator
@@ -86,7 +86,7 @@ export function Configurator() {
           <XMarkIcon strokeWidth={2.5} className="h-5 w-5" />
         </IconButton>
       </div>
-      <div className="py-4 px-6">
+      <div className="px-6 py-4">
         <div className="mb-12">
           <Typography variant="h6" color="blue-gray">
             Sidenav Colors
@@ -185,7 +185,7 @@ export function Configurator() {
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
-                  className="mt-px ml-1.5 h-4 w-4"
+                  className="ml-1.5 mt-px h-4 w-4"
                 >
                   <path
                     fillRule="evenodd"

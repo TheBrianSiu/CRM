@@ -13,7 +13,7 @@ export function ProfileInfoCard({ title, description, details, action }) {
         color="transparent"
         shadow={false}
         floated={false}
-        className="mx-0 mt-0 mb-4 flex items-center justify-between gap-4"
+        className="mx-0 mb-4 mt-0 flex items-center justify-between gap-4"
       >
         <Typography variant="h6" color="blue-gray">
           {title}

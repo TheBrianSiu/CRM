@@ -8,35 +8,34 @@ import {
   Tooltip,
   Progress,
 } from "@material-tailwind/react";
-import moment from 'moment';
-import { Link, Outlet } from "react-router-dom";
-import { useState,useEffect } from "react";
-
+import moment from "moment";
+import { Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 export function Tables() {
   const [Userdata, setUserdata] = useState([]);
-  useEffect(()=>{
-    fetch('http://localhost:8080/users-table')
-    .then(reponse => reponse.json())
-    .then(data => setUserdata(data))
-    .catch(error => console.error(error));
-  })
+  useEffect(() => {
+    fetch("http://localhost:8080/users-table")
+      .then((reponse) => reponse.json())
+      .then((data) => setUserdata(data))
+      .catch((error) => console.error(error));
+  }, []);
   return (
-    <div className="mt-12 mb-8 flex flex-col gap-12">
+    <div className="mb-8 mt-12 flex flex-col gap-12">
       <Card>
         <CardHeader variant="gradient" color="blue" className="mb-8 p-6">
           <Typography variant="h6" color="white">
             Users Table
           </Typography>
         </CardHeader>
-        <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
+        <CardBody className="overflow-x-scroll px-0 pb-2 pt-0">
           <table className="w-full min-w-[640px] table-auto">
             <thead>
               <tr>
                 {["Users", "Role", "status", "created", ""].map((el) => (
                   <th
                     key={el}
-                    className="border-b border-blue-gray-50 py-3 px-5 text-left"
+                    className="border-b border-blue-gray-50 px-5 py-3 text-left"
                   >
                     <Typography
                       variant="small"
@@ -50,25 +49,41 @@ export function Tables() {
             </thead>
             <tbody>
               {Userdata.map(
-                ({ img, first_name, last_name, email, role, status, date, user_id}, key) => {
+                (
+                  {
+                    img,
+                    first_name,
+                    last_name,
+                    email,
+                    role,
+                    status,
+                    date,
+                    user_id,
+                  },
+                  key,
+                ) => {
                   const className = `py-3 px-5 ${
                     key === Userdata.length - 1
                       ? ""
                       : "border-b border-blue-gray-50"
                   }`;
-                  const formatdate = moment(date).format('YYYY-MM-DD');
+                  const formatdate = moment(date).format("YYYY-MM-DD");
                   return (
-                    <tr key={first_name+" "+last_name}>
+                    <tr key={first_name + " " + last_name}>
                       <td className={className}>
                         <div className="flex items-center gap-4">
-                          <Avatar src={img} alt={first_name+last_name} size="sm" />
+                          <Avatar
+                            src={img}
+                            alt={first_name + last_name}
+                            size="sm"
+                          />
                           <div>
                             <Typography
                               variant="small"
                               color="blue-gray"
                               className="font-semibold"
                             >
-                              {first_name+" "+last_name}
+                              {first_name + " " + last_name}
                             </Typography>
                             <Typography className="text-xs font-normal text-blue-gray-500">
                               {email}
@@ -84,9 +99,17 @@ export function Tables() {
                       <td className={className}>
                         <Chip
                           variant="gradient"
-                          color={status === '1' ? "green" : "blue-gray"}
-                          value={status === '1' ? "active" : "inactive"}
-                          className="py-0.5 px-2 text-[11px] font-medium"
+                          color={status === "1" ? "green" : "blue-gray"}
+                          value={status === "1" ? "active" : "inactive"}
+                          style={{
+                            maxWidth: "80px",
+                            maxHeight: "30px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: "0 8px", 
+                          }}
+                          className="px-2 py-0.5 text-[11px] font-medium"
                         />
                       </td>
                       <td className={className}>
@@ -98,13 +121,14 @@ export function Tables() {
                         <Typography
                           as="a"
                           href={`tables/edit/${user_id}`}
-                          className="text-xs font-semibold text-blue-gray-600">
-                            Edit
+                          className="text-xs font-semibold text-blue-gray-600"
+                        >
+                          Edit
                         </Typography>
                       </td>
                     </tr>
                   );
-                }
+                },
               )}
             </tbody>
           </table>

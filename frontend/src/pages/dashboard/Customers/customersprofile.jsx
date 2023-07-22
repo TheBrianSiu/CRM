@@ -22,7 +22,7 @@ import { useParams } from "react-router-dom";
 import { ProfileInfoCard } from "@/widgets/cards";
 import { useEffect, useState } from "react";
 
-export function Usersprofile() {
+export function Customersprofile() {
   const [UserData, setUserData] = useState([]);
   const { id } = useParams();
   useEffect(() => {
@@ -225,4 +225,4 @@ export function Usersprofile() {
   );
 }
 
-export default Usersprofile;
+export default Customersprofile;

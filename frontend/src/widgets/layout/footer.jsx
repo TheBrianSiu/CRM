@@ -28,7 +28,7 @@ export function Footer({ brandName, brandLink, routes }) {
                 href={path}
                 target="_blank"
                 variant="small"
-                className="py-0.5 px-1 font-normal text-inherit transition-colors hover:text-blue-500"
+                className="px-1 py-0.5 font-normal text-inherit transition-colors hover:text-blue-500"
               >
                 {name}
               </Typography>

@@ -29,7 +29,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
           sidenavType === "dark" ? "border-white/20" : "border-blue-gray-50"
         }`}
       >
-        <Link to="/" className="flex items-center gap-4 py-6 px-8">
+        <Link to="/" className="flex items-center gap-4 px-8 py-6">
           <Avatar src={brandImg} size="sm" />
           <Typography
             variant="h6"
@@ -53,7 +53,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
         {routes.map(({ layout, title, pages }, key) => (
           <ul key={key} className="mb-4 flex flex-col gap-1">
             {title && (
-              <li className="mx-3.5 mt-4 mb-2">
+              <li className="mx-3.5 mb-2 mt-4">
                 <Typography
                   variant="small"
                   color={sidenavType === "dark" ? "white" : "blue-gray"}
