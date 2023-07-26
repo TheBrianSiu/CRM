@@ -179,7 +179,6 @@ export function Projects() {
                                     : completion === "In progress"
                                     ? "yellow"
                                     : "gray"
-
                                 }
                                 value={completion}
                               />

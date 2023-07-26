@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { Cog6ToothIcon } from "@heroicons/react/24/solid";
 import { IconButton } from "@material-tailwind/react";
 import Usersprofile from "@/pages/dashboard/users/usersprofile";
-import Customersprofile from "@/pages/dashboard/Customers/customersprofile";
+import Customersprofile from "@/pages/dashboard/customers/customersprofile";
 import {
   Sidenav,
   DashboardNavbar,
@@ -45,7 +45,7 @@ export function Dashboard() {
               )),
           )}
           <Route path="tables/edit/:id" element={<Usersprofile />} />
-          <Route path="customers/edit/:id" element={<Customersprofile />} />  
+          <Route path="customers/edit/:id" element={<Customersprofile />} />
           redirect the path to edit page
         </Routes>
         <div className="text-blue-gray-600">

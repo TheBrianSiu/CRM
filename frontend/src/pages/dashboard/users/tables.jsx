@@ -107,7 +107,7 @@ export function Tables() {
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            padding: "0 8px", 
+                            padding: "0 8px",
                           }}
                           className="px-2 py-0.5 text-[11px] font-medium"
                         />
