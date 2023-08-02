@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { db } = require('../dbConfig');
+const { validateCustomer } = require('../validation/validation');
 
 
 // customers table
@@ -12,7 +13,8 @@ router.get('/customers-table', (req, res)=>{
     })
 })
 
-router.get('/csutomer-table/:id', (req, res)=>{
+// retrieve each user
+router.get('/customers-table/:id', (req, res)=>{
     const userid = req.params.id;
     const sql = `SELECT * FROM CUSTOMERS WHERE ID = ${userid}`;
     db.query(sql,(err,data)=>{
@@ -21,11 +23,16 @@ router.get('/csutomer-table/:id', (req, res)=>{
     })
 })
 
-router.put('/customer-table/update/:id', async (req, res) => {
+//update each user 
+router.put('/customers-table/update/:id', async (req, res) => {
     const userid = req.params.id;
     const updatedData = req.body;
-    // console.log(updatedData);
-  
+
+    const validation = validateCustomer(updatedData);
+    if (!validation.isValid) {
+     return res.status(400).json( validation.errors );
+    }
+    
     try {
       let sql = 'UPDATE CUSTOMERS SET';
       const values = [];
@@ -47,5 +54,53 @@ router.put('/customer-table/update/:id', async (req, res) => {
       return res.status(500).json({ message: 'Internal Server Error' });
     }
   });
+
+
+// insert a user
+
+
+router.post('/customers-table/add', async (req, res) => {
+  const data = req.body;
+
+  const validation = validateCustomer(data);
+  if (!validation.isValid) {
+   return res.status(400).json( validation.errors );
+  }
+
+  try {
+    const dataArray = [Object.values(data)];
+    const sql = 'INSERT INTO CUSTOMERS (first_name, last_name, phone_number, email, property_type, location_preference, bedrooms, bathrooms, budget, financing_option, timeline, notes, lead_source, status, assigned_agent, img, address_country, address_street, address_zip_code, address_city, address_state) VALUES ?';
+    await db.query(sql, [dataArray]);
+    return res.json({ message: 'Customer data added successfully' });
+  } catch (error) {
+    console.error('Error adding customer data:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+
+// delete a customer
+
+router.delete('/customers-table/delete/:id', async (req, res) => {
+  const id = req.params.id;
+  
+  try {
+    const sql = 'DELETE FROM CUSTOMERS WHERE ID = ?';
+
+    const data = await new Promise((resolve, reject) => {
+      db.query(sql, [id], (err, result) => {
+        if (err) {
+          console.error('Error executing SQL query:', err);
+          reject(err);
+        } else {
+          resolve(result); // result data
+        }
+      });
+    });
+    return res.json(data); // Send the result data in the response
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
   module.exports = router;

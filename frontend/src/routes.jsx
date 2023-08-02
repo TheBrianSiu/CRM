@@ -9,10 +9,10 @@ import {
 import {
   Home,
   Profile,
-  Tables,
   Customers,
   Projects,
   Notifications,
+  Users,
 } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 
@@ -33,8 +33,8 @@ export const routes = [
       {
         icon: <TableCellsIcon {...icon} />,
         name: "users",
-        path: "/tables",
-        element: <Tables />,
+        path: "/users",
+        element: <Users />,
       },
       {
         icon: <TableCellsIcon {...icon} />,

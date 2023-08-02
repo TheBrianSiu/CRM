@@ -1,20 +1,20 @@
-const usersRoute = require('./users/UsersRoutes');
-const custRoute = require('./customers/CustRoutes');
-const projectRoute = require('./projects/ProjectRoutes');
-const {db,app} = require('./dbConfig');
+const usersroute = require('./users/usersroutes');
+const custroute = require('./customers/custroutes');
+const projectroute = require('./projects/projectroutes');
+const {app,db} = require('./dbConfig');
 
 app.get('/', (req, res) => {
     return res.json("from backend");
   });
 
 // users table
-app.use('/', usersRoute);
+app.use('/', usersroute);
 
 //Customer
-app.use('/', custRoute);
+app.use('/', custroute);
 
 //project
-app.use('/', projectRoute);
+app.use('/', projectroute);
 
 
 app.listen(8080),(()=> {
