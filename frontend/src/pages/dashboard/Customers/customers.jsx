@@ -15,13 +15,13 @@ import Fuse from "fuse.js";
 
 function Deleteuser(id) {
   if (window.confirm("Do you want to delete the user?")) {
-    fetch(`http://localhost:8080/users-table/delete/${id}`, {
-      method: "DELETE",
+    fetch(`http://localhost:8080/customers-table/delete/${id}`, {
+      method: "PUT",
     })
       .then((response) => response.json())
       .then((data) => {
         console.log("Response data:", data);
-        alert("The user is deleted");
+        alert("The customer is deleted");
       })
       .catch((error) => console.error(error));
   }

@@ -21,7 +21,7 @@ export function Projects() {
       .then((response) => response.json())
       .catch((error) => console.error(error));
 
-    const fetchUsersData = fetch("http://localhost:8080/user-projects-table")
+    const fetchUsersData = fetch("http://localhost:8080/users-table/users")
       .then((response) => response.json())
       .then((data) => {
         // Create a user map with user IDs as keys and user data as values
@@ -130,7 +130,7 @@ export function Projects() {
                               // Return null or a placeholder if user data or img is not available
                               return null;
                             }
-                            console.log(listUser[user.user_id].img);
+                            console.log(listUser[user.user_id]);
                             return (
                               <Tooltip
                                 key={

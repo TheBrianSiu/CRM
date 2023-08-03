@@ -13,10 +13,10 @@ import { useNavigate } from "react-router-dom";
 import Fuse from "fuse.js";
 
 function Deleteuser(id) {
-  console.log(id);
+
   if (window.confirm("Do you want to delete the user?")) {
     fetch(`http://localhost:8080/users-table/delete/${id}`, {
-      method: "DELETE",
+      method: "PUT",
     })
       .then((response) => response.json())
       .then((data) => {

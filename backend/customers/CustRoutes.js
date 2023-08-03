@@ -6,7 +6,7 @@ const { validateCustomer } = require('../validation/validation');
 
 // customers table
 router.get('/customers-table', (req, res)=>{
-    const sql = "SELECT* FROM CUSTOMERS";
+    const sql = "SELECT* FROM CUSTOMERS WHERE IS_DELETED = 0";
     db.query(sql,(err,data)=>{
         if(err) return res.json(err);
         return res.json(data);
@@ -16,7 +16,7 @@ router.get('/customers-table', (req, res)=>{
 // retrieve each user
 router.get('/customers-table/:id', (req, res)=>{
     const userid = req.params.id;
-    const sql = `SELECT * FROM CUSTOMERS WHERE ID = ${userid}`;
+    const sql = `SELECT * FROM CUSTOMERS WHERE ID = ${userid} AND IS_DELETED = 0`;
     db.query(sql,(err,data)=>{
         if(err){ return res.status(404).json( { message :  'user not found'});}
         return res.json(data);
@@ -81,11 +81,11 @@ router.post('/customers-table/add', async (req, res) => {
 
 // delete a customer
 
-router.delete('/customers-table/delete/:id', async (req, res) => {
+router.put('/customers-table/delete/:id', async (req, res) => {
   const id = req.params.id;
   
   try {
-    const sql = 'DELETE FROM CUSTOMERS WHERE ID = ?';
+    const sql = 'UPDATE CUSTOMERS SET IS_DELETED = 1 WHERE ID = ?';
 
     const data = await new Promise((resolve, reject) => {
       db.query(sql, [id], (err, result) => {

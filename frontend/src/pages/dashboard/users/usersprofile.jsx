@@ -81,19 +81,16 @@ export function Usersprofile() {
     e.preventDefault();
     if (window.confirm("Do you want to submit the form?")) {
       const userToUpdate = UsersData[0];
-      const { username, password, confirm_password, ...userData } = userToUpdate;
+      const { username, password, confirm_password, ...userData } = userToUpdate; // remove all three
   
       let updatedData = { ...userData };
       delete updatedData.id;
   
       // Check if the user has updated the password
       if (password !== null && confirm_password !== null) {
-        // Include the password fields in the updatedData object
+        // put it back 
         updatedData = { ...updatedData, password };
       }
-
-      console.log(initialUsername);
-      console.log(username);
 
       //check username has udpated or not
       if(initialUsername !== username){

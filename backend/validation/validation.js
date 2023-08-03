@@ -66,6 +66,7 @@ const validateCustomer = (customerData) => {
   return { isValid: true };
 };
 
+
 // users validation
 const validateUser = (userData) => {
   const errors = [];
@@ -103,7 +104,6 @@ const validateUser = (userData) => {
   if (userData.username && !validator.isAlphanumeric(userData.username, 'en-US')) {
     errors.push('Username is required and should contain only alphanumeric characters');
   }
-
   if (errors.length > 0) {
     return { isValid: false, errors: errors };
   }
