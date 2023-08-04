@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 import Fuse from "fuse.js";
 
 function Deleteuser(id) {
-
   if (window.confirm("Do you want to delete the user?")) {
     fetch(`http://localhost:8080/users-table/delete/${id}`, {
       method: "PUT",
@@ -237,7 +236,7 @@ export function Users() {
                       </td>
                       <td className={className}>
                         <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {last_login == null ? null :formatDate(last_login)}
+                          {last_login == null ? null : formatDate(last_login)}
                         </Typography>
                       </td>
                       <td className={className}>

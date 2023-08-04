@@ -10,10 +10,11 @@ import {
   Home,
   Profile,
   Customers,
-  Projects,
   Notifications,
   Users,
 } from "@/pages/dashboard";
+
+import Projects from "@/pages/dashboard/projects/projects";
 import { SignIn, SignUp } from "@/pages/auth";
 
 const icon = {
