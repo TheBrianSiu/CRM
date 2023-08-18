@@ -16,7 +16,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-export function Addcustomers() {
+export function AddProjects() {
   const [CustData, setCustData] = useState([
     {
       first_name: "",
@@ -541,4 +541,4 @@ export function Addcustomers() {
   );
 }
 
-export default Addcustomers;
+export default AddProjects;

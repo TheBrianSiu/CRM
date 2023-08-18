@@ -1,183 +1,167 @@
-import React, { useState } from "react";
-import { useDrag, useDrop } from "react-dnd";
-import TaskMenu from "./component/taskmenu"; 
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Typography,
+  Avatar,
+  Chip,
+} from "@material-tailwind/react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Fuse from "fuse.js";
+import Navbar from "./component/utils/navbar";
+import TaskBoard from "./component/Taskboardtheme/taskboard";
+import TaskBoard2 from "./component/Taskboardtheme/taskboard2";
+import Pagination from "./component/utils/Pagiantion";
+import { SwitchPage } from "./component/utils/switchpage";
+
+function Deleteuser(id) {
+  if (window.confirm("Do you want to delete the user?")) {
+    fetch(`http://localhost:8080/customers-table/delete/${id}`, {
+      method: "PUT",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Response data:", data);
+        alert("The customer is deleted");
+      })
+      .catch((error) => console.error(error));
+  }
+}
 
 const Projects = () => {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "Task 1",
-      description: "Description for Task 1",
-      status: "todo", // Change this to "todo"
-    },
-    {
-      id: 2,
-      title: "Task 2",
-      description: "Description for Task 2",
-      status: "doing",
-    },
-    {
-      id: 3,
-      title: "Task 3",
-      description: "Description for Task 3",
-      status: "review", // Change this to "review"
-    },
-    // Add more tasks as needed...
-  ]);
+  const [Istheme, setIsthem] = useState("All");
+  const navigate = useNavigate();
+  const [columns, setColumns] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const [lastItemIndex, setLastItemIndex] = useState(itemsPerPage);
 
-  const [columns, setColumns] = useState([
-    {
-      id: "todo",
-      title: "Todo",
-      taskIds: tasks
-        .filter((task) => task.status === "todo")
-        .map((task) => task.id),
-      backgroundColor: "#F1F1EF",
-    },
-    {
-      id: "doing",
-      title: "Doing",
-      taskIds: tasks
-        .filter((task) => task.status === "doing")
-        .map((task) => task.id),
-      backgroundColor: "#E9F3F7",
-    },
-    {
-      id: "review",
-      title: "Review",
-      taskIds: tasks
-        .filter((task) => task.status === "review")
-        .map((task) => task.id),
-      backgroundColor: "#EEF3ED",
-    },
-    {
-      id: "done",
-      title: "Done",
-      taskIds: tasks
-        .filter((task) => task.status === "done")
-        .map((task) => task.id),
-      backgroundColor: "#FAF3DD",
-    },
-    // Add more columns as needed...
-  ]);
+  // retrieve data
+  useEffect(() => {
+    fetch("http://localhost:8080/projects-with-assignees")
+      .then((response) => response.json())
+      .then((data) => {
+        setTasks(data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
 
-  const addTask = (title, description, status) => {
-    const newTask = {
-      id: tasks.length + 1,
-      title,
-      description,
-      status,
+  const options = {
+    keys: [
+      "task_name",
+      "assignees.first_name",
+      "assignees.last_name",
+      "description",
+      "est_value",
+      "lead_status",
+      "priority",
+    ],
+    threshold: 0.3,
+    location: 0,
+    distance: 100,
+    includeMatches: true,
+    includeScore: true,
+    useExtendedSearch: true,
+  };
+
+  //search engine
+  const fuse = new Fuse(tasks, options);
+
+  const filteredUserdata = searchQuery
+  ? fuse.search(searchQuery).map((result) => result.item)
+  : tasks;
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  // update/generate taskboard column and taskitem function
+  useEffect(() => {
+    const generateColumns = (leadStatus, backgroundColor) => {
+      return {
+        id: leadStatus.toLowerCase(),
+        lead_status: leadStatus,
+        taskIds: filteredUserdata
+          .filter((task) => task.lead_status === leadStatus.toLowerCase())
+          .map((task) => task.project_id),
+        backgroundColor,
+      };
     };
-    setTasks([...tasks, newTask]);
-    setColumns((prevColumns) => {
-      return prevColumns.map((column) =>
-        column.id === status
-          ? { ...column, taskIds: [...column.taskIds, newTask.id] }
-          : column
-      );
-    });
-  };
 
-  const updateTaskStatus = (taskId, newStatus) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId ? { ...task, status: newStatus } : task
-      )
-    );
+    const updatedColumns = [
+      generateColumns("New", "#F1F1EF"),
+      generateColumns("Prospect", "#E9F3F7"),
+      generateColumns("Proposal", "#EEF3ED"),
+      generateColumns("Won", "#FAF3DD"),
+      generateColumns("Lost", "#FAECEC"),
+    ];
 
-    setColumns((prevColumns) => {
-      const updatedColumns = prevColumns.map((column) => ({
-        ...column,
-        taskIds:
-          column.id === newStatus
-            ? [...column.taskIds, taskId]
-            : column.taskIds.filter((id) => id !== taskId),
-      }));
-      return updatedColumns;
-    });
-  };
+    setColumns(updatedColumns);
+  }, [filteredUserdata]);
 
-  const TaskItem = ({ task, columnId }) => {
-    const [{ isDragging }, drag] = useDrag({
-      type: "task",
-      item: { taskId: task.id, columnId },
-      collect: (monitor) => ({
-        isDragging: !!monitor.isDragging(),
-      }),
-    });
-  
-    return (
-      <div ref={(node) => drag(node)}>
-        <TaskMenu isDragging={isDragging} task={task} />
-      </div>
-    );
-  };
+  // navigation
+  function adduser() {
+    navigate("add");
+  }
 
-  const Column = ({ column }) => {
-    const [isOver, setIsOver] = useState(false);
 
-    const [, drop] = useDrop({
-      accept: "task",
-      drop: (item) => {
-        const { taskId, columnId } = item;
 
-        // Check if it is dropped back into the same column
-        if (taskId && columnId !== column.id) {
-          updateTaskStatus(taskId, column.id);
-        }
-      },
-      collect: (monitor) => ({
-        isOver: !!monitor.isOver(),
-      }),
-    });
+  // range of item to display
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredUserdata.slice(
+    indexOfFirstItem,
+    indexOfLastItem,
+  );
 
-    return (
-      <div
-        ref={drop}
-        className="column-container relative rounded-lg p-4 shadow-md"
-        style={{
-          minWidth: "250px",
-          maxWidth: "300px",
-          backgroundColor: column.backgroundColor,
-          overflowY: "auto",
-          maxHeight: "80vh",
-          opacity: isOver ? 0.8 : 1,
-        }}
-      >
-        <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-xl font-bold">{column.title}</h3>
-          <div
-            className="justify-end"
-            onClick={() => {
-              addTask("New Task", "Desc", column.id);
-            }}
-          >
-            +
-          </div>
-        </div>
-        <div className="flex-1">
-          {column.taskIds.map((taskId) => {
-            const task = tasks.find((task) => task.id === taskId);
-            return <TaskItem key={taskId} task={task} columnId={column.id} />;
-          })}
-        </div>
-        <div
-          className="absolute bottom-0 left-0 right-0 mt-2 cursor-pointer rounded-lg bg-blue-gray-50 p-2 text-center"
-          onClick={() => {
-            addTask("New Task", "Description", column.id);
-          }}
-        >
-          + New
-        </div>
-      </div>
-    );
-  };
   return (
-    <div className="flex min-h-screen flex-wrap p-4">
-      {/* Render the columns */}
-      {columns.map((column) => (
-        <Column key={column.id} column={column} />
-      ))}
+    <div className="mb-8 mt-12 flex flex-col gap-12">
+      <Card>
+        <CardHeader variant="gradient" color="blue" className="mb-8 p-6">
+          <Typography variant="h6" color="white">
+            Project Table
+          </Typography>
+        </CardHeader>
+        <CardBody className="overflow-x-scroll px-0 pb-2 pt-0">
+          <Navbar
+            adduser={adduser}
+            searchQuery={searchQuery}
+            handleSearch={handleSearch}
+            Istheme={Istheme}
+            setIstheme={setIsthem}
+          />
+          {Istheme === "All" ? (
+            <TaskBoard2 currentItems={currentItems} tasks={tasks} />
+          ) : (
+            <TaskBoard
+              tasks={tasks}
+              setTasks={setTasks}
+              columns={columns}
+              setColumns={setColumns}
+            />
+          )}
+          <div className="mt-4 flex justify-center">
+            {Istheme === "All" ? (
+              <Pagination
+                currentPage={currentPage}
+                filteredUserdataLength={filteredUserdata.length}
+                itemsPerPage={itemsPerPage}
+                setCurrentPage={setCurrentPage}
+                indexOfLastItem={indexOfLastItem}
+                handlePrevPage={() =>
+                  SwitchPage("prev", currentPage, totalPages, setCurrentPage)
+                }
+                handleNextPage={() =>
+                  SwitchPage("next", currentPage, totalPages, setCurrentPage)
+                }
+              />
+            ) : null}
+          </div>
+        </CardBody>
+      </Card>
     </div>
   );
 };
