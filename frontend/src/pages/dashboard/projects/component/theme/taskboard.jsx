@@ -3,7 +3,6 @@ import Taskitems from "../structures/taskitems";
 import Columns from "../structures/columns";
 
 const TaskBoard = ({ tasks, setTasks, columns, setColumns }) => {
-  
   const addTask = (task_name, description, status) => {
     const newTask = {
       project_id: tasks.length + 1,

@@ -85,5 +85,62 @@ WHERE
   });
   
   
+  // add
+router.post("/projects-table/add", async (req, res) => {
+  const data = req.body;
+
+  const dataArray = [Object.values(data)];
+
+  // const validation = validateUser(data);
+  // if (!validation.isValid) {
+  //   return res.status(400).json(validation.errors);
+  // }
+  try {
+    const sql = `INSERT INTO PROJECTS ( task_name, due_date, description, attachments, est_hours, est_value, lead_status, priority) VALUES ?`;
+    await db.query(sql, [dataArray], (err, result) => {
+      if (err) {
+        console.error("Error adding new task", err);
+        return res.status(500).json({ message: "Internal Server Error" });
+      }
+      
+      return res.json({
+        message: "New task is added successfully",
+        id: result.insertId,
+      });
+    });
+  } catch(error) {
+    console.error("Error adding new task", error);
+    return res.status(500).json({ message: "Internal Server Error"});
+  }
+});
+
+
+router.post("/project_assignees/add", async (req, res) => {
+  try {
+    const data = req.body;
+    const dataArray = data.map(item => [item.project_id , item.assignee_id]);
+
+    const sql = `INSERT INTO project_assignees (PROJECT_ID, ASSIGNEE_ID) VALUES?`;
+    await db.query(sql, [dataArray]);
+    return res.json({ message: "Assignees added successfully" });
+  } catch (error) {
+    console.error("Error adding assignees", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.post("/project_customers/add", async (req, res) => {
+  try {
+    const data = req.body;
+    const dataArray = data.map(item => [item.project_id , item.customer_id]);
+    const sql = `INSERT INTO project_customers (PROJECT_ID, CUSTOMER_ID) VALUES?`;
+    await db.query(sql, [dataArray]);
+    return res.json({ message: "Assignees added successfully" });
+  } catch (error) {
+    console.error("Error adding assignees", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
 module.exports = router;
+

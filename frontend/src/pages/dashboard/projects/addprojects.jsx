@@ -13,44 +13,52 @@ import {
   ChatBubbleLeftEllipsisIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
+import makeAnimated from "react-select/animated";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import Select from "react-select";
+import { useEffect, useState } from "react";
 
-export function AddProjects() {
-  const [CustData, setCustData] = useState([
+export function Addprojects() {
+  const animatedComponents = makeAnimated();
+  const navigate = useNavigate();
+  const [Cust, setCust] = useState([]);
+  const [User, setUser] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectedCust, setSelectedCust] = useState([]);
+  const [Data, setData] = useState([
     {
-      first_name: "",
-      last_name: "",
-      phone_number: "",
-      email: "",
-      property_type: "",
-      location_preference: "",
-      bedrooms: "",
-      bathrooms: "",
-      budget: "",
-      financing_option: "",
-      timeline: "",
-      notes: "",
-      lead_source: "",
-      status: 0,
-      assigned_agent: "",
-      img: "",
-      address_country: "",
-      address_street: "",
-      address_zip_code: "",
-      address_city: "",
-      address_state: "",
+      task_name: "",
+      due_date: "",
+      description: "",
+      attachments: "",
+      est_hours: "",
+      est_value: "",
+      lead_status: "",
+      priority: "",
     },
   ]);
-  const navigate = useNavigate();
+
+  //options choice
+  const priorityOptions = [
+    { value: "high", label: "High" },
+    { value: "medium", label: "Medium" },
+    { value: "low", label: "low" },
+  ];
+  const statusOptions = [
+    { value: "new", label: "New" },
+    { value: "prospect", label: "Prospect" },
+    { value: "proposal", label: "Proposal" },
+    { value: "won", label: "Won" },
+    { value: "lost", label: "Lost" },
+  ];
 
   //handle submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (window.confirm("Do you want to submit a new user?")) {
-      const customerdata = { ...CustData[0] };
+    if (window.confirm("Do you want to submit a new task?")) {
+      const customerdata = { ...Data[0] };
 
-      fetch(`http://localhost:8080/customers-table/add`, {
+      fetch(`http://localhost:8080/projects-table/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(customerdata),
@@ -65,8 +73,59 @@ export function AddProjects() {
           }
         })
         .then(function (data) {
-          alert("The user is added successfully!");
-          navigate(-1); // Navigate back after the fetch is successful
+          const generatedid = data.id;
+          const userProjectData = selectedUsers.map((user) => ({
+            project_id: generatedid,
+            assignee_id: user.value,
+          }));
+
+          fetch(`http://localhost:8080/project_assignees/add`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userProjectData),
+          })
+            .then((res) => {
+              if (!res.ok) {
+                return res.text().then((text) => {
+                  throw new Error(text);
+                });
+              } else {
+                return res.json();
+              }
+            })
+            .then(function (data) {
+              const custProjectData = selectedCust.map((cust) => ({
+                project_id: generatedid,
+                customer_id: cust.value,
+              }));
+              
+              fetch(`http://localhost:8080/project_customers/add`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(custProjectData),
+              })
+                .then((res) => {
+                  if (!res.ok) {
+                    return res.text().then((text) => {
+                      throw new Error(text);
+                    });
+                  } else {
+                    return res.json();
+                  }
+                })
+                .then(function (data) {
+                  alert(
+                    "The task is added successfully!",
+                  );
+                  navigate(-1);
+                })
+                .catch((err) => {
+                  alert(err);
+                });
+            })
+            .catch((err) => {
+              alert(err);
+            });
         })
         .catch((err) => {
           alert(err);
@@ -76,12 +135,27 @@ export function AddProjects() {
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
-    setCustData((prevCustData) =>
-      prevCustData.map((customer, i) =>
-        i === index ? { ...customer, [name]: value } : customer,
+    setData((prevCustData) =>
+      prevCustData.map((task, i) =>
+        i === index ? { ...task, [name]: value } : task,
       ),
     );
   };
+
+  //retrieve data
+  useEffect(() => {
+    fetch(`http://localhost:8080/users-table/supervisor`)
+      .then((response) => response.json())
+      .then((data) => setUser(data))
+      .catch((error) => console.log(error));
+  }, [User]);
+
+  useEffect(() => {
+    fetch(`http://localhost:8080/customers-basicinfo`)
+      .then((response) => response.json())
+      .then((data) => setCust(data))
+      .catch((error) => console.log(error));
+  }, [Cust]);
 
   return (
     <>
@@ -90,19 +164,17 @@ export function AddProjects() {
       </div>
       <Card className="mx-3 -mt-16 mb-6 lg:mx-4">
         <CardBody className="p-4">
-          {CustData.map((customer, index) => {
+          {Data.map((task, index) => {
             const className = `py-3 px-5 ${
-              index === CustData.length - 1
-                ? ""
-                : "border-b border-blue-gray-50"
+              index === Data.length - 1 ? "" : "border-b border-blue-gray-50"
             }`;
             return (
               <div>
                 <div className="mb-10 flex items-center justify-between gap-6">
                   <div className="flex items-center gap-6">
                     <Avatar
-                      src={customer.img}
-                      alt="bruce-mars"
+                      src={task.img}
+                      alt="Project logo"
                       size="xl"
                       className="rounded-lg shadow-lg shadow-blue-gray-500/40"
                     />
@@ -112,13 +184,13 @@ export function AddProjects() {
                         color="blue-gray"
                         className="mb-1"
                       >
-                        {customer.first_name} {customer.last_name}
+                        {task.task_name}
                       </Typography>
                       <Typography
                         variant="small"
                         className="font-normal text-blue-gray-600"
                       >
-                        {customer.address_city}, {customer.address_state}
+                        {task.description}
                       </Typography>
                     </div>
                   </div>
@@ -146,378 +218,224 @@ export function AddProjects() {
                     <div className="md:col-span-1">
                       <div className="px-4 sm:px-0">
                         <h3 className="text-lg font-medium leading-6 text-gray-900">
-                          Personal Information
+                          Project Information
                         </h3>
                         <p className="mt-1 text-sm text-gray-600">
-                          Use a permanent address where you can receive mail.
+                          Please provide the details of the project.
                         </p>
                       </div>
                     </div>
                     <div className="mt-5 md:col-span-2 md:mt-0">
-                      <form onSubmit={handleSubmit} method="PUT">
+                      <form onSubmit={handleSubmit} method="POST">
                         <div className="overflow-hidden shadow sm:rounded-md">
                           <div className="bg-white px-4 py-5 sm:p-6">
                             <div className="grid grid-cols-6 gap-6">
-                              <div className="col-span-6 sm:col-span-3">
+                              <div className="col-span-6 sm:col-span-4">
                                 <label
-                                  htmlFor="first_name"
+                                  htmlFor="task_name"
                                   className="block text-sm font-medium text-gray-700"
                                 >
-                                  First name
+                                  Task Name
                                 </label>
                                 <input
                                   type="text"
-                                  name="first_name"
-                                  id="first_name"
-                                  autoComplete="given-name"
+                                  name="task_name"
+                                  id="task_name"
+                                  autoComplete="task_name"
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.first_name}
-                                  onChange={(e) => handleChange(e, index)}
-                                />
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-3">
-                                <label
-                                  htmlFor="last_name"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  Last name
-                                </label>
-                                <input
-                                  type="text"
-                                  name="last_name"
-                                  id="last_name"
-                                  autoComplete="family-name"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.last_name}
-                                  onChange={(e) => handleChange(e, index)}
-                                />
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-3">
-                                <label
-                                  htmlFor="email"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  Email address
-                                </label>
-                                <input
-                                  type="text"
-                                  name="email"
-                                  id="email"
-                                  autoComplete="email"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.email}
-                                  onChange={(e) => handleChange(e, index)}
-                                />
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-3">
-                                <label
-                                  htmlFor="phone_number"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  Phone Number
-                                </label>
-                                <input
-                                  type="tel"
-                                  name="phone_number"
-                                  id="phone_number"
-                                  autoComplete="phone_number"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.phone_number}
-                                  onChange={(e) => handleChange(e, index)}
-                                  placeholder="999-999-999"
-                                  pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+                                  value={Data[0].task_name}
+                                  onChange={(e) => handleChange(e, 0)}
                                   required
                                 />
                               </div>
 
-                              <div className="col-span-6 sm:col-span-3">
-                                <label
-                                  htmlFor="address_country"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  Country / Region
-                                </label>
-                                <select
-                                  id="address_country"
-                                  name="address_country"
-                                  autoComplete="address_country"
-                                  className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.address_country}
-                                  onChange={(e) => handleChange(e, index)}
-                                >
-                                  <option>United States</option>
-                                  <option>Canada</option>
-                                  <option>Mexico</option>
-                                </select>
-                              </div>
-
                               <div className="col-span-6">
                                 <label
-                                  htmlFor="address_street"
+                                  htmlFor="description"
                                   className="block text-sm font-medium text-gray-700"
                                 >
-                                  Street address
-                                </label>
-                                <input
-                                  type="text"
-                                  name="address_street"
-                                  id="address_street"
-                                  autoComplete="street-address"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.address_street}
-                                  onChange={(e) => handleChange(e, index)}
-                                />
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-6 lg:col-span-2">
-                                <label
-                                  htmlFor="address_city"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  City
-                                </label>
-                                <input
-                                  type="text"
-                                  name="address_city"
-                                  id="address_city"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.address_city}
-                                  onChange={(e) => handleChange(e, index)}
-                                />
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                                <label
-                                  htmlFor="address_state"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  State / Province
-                                </label>
-                                <input
-                                  type="text"
-                                  name="address_state"
-                                  id="address_state"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.address_state}
-                                  onChange={(e) => handleChange(e, index)}
-                                />
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                                <label
-                                  htmlFor="address_zip_code"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  ZIP / Postal
-                                </label>
-                                <input
-                                  type="text"
-                                  name="address_zip_code"
-                                  id="address_zip_code"
-                                  autoComplete="address_zip_code"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.address_zip_code}
-                                  onChange={(e) => handleChange(e, index)}
-                                />
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                                <label
-                                  htmlFor="location_preference"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  LOCATION PREFERENCE
-                                </label>
-                                <input
-                                  type="text"
-                                  name="location_preference"
-                                  id="location_preference"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.location_preference}
-                                  onChange={(e) => handleChange(e, index)}
-                                />
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                                <label
-                                  htmlFor="property_type"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  PROPERTY TYPE
-                                </label>
-                                <input
-                                  type="text"
-                                  name="property_type"
-                                  id="property_type"
-                                  autoComplete="property-type"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.property_type}
-                                  onChange={(e) => handleChange(e, index)}
-                                />
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                                <label
-                                  htmlFor="bedrooms"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  BEDROOMS
-                                </label>
-                                <input
-                                  type="text"
-                                  name="bedrooms"
-                                  id="bedrooms"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.bedrooms}
-                                  onChange={(e) => handleChange(e, index)}
-                                />
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                                <label
-                                  htmlFor="bathrooms"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  BATHROOMS
-                                </label>
-                                <input
-                                  type="text"
-                                  name="bathrooms"
-                                  id="bathrooms"
-                                  autoComplete="bathrooms"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.bathrooms}
-                                  onChange={(e) => handleChange(e, index)}
-                                />
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                                <label
-                                  htmlFor="budget"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  BUDGET
-                                </label>
-                                <input
-                                  type="text"
-                                  name="budget"
-                                  id="budget"
-                                  autoComplete="budget"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.budget}
-                                  onChange={(e) => handleChange(e, index)}
-                                />
-                              </div>
-                              <div>
-                                <label
-                                  htmlFor="TIMELINE"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  TIMELINE
-                                </label>
-                                <input
-                                  type="text"
-                                  name="timeline"
-                                  id="TIMELINE"
-                                  autoComplete="TIMELINE"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.timeline}
-                                  onChange={(e) => handleChange(e, index)}
-                                />
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                                <label
-                                  htmlFor="FINANCING_OPTIONS"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  FINANCING OPTIONS
-                                </label>
-                                <input
-                                  type="text"
-                                  name="financing_option"
-                                  id="FINANCING_OPTIONS"
-                                  autoComplete="FINANCING_OPTIONS"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.financing_option}
-                                  onChange={(e) => handleChange(e, index)}
-                                />
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                                <label
-                                  htmlFor="ASSIGNED_AGENT"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  ASSIGNED AGENT
-                                </label>
-                                <input
-                                  type="text"
-                                  name="assigned_agent"
-                                  id="ASSIGNED_AGENT"
-                                  autoComplete="ASSIGNED_AGENT"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.assigned_agent}
-                                  onChange={(e) => handleChange(e, index)}
-                                />
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                                <label
-                                  htmlFor="LEAD_SOURCE"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  LEAD SOURCE
-                                </label>
-                                <input
-                                  type="text"
-                                  name="lead_source"
-                                  id="LEAD_SOURCE"
-                                  autoComplete="LEAD_SOURCE"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.lead_source}
-                                  onChange={(e) => handleChange(e, index)}
-                                />
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                                <label
-                                  htmlFor="STATUS"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  STATUS
-                                </label>
-                                <select
-                                  type="STATUS"
-                                  name="status"
-                                  id="STATUS"
-                                  autoComplete="STATUS"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.status}
-                                  onChange={(e) => handleChange(e, index)}
-                                >
-                                  <option value={0}>Active</option>
-                                  <option value={1}>Inactive</option>
-                                </select>
-                              </div>
-
-                              <div className="col-span-12 sm:col-span-6 lg:col-span-2">
-                                <label
-                                  htmlFor="NOTES"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  NOTES
+                                  Description
                                 </label>
                                 <textarea
-                                  name="notes"
-                                  id="NOTES"
-                                  autoComplete="NOTES"
+                                  name="description"
+                                  id="description"
+                                  autoComplete="description"
+                                  rows="3"
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={customer.notes}
-                                  onChange={(e) => handleChange(e, index)}
+                                  value={Data[0].description}
+                                  onChange={(e) => handleChange(e, 0)}
+                                />
+                              </div>
+
+                              <div className="col-span-6 sm:col-span-4">
+                                <label
+                                  htmlFor="due_date"
+                                  className="block text-sm font-medium text-gray-700"
+                                >
+                                  Due Date
+                                </label>
+                                <input
+                                  type="date"
+                                  name="due_date"
+                                  id="due_date"
+                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                  value={Data[0].due_date}
+                                  onChange={(e) => handleChange(e, 0)}
+                                  required
+                                />
+                              </div>
+
+                              {/* <div className="col-span-6 sm:col-span-3">
+                                <label
+                                  htmlFor="attachments"
+                                  className="block text-sm font-medium text-gray-700"
+                                >
+                                  Attachments
+                                </label>
+                                <input
+                                  type="text"
+                                  name="attachments"
+                                  id="attachments"
+                                  autoComplete="attachments"
+                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                  value={Data[0].attachments}
+                                  onChange={(e) => handleChange(e, 0)}
+                                />
+                              </div> */}
+
+                              <div className="col-span-6 sm:col-span-3 ">
+                                <label
+                                  htmlFor="est_hours"
+                                  className="block text-sm font-medium text-gray-700"
+                                >
+                                  Estimated Hours
+                                </label>
+                                <input
+                                  type="number"
+                                  name="est_hours"
+                                  id="est_hours"
+                                  autoComplete="est_hours"
+                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                  value={Data[0].est_hours}
+                                  onChange={(e) => handleChange(e, 0)}
+                                />
+                              </div>
+
+                              <div className="col-span-6 sm:col-span-3">
+                                <label
+                                  htmlFor="est_value"
+                                  className="block text-sm font-medium text-gray-700"
+                                >
+                                  Estimated Value
+                                </label>
+                                <input
+                                  type="number"
+                                  name="est_value"
+                                  id="est_value"
+                                  autoComplete="est_value"
+                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                  value={Data[0].est_value}
+                                  onChange={(e) => handleChange(e, 0)}
+                                />
+                              </div>
+
+                              <div className="col-span-6 sm:col-span-3 ">
+                                <label
+                                  htmlFor="lead_status"
+                                  className="block text-sm font-medium text-gray-700"
+                                >
+                                  Lead Status
+                                </label>
+                                <Select
+                                  id="lead_status"
+                                  name="lead_status"
+                                  options={statusOptions}
+                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                  value={statusOptions.find(
+                                    (option) =>
+                                      option.value === Data[0].lead_status,
+                                  )}
+                                  onChange={(selectedOption) =>
+                                    handleChange(
+                                      {
+                                        target: {
+                                          name: "lead_status",
+                                          value: selectedOption.value,
+                                        },
+                                      },
+                                      0,
+                                    )
+                                  }
+                                />
+                              </div>
+
+                              <div className="col-span-6 sm:col-span-3">
+                                <label
+                                  htmlFor="priority"
+                                  className="block text-sm font-medium text-gray-700"
+                                >
+                                  Priority
+                                </label>
+                                <Select
+                                  id="priority"
+                                  name="priority"
+                                  options={priorityOptions}
+                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                  value={priorityOptions.find(
+                                    (option) =>
+                                      option.value === Data[0].priority,
+                                  )}
+                                  onChange={(selectedOption) =>
+                                    handleChange(
+                                      {
+                                        target: {
+                                          name: "priority",
+                                          value: selectedOption.value,
+                                        },
+                                      },
+                                      0,
+                                    )
+                                  }
+                                />
+                              </div>
+
+                              <div className="col-span-6 sm:col-span-3">
+                                <label
+                                  htmlFor="user_id"
+                                  className="block text-sm font-medium text-gray-700"
+                                >
+                                  Assignees
+                                </label>
+                                <Select
+                                  closeMenuOnSelect={false}
+                                  components={animatedComponents}
+                                  isMulti
+                                  options={User.map((user) => ({
+                                    value: user.user_id,
+                                    label: `${user.first_name} ${user.last_name}`,
+                                  }))}
+                                  value={selectedUsers}
+                                  onChange={setSelectedUsers}
+                                />
+                              </div>
+
+                              <div className="col-span-6 sm:col-span-3">
+                                <label
+                                  htmlFor="cust_id"
+                                  className="block text-sm font-medium text-gray-700"
+                                >
+                                  Customers
+                                </label>
+                                <Select
+                                  closeMenuOnSelect={false}
+                                  components={animatedComponents}
+                                  isMulti
+                                  options={Cust.map((cust) => ({
+                                    value: cust.id,
+                                    label: `${cust.first_name} ${cust.last_name}`,
+                                  }))}
+                                  value={selectedCust}
+                                  onChange={setSelectedCust}
                                 />
                               </div>
                             </div>
@@ -541,4 +459,4 @@ export function AddProjects() {
   );
 }
 
-export default AddProjects;
+export default Addprojects;

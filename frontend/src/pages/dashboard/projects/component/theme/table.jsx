@@ -7,7 +7,7 @@ import {
   Chip,
 } from "@material-tailwind/react";
 
-export function TaskBoard2({ currentItems, tasks }) {
+export function Table({ currentItems, tasks }) {
   return (
     <div>
       <table className="w-full min-w-[640px] table-auto">
@@ -135,4 +135,4 @@ export function TaskBoard2({ currentItems, tasks }) {
   );
 }
 
-export default TaskBoard2;
+export default Table;

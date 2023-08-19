@@ -10,8 +10,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Fuse from "fuse.js";
 import Navbar from "./component/utils/navbar";
-import TaskBoard from "./component/Taskboardtheme/taskboard";
-import TaskBoard2 from "./component/Taskboardtheme/taskboard2";
+import TaskBoard from "./component/theme/taskboard";
+import Table from "./component/theme/table";
 import Pagination from "./component/utils/Pagiantion";
 import { SwitchPage } from "./component/utils/switchpage";
 
@@ -71,8 +71,8 @@ const Projects = () => {
   const fuse = new Fuse(tasks, options);
 
   const filteredUserdata = searchQuery
-  ? fuse.search(searchQuery).map((result) => result.item)
-  : tasks;
+    ? fuse.search(searchQuery).map((result) => result.item)
+    : tasks;
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -107,8 +107,6 @@ const Projects = () => {
     navigate("add");
   }
 
-
-
   // range of item to display
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -134,7 +132,7 @@ const Projects = () => {
             setIstheme={setIsthem}
           />
           {Istheme === "All" ? (
-            <TaskBoard2 currentItems={currentItems} tasks={tasks} />
+            <Table currentItems={currentItems} tasks={tasks} />
           ) : (
             <TaskBoard
               tasks={tasks}

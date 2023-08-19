@@ -13,6 +13,15 @@ router.get('/customers-table', (req, res)=>{
     })
 })
 
+//customers-basic info
+router.get('/customers-basicinfo', (req, res)=>{
+  const sql = "SELECT id, first_name, last_name FROM CUSTOMERS WHERE IS_DELETED = 0";
+  db.query(sql,(err,data)=>{
+      if(err) return res.json(err);
+      return res.json(data);
+  })
+})
+
 // retrieve each user
 router.get('/customers-table/:id', (req, res)=>{
     const userid = req.params.id;

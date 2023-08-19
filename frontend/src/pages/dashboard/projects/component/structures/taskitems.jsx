@@ -37,7 +37,7 @@ export function Taskitems({ task, columnId }) {
         <div className="text-xs text-gray-600">{task.description}</div>
       </section>
       <footer>
-        <div className="text-sm">{task.project_id}</div>
+        <div className="text-sm">{task.priority}</div>
       </footer>
     </div>
   );

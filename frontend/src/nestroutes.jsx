@@ -2,6 +2,7 @@ import Addcustomers from "./pages/dashboard/customers/addcustomers";
 import Customersprofile from "./pages/dashboard/customers/customersprofile";
 import Usersprofile from "./pages/dashboard/users/usersprofile";
 import Addusers from "./pages/dashboard/users/addusers";
+import Addprojects from "./pages/dashboard/projects/addprojects";
 
 export const routes = [
   {
@@ -26,6 +27,11 @@ export const routes = [
         name: "customers_addpage",
         path: "customers/add",
         element: <Addcustomers />,
+      },
+      {
+        name: "projects_addpage",
+        path: "projects/add",
+        element: <Addprojects />,
       },
     ],
   },
