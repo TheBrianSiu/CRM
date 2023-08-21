@@ -273,6 +273,27 @@ router.put("/projects-table/update/:id", async (req, res) => {
   }
 });
 
+//update lead_status
+router.put("/projects-table/update-status/:id", async (req, res) => {
+  const project_id = req.params.id;
+  const updatedData = req.body;
+
+  try {
+    const sql = "UPDATE PROJECTS SET LEAD_STATUS = ? WHERE PROJECT_ID = ?";
+
+    const values = [updatedData[0], project_id];
+
+
+    await db.query(sql, values);
+
+    return res.status(200).json({ message: "Project status updated successfully" });
+  } catch (error) {
+    console.error("Error updating project data", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
 
 //delete project 
 router.put("/projects/delete/:id", async (req, res) => {

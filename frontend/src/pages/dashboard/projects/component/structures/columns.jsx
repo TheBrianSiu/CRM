@@ -33,17 +33,18 @@ export function Columns({ column, tasks, updateTaskStatus, addTask }) {
         opacity: isOver ? 0.8 : 1,
       }}
     >
-      <div className="mb-4 flex items-center justify-between">
+      <div className="group mb-4 flex items-center justify-between">
         <h3 className="text-xl font-bold">{column.lead_status}</h3>
         <div
-          className="justify-end"
+          className="cursor-pointer justify-end p-2  transition-colors duration-300 group-hover:bg-gray-500 group-hover:text-white"
           onClick={() => {
-            addTask("New Task", "Desc", column.id);
+            addTask(column.id);
           }}
         >
           +
         </div>
       </div>
+
       <div className="flex-1">
         {column.taskIds.map((taskId) => {
           const task = tasks.find((task) => task.project_id === taskId);

@@ -7,7 +7,7 @@ import {
   Chip,
 } from "@material-tailwind/react";
 
-export function Table({ currentItems, tasks, onDelete}) {
+export function Table({ currentItems, tasks, onDelete }) {
   return (
     <div>
       <table className="w-full min-w-[640px] table-auto">
@@ -101,7 +101,6 @@ export function Table({ currentItems, tasks, onDelete}) {
                           : lead_status === "Lost"
                           ? "red"
                           : "transparent"
-
                       }
                       value={lead_status}
                       className="px-2 py-0.5 text-center text-[11px] font-medium"

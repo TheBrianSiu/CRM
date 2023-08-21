@@ -1,42 +1,35 @@
 import React, { useState, useEffect } from "react";
 import Taskitems from "../structures/taskitems";
 import Columns from "../structures/columns";
+import { HandleSubmit } from "../utils/handlesubmit";
+import { HandleUpdate } from "../utils/handleupdate";
 
 const TaskBoard = ({ tasks, setTasks, columns, setColumns }) => {
-  const addTask = (task_name, description, status) => {
+  const addTask = (status) => {
     const newTask = {
-      project_id: tasks.length + 1,
-      task_name,
-      description,
-      status,
+      task_name: "New item",
+      due_date: "",
+      description: "new description",
+      attachments: "",
+      est_hours: "",
+      est_value: "",
+      lead_status: status,
+      priority: "",
     };
-    setTasks([...tasks, newTask]);
-    setColumns((prevColumns) => {
-      return prevColumns.map((column) =>
-        column.id === status
-          ? { ...column, taskIds: [...column.taskIds, newTask.id] }
-          : column,
-      );
-    });
+
+    try {
+      HandleSubmit(newTask);
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
   };
 
   const updateTaskStatus = (taskId, newStatus) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.project_id === taskId ? { ...task, status: newStatus } : task,
-      ),
-    );
-
-    setColumns((prevColumns) => {
-      const updatedColumns = prevColumns.map((column) => ({
-        ...column,
-        taskIds:
-          column.id === newStatus
-            ? [...column.taskIds, taskId]
-            : column.taskIds.filter((id) => id !== taskId),
-      }));
-      return updatedColumns;
-    });
+    try {
+      HandleUpdate(taskId,newStatus);
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
   };
 
   return (

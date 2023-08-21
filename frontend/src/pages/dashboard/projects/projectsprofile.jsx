@@ -18,7 +18,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { useEffect, useState } from "react";
 
-
 export function ProjectsProfile() {
   const animatedComponents = makeAnimated();
   const { id } = useParams();
@@ -48,8 +47,8 @@ export function ProjectsProfile() {
     e.preventDefault();
     if (window.confirm("Do you want to update the task?")) {
       const customerdata = Data[0];
-      const { project_id, assignees, customers, ...taskData } = customerdata; 
-  
+      const { project_id, assignees, customers, ...taskData } = customerdata;
+
       fetch(`http://localhost:8080/projects-table/update/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -77,23 +76,22 @@ export function ProjectsProfile() {
             handleSelectedCust(generatedid);
           }
 
-
-            alert("The task is updated successfully!");
-            navigate(-1);
+          alert("The task is updated successfully!");
+          navigate(-1);
         })
         .catch((err) => {
           alert(err);
         });
     }
   };
-  
-  // conditional submit 
+
+  // conditional submit
   function handleSelectedUsers(generatedid) {
     const userProjectData = selectedUsers.map((user) => ({
       project_id: generatedid,
       assignee_id: user.value,
     }));
-  
+
     fetch(`http://localhost:8080/project_assignees/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -118,14 +116,14 @@ export function ProjectsProfile() {
         alert(err);
       });
   }
-  
+
   // conditional submit
   function handleSelectedCust(generatedid) {
     const custProjectData = selectedCust.map((cust) => ({
       project_id: generatedid,
       customer_id: cust.value,
     }));
-  
+
     fetch(`http://localhost:8080/project_customers/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -152,46 +150,44 @@ export function ProjectsProfile() {
   }
 
   // delete assignees linkage
-  function removeAssigness(){
-    fetch(`http://localhost:8080/project-assignee/delete/${id}`,{
-      method:"DELETE",
-      headers: {"Content-Type": "application/json"},
+  function removeAssigness() {
+    fetch(`http://localhost:8080/project-assignee/delete/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
     })
-    .then((res) => {
-      if (!res.ok) {
-        return res.text().then((text) => {
-          throw new Error(text);
-        });
-      } else {
-        return res.json();
-      }
-    })
-    .then(function (data) {
-    })
-    .catch((err) => {
-      alert(err);
-    });
+      .then((res) => {
+        if (!res.ok) {
+          return res.text().then((text) => {
+            throw new Error(text);
+          });
+        } else {
+          return res.json();
+        }
+      })
+      .then(function (data) {})
+      .catch((err) => {
+        alert(err);
+      });
   }
   // delete customers linkage
-  function removeCustomer(){
-    fetch(`http://localhost:8080/project-customer/delete/${id}`,{
-      method:"DELETE",
-      headers: {"Content-Type": "application/json"},
+  function removeCustomer() {
+    fetch(`http://localhost:8080/project-customer/delete/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
     })
-    .then((res) => {
-      if (!res.ok) {
-        return res.text().then((text) => {
-          throw new Error(text);
-        });
-      } else {
-        return res.json();
-      }
-    })
-    .then(function (data) {
-    })
-    .catch((err) => {
-      alert(err);
-    });
+      .then((res) => {
+        if (!res.ok) {
+          return res.text().then((text) => {
+            throw new Error(text);
+          });
+        } else {
+          return res.json();
+        }
+      })
+      .then(function (data) {})
+      .catch((err) => {
+        alert(err);
+      });
   }
 
   const handleChange = (e, index) => {
@@ -223,14 +219,12 @@ export function ProjectsProfile() {
       .then((data) => {
         setData(data);
 
-  
         if (data[0].customers[0].value && data[0].customers.length > 0) {
           setSelectedCust(data[0].customers);
         }
         if (data[0].assignees[0].value && data[0].assignees.length > 0) {
           setSelectedUsers(data[0].assignees);
         }
-
       })
       .catch((error) => console.log(error));
   }, []);
@@ -357,7 +351,11 @@ export function ProjectsProfile() {
                                   name="due_date"
                                   id="due_date"
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={Data[0].due_date ? Data[0].due_date.split("T")[0] : ""}                                                                                                
+                                  value={
+                                    Data[0].due_date
+                                      ? Data[0].due_date.split("T")[0]
+                                      : ""
+                                  }
                                   onChange={(e) => handleChange(e, 0)}
                                 />
                               </div>

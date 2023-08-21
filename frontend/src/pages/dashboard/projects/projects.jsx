@@ -15,7 +15,6 @@ import Table from "./component/theme/table";
 import Pagination from "./component/utils/Pagiantion";
 import { SwitchPage } from "./component/utils/switchpage";
 
-
 const Projects = () => {
   const [Istheme, setIsthem] = useState("All");
   const navigate = useNavigate();
@@ -34,7 +33,7 @@ const Projects = () => {
         setTasks(data);
       })
       .catch((error) => console.error(error));
-  }, []);
+  }, [tasks]);
 
   const options = {
     keys: [
@@ -95,7 +94,7 @@ const Projects = () => {
   }
 
   //deletion
-    function deleteProject(id) {
+  function deleteProject(id) {
     if (window.confirm("Do you want to delete the user?")) {
       fetch(`http://localhost:8080/projects/delete/${id}`, {
         method: "PUT",
@@ -110,12 +109,12 @@ const Projects = () => {
         .catch((error) => console.error(error));
     }
   }
-    // delete assignees linkage
-    function removeAssigness(project_id){
-      fetch(`http://localhost:8080/project-assignee/delete/${project_id}`,{
-        method:"DELETE",
-        headers: {"Content-Type": "application/json"},
-      })
+  // delete assignees linkage
+  function removeAssigness(project_id) {
+    fetch(`http://localhost:8080/project-assignee/delete/${project_id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    })
       .then((res) => {
         if (!res.ok) {
           return res.text().then((text) => {
@@ -125,18 +124,17 @@ const Projects = () => {
           return res.json();
         }
       })
-      .then(function (data) {
-      })
+      .then(function (data) {})
       .catch((err) => {
         alert(err);
       });
-    }
-    // delete customers linkage
-    function removeCustomer(project_id){
-      fetch(`http://localhost:8080/project-customer/delete/${project_id}`,{
-        method:"DELETE",
-        headers: {"Content-Type": "application/json"},
-      })
+  }
+  // delete customers linkage
+  function removeCustomer(project_id) {
+    fetch(`http://localhost:8080/project-customer/delete/${project_id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    })
       .then((res) => {
         if (!res.ok) {
           return res.text().then((text) => {
@@ -146,12 +144,11 @@ const Projects = () => {
           return res.json();
         }
       })
-      .then(function (data) {
-      })
+      .then(function (data) {})
       .catch((err) => {
         alert(err);
       });
-    }
+  }
 
   // range of item to display
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -178,7 +175,11 @@ const Projects = () => {
             setIstheme={setIsthem}
           />
           {Istheme === "All" ? (
-            <Table currentItems={currentItems} tasks={tasks} onDelete={deleteProject} />
+            <Table
+              currentItems={currentItems}
+              tasks={tasks}
+              onDelete={deleteProject}
+            />
           ) : (
             <TaskBoard
               tasks={tasks}

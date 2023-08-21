@@ -57,7 +57,7 @@ export function Addprojects() {
     e.preventDefault();
     if (window.confirm("Do you want to submit a new task?")) {
       const customerdata = { ...Data[0] };
-  
+
       fetch(`http://localhost:8080/projects-table/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -90,14 +90,14 @@ export function Addprojects() {
         });
     }
   };
-  
-  // conditional submit 
+
+  // conditional submit
   function handleSelectedUsers(generatedid) {
     const userProjectData = selectedUsers.map((user) => ({
       project_id: generatedid,
       assignee_id: user.value,
     }));
-  
+
     fetch(`http://localhost:8080/project_assignees/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -122,14 +122,14 @@ export function Addprojects() {
         alert(err);
       });
   }
-  
+
   //conditional submit
   function handleSelectedCust(generatedid) {
     const custProjectData = selectedCust.map((cust) => ({
       project_id: generatedid,
       customer_id: cust.value,
     }));
-  
+
     fetch(`http://localhost:8080/project_customers/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -154,8 +154,6 @@ export function Addprojects() {
         alert(err);
       });
   }
-
-  
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
