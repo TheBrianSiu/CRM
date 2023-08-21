@@ -7,7 +7,7 @@ import {
   Chip,
 } from "@material-tailwind/react";
 
-export function Table({ currentItems, tasks }) {
+export function Table({ currentItems, tasks, onDelete}) {
   return (
     <div>
       <table className="w-full min-w-[640px] table-auto">
@@ -98,7 +98,10 @@ export function Table({ currentItems, tasks }) {
                           ? "purple"
                           : lead_status === "won"
                           ? "yellow"
-                          : "red"
+                          : lead_status === "Lost"
+                          ? "red"
+                          : "transparent"
+
                       }
                       value={lead_status}
                       className="px-2 py-0.5 text-center text-[11px] font-medium"
@@ -112,14 +115,14 @@ export function Table({ currentItems, tasks }) {
                   <td className={className}>
                     <Typography
                       as="a"
-                      // href={`customers/edit/${id}`}
+                      href={`projects/edit/${project_id}`}
                       className="text-xs font-semibold text-blue-gray-600"
                     >
                       Edit
                     </Typography>
                     <Typography
                       as="a"
-                      // onClick={() => Deleteuser(id)}
+                      onClick={() => onDelete(project_id)}
                       className="text-xs font-semibold text-blue-gray-600"
                     >
                       Delete

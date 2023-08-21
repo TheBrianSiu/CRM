@@ -111,7 +111,30 @@ const validateUser = (userData) => {
   return { isValid: true };
 };
 
+// projects validation
+const validateProject = (custData) => {
+  const errors = [];
+
+  if (!custData.task_name || !validator.isAlpha(custData.task_name, 'en-US', { ignore: ' ' })) {
+    errors.push('Task name is required and should contain only alphabetic characters');
+  }
+  if (custData.est_hours && !validator.isNumeric(custData.est_hours.toString()) || custData.est_hours && custData.est_hours < 0) {
+    errors.push('Estimated hours should be a numeric value and greater than zero');
+  }
+  if (custData.est_value && !validator.isNumeric(custData.est_value.toString()) || custData.est_value && custData.est_value < 0) {
+    errors.push('Estimated value should be a numeric value and greater than zero');
+  }
+
+  if (errors.length > 0) {
+    return { isValid: false, errors: errors };
+  }
+
+  return { isValid: true };
+};
+
+
 module.exports = {
   validateCustomer,
   validateUser,
+  validateProject,
 };

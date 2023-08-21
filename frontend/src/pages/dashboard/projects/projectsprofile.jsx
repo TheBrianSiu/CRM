@@ -14,29 +14,20 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
 import makeAnimated from "react-select/animated";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { useEffect, useState } from "react";
 
-export function Addprojects() {
+
+export function ProjectsProfile() {
   const animatedComponents = makeAnimated();
+  const { id } = useParams();
   const navigate = useNavigate();
   const [Cust, setCust] = useState([]);
   const [User, setUser] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selectedCust, setSelectedCust] = useState([]);
-  const [Data, setData] = useState([
-    {
-      task_name: "",
-      due_date: "",
-      description: "",
-      attachments: "",
-      est_hours: "",
-      est_value: "",
-      lead_status: "",
-      priority: "",
-    },
-  ]);
+  const [Data, setData] = useState([]);
 
   //options choice
   const priorityOptions = [
@@ -55,13 +46,14 @@ export function Addprojects() {
   //handle submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (window.confirm("Do you want to submit a new task?")) {
-      const customerdata = { ...Data[0] };
+    if (window.confirm("Do you want to update the task?")) {
+      const customerdata = Data[0];
+      const { project_id, assignees, customers, ...taskData } = customerdata; 
   
-      fetch(`http://localhost:8080/projects-table/add`, {
-        method: "POST",
+      fetch(`http://localhost:8080/projects-table/update/${id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(customerdata),
+        body: JSON.stringify(taskData),
       })
         .then((res) => {
           if (!res.ok) {
@@ -73,17 +65,21 @@ export function Addprojects() {
           }
         })
         .then(function (data) {
-          const generatedid = data.id;
+          const generatedid = id;
+
+          removeAssigness(generatedid);
+          removeCustomer(generatedid);
+
           if (selectedUsers.length > 0) {
             handleSelectedUsers(generatedid);
           }
           if (selectedCust.length > 0) {
             handleSelectedCust(generatedid);
           }
-          if (selectedUsers.length === 0 && selectedCust.length === 0) {
-            alert("The task is added successfully!");
+
+
+            alert("The task is updated successfully!");
             navigate(-1);
-          }
         })
         .catch((err) => {
           alert(err);
@@ -114,7 +110,7 @@ export function Addprojects() {
       })
       .then(function (data) {
         if (selectedCust.length === 0) {
-          alert("The task is added successfully!");
+          alert("The task is updated successfully!");
           navigate(-1);
         }
       })
@@ -123,7 +119,7 @@ export function Addprojects() {
       });
   }
   
-  //conditional submit
+  // conditional submit
   function handleSelectedCust(generatedid) {
     const custProjectData = selectedCust.map((cust) => ({
       project_id: generatedid,
@@ -146,7 +142,7 @@ export function Addprojects() {
       })
       .then(function (data) {
         if (selectedUsers.length === 0) {
-          alert("The task is added successfully!");
+          alert("The task is updated successfully!");
           navigate(-1);
         }
       })
@@ -155,7 +151,48 @@ export function Addprojects() {
       });
   }
 
-  
+  // delete assignees linkage
+  function removeAssigness(){
+    fetch(`http://localhost:8080/project-assignee/delete/${id}`,{
+      method:"DELETE",
+      headers: {"Content-Type": "application/json"},
+    })
+    .then((res) => {
+      if (!res.ok) {
+        return res.text().then((text) => {
+          throw new Error(text);
+        });
+      } else {
+        return res.json();
+      }
+    })
+    .then(function (data) {
+    })
+    .catch((err) => {
+      alert(err);
+    });
+  }
+  // delete customers linkage
+  function removeCustomer(){
+    fetch(`http://localhost:8080/project-customer/delete/${id}`,{
+      method:"DELETE",
+      headers: {"Content-Type": "application/json"},
+    })
+    .then((res) => {
+      if (!res.ok) {
+        return res.text().then((text) => {
+          throw new Error(text);
+        });
+      } else {
+        return res.json();
+      }
+    })
+    .then(function (data) {
+    })
+    .catch((err) => {
+      alert(err);
+    });
+  }
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
@@ -166,20 +203,37 @@ export function Addprojects() {
     );
   };
 
-  //retrieve data
+  //retrieve user and cust data set
   useEffect(() => {
     fetch(`http://localhost:8080/users-table/supervisor`)
       .then((response) => response.json())
       .then((data) => setUser(data))
       .catch((error) => console.log(error));
-  }, [User]);
 
-  useEffect(() => {
     fetch(`http://localhost:8080/customers-basicinfo`)
       .then((response) => response.json())
       .then((data) => setCust(data))
       .catch((error) => console.log(error));
-  }, [Cust]);
+  }, []);
+
+  // retrieve records
+  useEffect(() => {
+    fetch(`http://localhost:8080/inserted-projects/${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
+
+  
+        if (data[0].customers[0].value && data[0].customers.length > 0) {
+          setSelectedCust(data[0].customers);
+        }
+        if (data[0].assignees[0].value && data[0].assignees.length > 0) {
+          setSelectedUsers(data[0].assignees);
+        }
+
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
   return (
     <>
@@ -303,12 +357,10 @@ export function Addprojects() {
                                   name="due_date"
                                   id="due_date"
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={Data[0].due_date}
+                                  value={Data[0].due_date ? Data[0].due_date.split("T")[0] : ""}                                                                                                
                                   onChange={(e) => handleChange(e, 0)}
-                                  required
                                 />
                               </div>
-
                               {/* <div className="col-span-6 sm:col-span-3">
                                 <label
                                   htmlFor="attachments"
@@ -442,7 +494,6 @@ export function Addprojects() {
                                   onChange={setSelectedUsers}
                                 />
                               </div>
-
                               <div className="col-span-6 sm:col-span-3">
                                 <label
                                   htmlFor="cust_id"
@@ -483,4 +534,4 @@ export function Addprojects() {
   );
 }
 
-export default Addprojects;
+export default ProjectsProfile;

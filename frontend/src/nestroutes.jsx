@@ -3,6 +3,7 @@ import Customersprofile from "./pages/dashboard/customers/customersprofile";
 import Usersprofile from "./pages/dashboard/users/usersprofile";
 import Addusers from "./pages/dashboard/users/addusers";
 import Addprojects from "./pages/dashboard/projects/addprojects";
+import ProjectsProfile from "./pages/dashboard/projects/projectsprofile";
 
 export const routes = [
   {
@@ -32,6 +33,11 @@ export const routes = [
         name: "projects_addpage",
         path: "projects/add",
         element: <Addprojects />,
+      },
+      {
+        name: "projects_editpage",
+        path: "projects/edit/:id",
+        element: <ProjectsProfile />,
       },
     ],
   },

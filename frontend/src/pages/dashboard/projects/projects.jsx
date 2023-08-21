@@ -15,19 +15,6 @@ import Table from "./component/theme/table";
 import Pagination from "./component/utils/Pagiantion";
 import { SwitchPage } from "./component/utils/switchpage";
 
-function Deleteuser(id) {
-  if (window.confirm("Do you want to delete the user?")) {
-    fetch(`http://localhost:8080/customers-table/delete/${id}`, {
-      method: "PUT",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Response data:", data);
-        alert("The customer is deleted");
-      })
-      .catch((error) => console.error(error));
-  }
-}
 
 const Projects = () => {
   const [Istheme, setIsthem] = useState("All");
@@ -107,6 +94,65 @@ const Projects = () => {
     navigate("add");
   }
 
+  //deletion
+    function deleteProject(id) {
+    if (window.confirm("Do you want to delete the user?")) {
+      fetch(`http://localhost:8080/projects/delete/${id}`, {
+        method: "PUT",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          removeAssigness(id);
+          removeCustomer(id);
+          console.log("Response data:", data);
+          alert("The task is deleted");
+        })
+        .catch((error) => console.error(error));
+    }
+  }
+    // delete assignees linkage
+    function removeAssigness(project_id){
+      fetch(`http://localhost:8080/project-assignee/delete/${project_id}`,{
+        method:"DELETE",
+        headers: {"Content-Type": "application/json"},
+      })
+      .then((res) => {
+        if (!res.ok) {
+          return res.text().then((text) => {
+            throw new Error(text);
+          });
+        } else {
+          return res.json();
+        }
+      })
+      .then(function (data) {
+      })
+      .catch((err) => {
+        alert(err);
+      });
+    }
+    // delete customers linkage
+    function removeCustomer(project_id){
+      fetch(`http://localhost:8080/project-customer/delete/${project_id}`,{
+        method:"DELETE",
+        headers: {"Content-Type": "application/json"},
+      })
+      .then((res) => {
+        if (!res.ok) {
+          return res.text().then((text) => {
+            throw new Error(text);
+          });
+        } else {
+          return res.json();
+        }
+      })
+      .then(function (data) {
+      })
+      .catch((err) => {
+        alert(err);
+      });
+    }
+
   // range of item to display
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -132,7 +178,7 @@ const Projects = () => {
             setIstheme={setIsthem}
           />
           {Istheme === "All" ? (
-            <Table currentItems={currentItems} tasks={tasks} />
+            <Table currentItems={currentItems} tasks={tasks} onDelete={deleteProject} />
           ) : (
             <TaskBoard
               tasks={tasks}
