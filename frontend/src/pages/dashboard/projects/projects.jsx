@@ -95,7 +95,7 @@ const Projects = () => {
 
   //deletion
   function deleteProject(id) {
-    if (window.confirm("Do you want to delete the user?")) {
+    if (window.confirm("Do you want to delete this item?")) {
       fetch(`http://localhost:8080/projects/delete/${id}`, {
         method: "PUT",
       })

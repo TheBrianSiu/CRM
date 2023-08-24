@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import Fuse from "fuse.js";
 
 function Deleteuser(id) {
-  if (window.confirm("Do you want to delete the user?")) {
+  if (window.confirm("Do you want to delete this customer?")) {
     fetch(`http://localhost:8080/customers-table/delete/${id}`, {
       method: "PUT",
     })

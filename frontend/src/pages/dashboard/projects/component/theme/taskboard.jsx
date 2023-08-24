@@ -26,7 +26,7 @@ const TaskBoard = ({ tasks, setTasks, columns, setColumns }) => {
 
   const updateTaskStatus = (taskId, newStatus) => {
     try {
-      HandleUpdate(taskId,newStatus);
+      HandleUpdate(taskId, newStatus);
     } catch (error) {
       console.error("An error occurred:", error);
     }

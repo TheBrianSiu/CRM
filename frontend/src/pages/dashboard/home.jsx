@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Card,
@@ -22,24 +22,71 @@ import {
 import { StatisticsCard } from "@/widgets/cards";
 import { StatisticsChart } from "@/widgets/charts";
 import {
-  statisticsCardsData,
-  statisticsChartsData,
-  projectsTableData,
   ordersOverviewData,
 } from "@/data";
+import { FetchSalesRecords,FetchProjectTable,FetchProjectCompletion, FetchChartsData} from "@/data";
 
 export function Home() {
+  const [StatisticsCardsData, setStatisticsCardsData] = useState([]);
+  const [ProjectsTableData, setProjectsTableData] = useState([]);
+  const [CompletedProject, setCompletedProject] = useState();
+  const [statisticsChartsData, setStatisticsChartsData] = useState([]);
+
+  function formatDate(date) {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${year}-${month.toString().padStart(2, "0")}-${day
+      .toString()
+      .padStart(2, "0")}`;
+  }
+
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+
+  const startOfLastMonth = new Date(year, month-1, 1);
+  const endOfLastMonth = new Date(year, month, 0);
+  const startOfMonth = new Date(year, month, 1);
+  const endOfMonth = new Date(year, month+1, 0);
+
+  const formattedStartOfMonth = formatDate(startOfMonth);
+  const formattedEndOfMonth = formatDate(endOfMonth);
+  const formattedStartOfLastMonth = formatDate(startOfLastMonth);
+  const formattedEndOfLastMonth = formatDate(endOfLastMonth);
+  
+  function formatNumber(number) {
+    if (number >= 1000000000) {
+      return (number / 1000000000).toFixed(1) + ' billion';
+    } else if (number >= 1000000) {
+      return (number / 1000000).toFixed(1) + ' million';
+    } else if (number >= 1000) {
+      return (number / 1000).toFixed(1) + ' thousand';
+    } else {
+      return number.toString();
+    }
+  }
+
   useEffect(() => {
-    fetch("http://localhost:8080/users")
-      .then((res) => res.json())
-      .then((data) => console.log(data))
-      .catch((err) => console.log(err));
+    FetchSalesRecords(formattedStartOfMonth, formattedEndOfMonth, formattedStartOfLastMonth, formattedEndOfLastMonth, formatNumber, setStatisticsCardsData);
   }, []);
+
+  useEffect(() => {
+    FetchProjectTable(setProjectsTableData);
+  }, []);
+
+  useEffect(() => {
+    FetchProjectCompletion(formattedStartOfMonth, formattedEndOfMonth,setCompletedProject);
+  }, []);
+
+  useEffect(()=>{
+    FetchChartsData(year,setStatisticsChartsData)
+  },[])
 
   return (
     <div className="mt-12">
       <div className="mb-12 grid gap-x-6 gap-y-10 md:grid-cols-2 xl:grid-cols-4">
-        {statisticsCardsData.map(({ icon, title, footer, ...rest }) => (
+        {StatisticsCardsData.map(({ icon, title, footer, ...rest }) => (
           <StatisticsCard
             key={title}
             {...rest}
@@ -49,7 +96,10 @@ export function Home() {
             })}
             footer={
               <Typography className="font-normal text-blue-gray-600">
-                <strong className={footer.color}>{footer.value}</strong>
+                <strong className={footer.color}>
+                  {footer.value}
+                  {"%"}
+                </strong>
                 &nbsp;{footer.label}
               </Typography>
             }
@@ -90,7 +140,7 @@ export function Home() {
                 className="flex items-center gap-1 font-normal text-blue-gray-600"
               >
                 <CheckIcon strokeWidth={3} className="h-4 w-4 text-blue-500" />
-                <strong>30 done</strong> this month
+                <strong>{CompletedProject}{" done"}</strong> this month
               </Typography>
             </div>
             <Menu placement="left-start">
@@ -114,7 +164,7 @@ export function Home() {
             <table className="w-full min-w-[640px] table-auto">
               <thead>
                 <tr>
-                  {["companies", "members", "budget", "completion"].map(
+                  {["Task item", "assignees", "est value", "status"].map(
                     (el) => (
                       <th
                         key={el}
@@ -132,41 +182,46 @@ export function Home() {
                 </tr>
               </thead>
               <tbody>
-                {projectsTableData.map(
-                  ({ img, name, members, budget, completion }, key) => {
+                {ProjectsTableData.slice(0, 10).map(
+                  ({ task_name, assignees, est_value, lead_status }, key) => {
+                    const isLastItem = key === Math.min(9, ProjectsTableData.length - 1);
                     const className = `py-3 px-5 ${
-                      key === projectsTableData.length - 1
-                        ? ""
-                        : "border-b border-blue-gray-50"
+                      isLastItem ? "" : "border-b border-blue-gray-50"
                     }`;
 
                     return (
-                      <tr key={name}>
+                      <tr key={task_name}>
                         <td className={className}>
                           <div className="flex items-center gap-4">
-                            <Avatar src={img} alt={name} size="sm" />
+                            {/* <Avatar src={""} alt={task_name} size="sm" /> */}
                             <Typography
                               variant="small"
                               color="blue-gray"
                               className="font-bold"
                             >
-                              {name}
+                              {task_name}
                             </Typography>
                           </div>
                         </td>
                         <td className={className}>
-                          {members.map(({ img, name }, key) => (
-                            <Tooltip key={name} content={name}>
-                              <Avatar
-                                src={img}
-                                alt={name}
-                                size="xs"
-                                variant="circular"
-                                className={`cursor-pointer border-2 border-white ${
-                                  key === 0 ? "" : "-ml-2.5"
-                                }`}
-                              />
-                            </Tooltip>
+                          {assignees.map(({ first_name, last_name }, key) => (
+                            <Typography
+                            variant="small"
+                            className="text-xs font-medium text-blue-gray-600"
+                          >
+                            {first_name}{" "}{last_name}
+                          </Typography>
+                            // <Tooltip key={first_name} content={first_name}>
+                            //   <Avatar
+                            //     src={""}
+                            //     alt={""}
+                            //     size="xs"
+                            //     variant="circular"
+                            //     className={`cursor-pointer border-2 border-white ${
+                            //       key === 0 ? "" : "-ml-2.5"
+                            //     }`}
+                            //   />
+                            // </Tooltip>
                           ))}
                         </td>
                         <td className={className}>
@@ -174,7 +229,7 @@ export function Home() {
                             variant="small"
                             className="text-xs font-medium text-blue-gray-600"
                           >
-                            {budget}
+                            {est_value}
                           </Typography>
                         </td>
                         <td className={className}>
@@ -183,12 +238,12 @@ export function Home() {
                               variant="small"
                               className="mb-1 block text-xs font-medium text-blue-gray-600"
                             >
-                              {completion}%
+                              {lead_status}
                             </Typography>
                             <Progress
-                              value={completion}
+                              value={lead_status}
                               variant="gradient"
-                              color={completion === 100 ? "green" : "blue"}
+                              // color={completion === 100 ? "green" : "blue"}
                               className="h-1"
                             />
                           </div>
@@ -202,7 +257,7 @@ export function Home() {
           </CardBody>
         </Card>
         <Card>
-          <CardHeader
+          {/* <CardHeader
             floated={false}
             shadow={false}
             color="transparent"
@@ -223,7 +278,7 @@ export function Home() {
             </Typography>
           </CardHeader>
           <CardBody className="pt-0">
-            {ordersOverviewData.map(
+            {statisticsChartsData.map(
               ({ icon, color, title, description }, key) => (
                 <div key={title} className="flex items-start gap-4 py-3">
                   <div
@@ -233,9 +288,7 @@ export function Home() {
                         : "after:h-4/6"
                     }`}
                   >
-                    {React.createElement(icon, {
-                      className: `!w-5 !h-5 ${color}`,
-                    })}
+                    {console.log(icon)}
                   </div>
                   <div>
                     <Typography
@@ -256,7 +309,7 @@ export function Home() {
                 </div>
               ),
             )}
-          </CardBody>
+          </CardBody> */}
         </Card>
       </div>
     </div>

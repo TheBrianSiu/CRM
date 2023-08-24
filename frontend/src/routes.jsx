@@ -49,18 +49,6 @@ export const routes = [
         path: "/projects",
         element: <Projects />,
       },
-      {
-        icon: <BellIcon {...icon} />,
-        name: "notifactions",
-        path: "/notifactions",
-        element: <Notifications />,
-      },
-      {
-        icon: <TableCellsIcon {...icon} />,
-        name: "admin",
-        path: "/admin",
-        element: <Profile />,
-      },
     ],
   },
   {
