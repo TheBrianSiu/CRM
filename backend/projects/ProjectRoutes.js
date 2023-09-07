@@ -293,8 +293,6 @@ router.put("/projects-table/update-status/:id", async (req, res) => {
   }
 });
 
-
-
 //delete project 
 router.put("/projects/delete/:id", async (req, res) => {
   const project_id = req.params.id;

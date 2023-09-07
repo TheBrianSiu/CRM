@@ -1,6 +1,4 @@
-
-
-export const FetchChartsData = ( year, setStatisticsChartsData) => {
+export const FetchChartsData = (year, setStatisticsChartsData) => {
   fetch(`http://localhost:8080/monthly-project`)
     .then((response) => response.json())
     .then((responseData) => {
@@ -16,8 +14,18 @@ export const FetchChartsData = ( year, setStatisticsChartsData) => {
         options: {
           xaxis: {
             categories: [
-              "Jan", "Feb", "Mar", "Apr", "May", "June",
-              "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "May",
+              "June",
+              "July",
+              "Aug",
+              "Sep",
+              "Oct",
+              "Nov",
+              "Dec",
             ],
           },
         },
@@ -45,8 +53,18 @@ export const FetchChartsData = ( year, setStatisticsChartsData) => {
             options: {
               xaxis: {
                 categories: [
-                  "Jan", "Feb", "Mar", "Apr", "May", "June",
-                  "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+                  "Jan",
+                  "Feb",
+                  "Mar",
+                  "Apr",
+                  "May",
+                  "June",
+                  "July",
+                  "Aug",
+                  "Sep",
+                  "Oct",
+                  "Nov",
+                  "Dec",
                 ],
               },
             },
@@ -74,8 +92,18 @@ export const FetchChartsData = ( year, setStatisticsChartsData) => {
                 options: {
                   xaxis: {
                     categories: [
-                      "Jan", "Feb", "Mar", "Apr", "May", "June",
-                      "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+                      "Jan",
+                      "Feb",
+                      "Mar",
+                      "Apr",
+                      "May",
+                      "June",
+                      "July",
+                      "Aug",
+                      "Sep",
+                      "Oct",
+                      "Nov",
+                      "Dec",
                     ],
                   },
                 },
@@ -84,30 +112,32 @@ export const FetchChartsData = ( year, setStatisticsChartsData) => {
               responseData.forEach((item) => {
                 const monthIndex = item.month - 1;
                 if (monthIndex >= 0 && monthIndex < 12) {
-                  monthlyNewClientsChart.series[0].data[monthIndex] = item.new_client;
+                  monthlyNewClientsChart.series[0].data[monthIndex] =
+                    item.new_client;
                 }
               });
 
               const statisticsChartsData = [
                 {
-                  color: "blue-gray",
+                  color: "white",
                   title: "New Project By Month",
-                  description: "Discover the monthly evolution of new projects.",
-                  footer: "Activities in this "+ year,
+                  description:
+                    "Discover the monthly evolution of new projects.",
+                  footer: "Activities in this " + year,
                   chart: newTasksChart,
                 },
                 {
-                  color: "green",
+                  color: "white",
                   title: "Sales closed by Month",
                   description: "Gain insights into your sales performance.",
-                  footer: "Activities in this "+ year,
+                  footer: "Activities in this " + year,
                   chart: monthlySalesChart,
                 },
                 {
-                  color: "blue-gray",
+                  color: "white",
                   title: "Number of new clients",
                   description: "Track the monthly influx of new clients.",
-                  footer: "Activities in this "+ year,
+                  footer: "Activities in this " + year,
                   chart: monthlyNewClientsChart,
                 },
               ];

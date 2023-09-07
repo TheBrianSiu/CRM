@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { Taskitems } from "./taskitems";
 
-export function Columns({ column, tasks, updateTaskStatus, addTask }) {
+export function Columns({ column, tasks, updateTaskStatus, addTask}) {
   const [isOver, setIsOver] = useState(false);
 
   const [, drop] = useDrop({
@@ -25,18 +25,20 @@ export function Columns({ column, tasks, updateTaskStatus, addTask }) {
       ref={drop}
       className="column-container relative rounded-lg p-4 shadow-md"
       style={{
-        minWidth: "250px",
-        maxWidth: "290px",
+        // minWidth: "6rem",
+        maxWidth: "15rem",
         backgroundColor: column.backgroundColor,
-        overflowY: "auto",
-        maxHeight: "80vh",
+        height: "80vh",
         opacity: isOver ? 0.8 : 1,
+        overflow: "hidden"
       }}
     >
+  
       <div className="group mb-4 flex items-center justify-between">
         <h3 className="text-xl font-bold">{column.lead_status}</h3>
         <div
-          className="cursor-pointer justify-end p-2  transition-colors duration-300 group-hover:bg-gray-500 group-hover:text-white"
+          style={{minWidth : "3rem", textAlign : "center"}}
+          className="min-w-20 cursor-pointer justify-end p-2  transition-colors duration-300 group-hover:bg-gray-500 group-hover:text-white"
           onClick={() => {
             addTask(column.id);
           }}
@@ -44,22 +46,29 @@ export function Columns({ column, tasks, updateTaskStatus, addTask }) {
           +
         </div>
       </div>
-
+          <div className="column-container relative "
+      style={{
+        backgroundColor: column.backgroundColor,
+        height: "80vh",
+        opacity: isOver ? 0.8 : 1,
+        overflowY: "auto"
+      }}>
       <div className="flex-1">
         {column.taskIds.map((taskId) => {
           const task = tasks.find((task) => task.project_id === taskId);
-          return <Taskitems task={task} columnId={column.id} />;
+          return <Taskitems task={task} columnId={column.id}/>;
         })}
       </div>
-      {/* <div
-              className="absolute bottom-0 left-0 right-0 mt-2 cursor-pointer rounded-lg bg-blue-gray-50 p-2 text-center"
-              onClick={() => {
-                addTask("New Task", "Description", column.id);
-              }}
-            >
-              + New
-            </div> */}
-    </div>
+      </div>
+      <div
+      className="absolute align-flex bottom-0 left-0 right-0 mt-2 cursor-pointer rounded-lg bg-blue-gray-50 p-2 text-center"
+      onClick={() => {
+        addTask(column.id);
+      }}
+        >
+          + New
+        </div>
+        </div>
   );
 }
 

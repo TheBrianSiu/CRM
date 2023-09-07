@@ -8,12 +8,13 @@ import {
 } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Fuse from "fuse.js";
 import Navbar from "./component/utils/navbar";
 import TaskBoard from "./component/theme/taskboard";
 import Table from "./component/theme/table";
 import Pagination from "./component/utils/Pagiantion";
 import { SwitchPage } from "./component/utils/switchpage";
+import { fetchProjects } from "./api/api";
+import { performSearch } from "./component/utils/search";
 
 const Projects = () => {
   const [Istheme, setIsthem] = useState("All");
@@ -27,38 +28,15 @@ const Projects = () => {
 
   // retrieve data
   useEffect(() => {
-    fetch("http://localhost:8080/projects-with-assignees")
-      .then((response) => response.json())
+    fetchProjects()
       .then((data) => {
         setTasks(data);
       })
       .catch((error) => console.error(error));
   }, [tasks]);
 
-  const options = {
-    keys: [
-      "task_name",
-      "assignees.first_name",
-      "assignees.last_name",
-      "description",
-      "est_value",
-      "lead_status",
-      "priority",
-    ],
-    threshold: 0.3,
-    location: 0,
-    distance: 100,
-    includeMatches: true,
-    includeScore: true,
-    useExtendedSearch: true,
-  };
-
   //search engine
-  const fuse = new Fuse(tasks, options);
-
-  const filteredUserdata = searchQuery
-    ? fuse.search(searchQuery).map((result) => result.item)
-    : tasks;
+  const filteredUserdata = performSearch(tasks, searchQuery);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -93,63 +71,6 @@ const Projects = () => {
     navigate("add");
   }
 
-  //deletion
-  function deleteProject(id) {
-    if (window.confirm("Do you want to delete this item?")) {
-      fetch(`http://localhost:8080/projects/delete/${id}`, {
-        method: "PUT",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          removeAssigness(id);
-          removeCustomer(id);
-          console.log("Response data:", data);
-          alert("The task is deleted");
-        })
-        .catch((error) => console.error(error));
-    }
-  }
-  // delete assignees linkage
-  function removeAssigness(project_id) {
-    fetch(`http://localhost:8080/project-assignee/delete/${project_id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          return res.text().then((text) => {
-            throw new Error(text);
-          });
-        } else {
-          return res.json();
-        }
-      })
-      .then(function (data) {})
-      .catch((err) => {
-        alert(err);
-      });
-  }
-  // delete customers linkage
-  function removeCustomer(project_id) {
-    fetch(`http://localhost:8080/project-customer/delete/${project_id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          return res.text().then((text) => {
-            throw new Error(text);
-          });
-        } else {
-          return res.json();
-        }
-      })
-      .then(function (data) {})
-      .catch((err) => {
-        alert(err);
-      });
-  }
-
   // range of item to display
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -178,14 +99,11 @@ const Projects = () => {
             <Table
               currentItems={currentItems}
               tasks={tasks}
-              onDelete={deleteProject}
             />
           ) : (
             <TaskBoard
               tasks={tasks}
-              setTasks={setTasks}
               columns={columns}
-              setColumns={setColumns}
             />
           )}
           <div className="mt-4 flex justify-center">

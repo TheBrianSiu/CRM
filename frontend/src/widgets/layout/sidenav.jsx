@@ -7,7 +7,9 @@ import {
   IconButton,
   Typography,
 } from "@material-tailwind/react";
+import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/solid";
 import { useMaterialTailwindController, setOpenSidenav } from "@/context";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function Sidenav({ brandImg, brandName, routes }) {
   const [controller, dispatch] = useMaterialTailwindController();
@@ -17,6 +19,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
     white: "bg-white shadow-lg",
     transparent: "bg-transparent",
   };
+  const { loginWithRedirect, logout, user, isLoading } = useAuth0();
 
   return (
     <aside
@@ -91,6 +94,44 @@ export function Sidenav({ brandImg, brandName, routes }) {
                 </NavLink>
               </li>
             ))}
+            <li className="mx-3.5 mb-2 mt-4">
+              <Typography
+                variant="small"
+                color={sidenavType === "dark" ? "white" : "blue-gray"}
+                className="font-black uppercase opacity-75"
+              >
+                Auth Page
+              </Typography>
+            </li>
+
+            <li key="signin">
+              <Button
+                variant="text"
+                color="white"
+                className="flex items-center gap-4 px-4 capitalize"
+                fullWidth
+                onClick={() => loginWithRedirect()}
+              >
+                {/* {<ArrowRightOnRectangleIcon/>} */}
+                <Typography color="inherit" className="font-medium capitalize">
+                  sign in
+                </Typography>
+              </Button>
+            </li>
+            <li key="signout">
+              <Button
+                variant="text"
+                color="white"
+                className="flex items-center gap-4 px-4 capitalize"
+                fullWidth
+                onClick={() => logout()}
+              >
+                {/* {<ArrowRightOnRectangleIcon/>} */}
+                <Typography color="inherit" className="font-medium capitalize">
+                  sign out
+                </Typography>
+              </Button>
+            </li>
           </ul>
         ))}
       </div>

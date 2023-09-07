@@ -6,8 +6,21 @@ import {
   Avatar,
   Chip,
 } from "@material-tailwind/react";
+import { deleteProjectWithRelatedData } from "../../api/api";
 
-export function Table({ currentItems, tasks, onDelete }) {
+
+export function Table({ currentItems, tasks}) {
+
+  function deleteProject(id){
+    if(window.confirm("Do you want to delete this item?")){
+      deleteProjectWithRelatedData(id)
+      .then((responses) => {
+        alert("The task is deleted");
+      })
+      .catch((error)=> console.error(error));
+    }
+  }
+
   return (
     <div>
       <table className="w-full min-w-[640px] table-auto">
@@ -121,7 +134,7 @@ export function Table({ currentItems, tasks, onDelete }) {
                     </Typography>
                     <Typography
                       as="a"
-                      onClick={() => onDelete(project_id)}
+                      onClick={() => deleteProject(project_id)}
                       className="text-xs font-semibold text-blue-gray-600"
                     >
                       Delete

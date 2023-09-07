@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 const EditModal = ({ task, onClose }) => {
-  console.log("sss");
   const [editedTitle, setEditedTitle] = useState(task.title);
   const [editedDescription, setEditedDescription] = useState(task.description);
 

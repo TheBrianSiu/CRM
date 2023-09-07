@@ -21,10 +21,13 @@ import {
 } from "@heroicons/react/24/outline";
 import { StatisticsCard } from "@/widgets/cards";
 import { StatisticsChart } from "@/widgets/charts";
+import { ordersOverviewData } from "@/data";
 import {
-  ordersOverviewData,
+  FetchSalesRecords,
+  FetchProjectTable,
+  FetchProjectCompletion,
+  FetchChartsData,
 } from "@/data";
-import { FetchSalesRecords,FetchProjectTable,FetchProjectCompletion, FetchChartsData} from "@/data";
 
 export function Home() {
   const [StatisticsCardsData, setStatisticsCardsData] = useState([]);
@@ -45,30 +48,37 @@ export function Home() {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
-  const startOfLastMonth = new Date(year, month-1, 1);
+  const startOfLastMonth = new Date(year, month - 1, 1);
   const endOfLastMonth = new Date(year, month, 0);
   const startOfMonth = new Date(year, month, 1);
-  const endOfMonth = new Date(year, month+1, 0);
+  const endOfMonth = new Date(year, month + 1, 0);
 
   const formattedStartOfMonth = formatDate(startOfMonth);
   const formattedEndOfMonth = formatDate(endOfMonth);
   const formattedStartOfLastMonth = formatDate(startOfLastMonth);
   const formattedEndOfLastMonth = formatDate(endOfLastMonth);
-  
+
   function formatNumber(number) {
     if (number >= 1000000000) {
-      return (number / 1000000000).toFixed(1) + ' billion';
+      return (number / 1000000000).toFixed(1) + " billion";
     } else if (number >= 1000000) {
-      return (number / 1000000).toFixed(1) + ' million';
+      return (number / 1000000).toFixed(1) + " million";
     } else if (number >= 1000) {
-      return (number / 1000).toFixed(1) + ' thousand';
+      return (number / 1000).toFixed(1) + " thousand";
     } else {
       return number.toString();
     }
   }
 
   useEffect(() => {
-    FetchSalesRecords(formattedStartOfMonth, formattedEndOfMonth, formattedStartOfLastMonth, formattedEndOfLastMonth, formatNumber, setStatisticsCardsData);
+    FetchSalesRecords(
+      formattedStartOfMonth,
+      formattedEndOfMonth,
+      formattedStartOfLastMonth,
+      formattedEndOfLastMonth,
+      formatNumber,
+      setStatisticsCardsData,
+    );
   }, []);
 
   useEffect(() => {
@@ -76,12 +86,16 @@ export function Home() {
   }, []);
 
   useEffect(() => {
-    FetchProjectCompletion(formattedStartOfMonth, formattedEndOfMonth,setCompletedProject);
+    FetchProjectCompletion(
+      formattedStartOfMonth,
+      formattedEndOfMonth,
+      setCompletedProject,
+    );
   }, []);
 
-  useEffect(()=>{
-    FetchChartsData(year,setStatisticsChartsData)
-  },[])
+  useEffect(() => {
+    FetchChartsData(year, setStatisticsChartsData);
+  }, []);
 
   return (
     <div className="mt-12">
@@ -140,7 +154,11 @@ export function Home() {
                 className="flex items-center gap-1 font-normal text-blue-gray-600"
               >
                 <CheckIcon strokeWidth={3} className="h-4 w-4 text-blue-500" />
-                <strong>{CompletedProject}{" done"}</strong> this month
+                <strong>
+                  {CompletedProject}
+                  {" done"}
+                </strong>{" "}
+                this month
               </Typography>
             </div>
             <Menu placement="left-start">
@@ -184,7 +202,8 @@ export function Home() {
               <tbody>
                 {ProjectsTableData.slice(0, 10).map(
                   ({ task_name, assignees, est_value, lead_status }, key) => {
-                    const isLastItem = key === Math.min(9, ProjectsTableData.length - 1);
+                    const isLastItem =
+                      key === Math.min(9, ProjectsTableData.length - 1);
                     const className = `py-3 px-5 ${
                       isLastItem ? "" : "border-b border-blue-gray-50"
                     }`;
@@ -206,11 +225,11 @@ export function Home() {
                         <td className={className}>
                           {assignees.map(({ first_name, last_name }, key) => (
                             <Typography
-                            variant="small"
-                            className="text-xs font-medium text-blue-gray-600"
-                          >
-                            {first_name}{" "}{last_name}
-                          </Typography>
+                              variant="small"
+                              className="text-xs font-medium text-blue-gray-600"
+                            >
+                              {first_name} {last_name}
+                            </Typography>
                             // <Tooltip key={first_name} content={first_name}>
                             //   <Avatar
                             //     src={""}
