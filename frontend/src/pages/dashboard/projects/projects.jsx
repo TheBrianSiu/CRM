@@ -96,15 +96,9 @@ const Projects = () => {
             setIstheme={setIsthem}
           />
           {Istheme === "All" ? (
-            <Table
-              currentItems={currentItems}
-              tasks={tasks}
-            />
+            <Table currentItems={currentItems} tasks={tasks} />
           ) : (
-            <TaskBoard
-              tasks={tasks}
-              columns={columns}
-            />
+            <TaskBoard tasks={tasks} columns={columns} />
           )}
           <div className="mt-4 flex justify-center">
             {Istheme === "All" ? (

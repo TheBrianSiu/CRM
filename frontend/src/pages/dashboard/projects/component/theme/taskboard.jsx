@@ -4,7 +4,7 @@ import Columns from "../structures/columns";
 import { HandleSubmit } from "../utils/handlesubmit";
 import { HandleUpdate } from "../utils/handleupdate";
 
-const TaskBoard = ({ tasks, columns, deletion}) => {
+const TaskBoard = ({ tasks, columns, deletion }) => {
   const addTask = (status) => {
     const newTask = {
       task_name: "New item",

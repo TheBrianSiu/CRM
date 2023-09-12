@@ -19,6 +19,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
     white: "bg-white shadow-lg",
     transparent: "bg-transparent",
   };
+
   const { loginWithRedirect, logout, user, isLoading } = useAuth0();
 
   return (
@@ -53,7 +54,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
         </IconButton>
       </div>
       <div className="m-4">
-        {routes.map(({ layout, title, pages }, key) => (
+        {routes.map(({ title, pages }, key) => (
           <ul key={key} className="mb-4 flex flex-col gap-1">
             {title && (
               <li className="mx-3.5 mb-2 mt-4">
@@ -68,7 +69,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
             )}
             {pages.map(({ icon, name, path }) => (
               <li key={name}>
-                <NavLink to={`/${layout}${path}`}>
+                <NavLink to={`${path}`}>
                   {({ isActive }) => (
                     <Button
                       variant={isActive ? "gradient" : "text"}
@@ -103,35 +104,48 @@ export function Sidenav({ brandImg, brandName, routes }) {
                 Auth Page
               </Typography>
             </li>
-
-            <li key="signin">
-              <Button
-                variant="text"
-                color="white"
-                className="flex items-center gap-4 px-4 capitalize"
-                fullWidth
-                onClick={() => loginWithRedirect()}
-              >
-                {/* {<ArrowRightOnRectangleIcon/>} */}
-                <Typography color="inherit" className="font-medium capitalize">
-                  sign in
-                </Typography>
-              </Button>
-            </li>
-            <li key="signout">
-              <Button
-                variant="text"
-                color="white"
-                className="flex items-center gap-4 px-4 capitalize"
-                fullWidth
-                onClick={() => logout()}
-              >
-                {/* {<ArrowRightOnRectangleIcon/>} */}
-                <Typography color="inherit" className="font-medium capitalize">
-                  sign out
-                </Typography>
-              </Button>
-            </li>
+            {!isLoading && !user && (
+              <li key="signin">
+                <Button
+                  variant="text"
+                  color="white"
+                  className="flex items-center gap-4 px-4 capitalize"
+                  fullWidth
+                  onClick={() => loginWithRedirect()}
+                >
+                  {/* {<ArrowRightOnRectangleIcon/>} */}
+                  <Typography
+                    color="inherit"
+                    className="font-medium capitalize"
+                  >
+                    sign in
+                  </Typography>
+                </Button>
+              </li>
+            )}
+            {!isLoading && user && (
+              <li key="signout">
+                <Button
+                  variant="text"
+                  color="white"
+                  className="flex items-center gap-4 px-4 capitalize"
+                  fullWidth
+                  onClick={() =>
+                    logout({
+                      logoutParams: { returnTo: window.location.origin },
+                    })
+                  }
+                >
+                  {/* {<ArrowRightOnRectangleIcon/>} */}
+                  <Typography
+                    color="inherit"
+                    className="font-medium capitalize"
+                  >
+                    sign out
+                  </Typography>
+                </Button>
+              </li>
+            )}
           </ul>
         ))}
       </div>

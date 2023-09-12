@@ -4,7 +4,7 @@ import TaskMenu from "../contextmenu/taskmenu";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import { ContextMenuTrigger } from "react-contextmenu";
 
-export function Taskitems({ task, columnId}) {
+export function Taskitems({ task, columnId }) {
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
 
   const [{ isDragging }, drag, preview] = useDrag({
@@ -16,12 +16,12 @@ export function Taskitems({ task, columnId}) {
   });
 
   useEffect(() => {
-    if(task){
+    if (task) {
       preview(getEmptyImage(), { captureDraggingState: true });
     }
-  }, [preview,task]);
+  }, [preview, task]);
 
-  if(!task){
+  if (!task) {
     return null;
   }
 
@@ -36,7 +36,7 @@ export function Taskitems({ task, columnId}) {
       >
         <header className="grid grid-cols-3">
           <div className="col-span-2 text-sm font-bold">{task.task_name}</div>
-          <TaskMenu task={task}/>
+          <TaskMenu task={task} />
         </header>
         <section>
           <div className="text-xs text-gray-600">{task.description}</div>

@@ -8,16 +8,14 @@ import {
 } from "@material-tailwind/react";
 import { deleteProjectWithRelatedData } from "../../api/api";
 
-
-export function Table({ currentItems, tasks}) {
-
-  function deleteProject(id){
-    if(window.confirm("Do you want to delete this item?")){
+export function Table({ currentItems, tasks }) {
+  function deleteProject(id) {
+    if (window.confirm("Do you want to delete this item?")) {
       deleteProjectWithRelatedData(id)
-      .then((responses) => {
-        alert("The task is deleted");
-      })
-      .catch((error)=> console.error(error));
+        .then((responses) => {
+          alert("The task is deleted");
+        })
+        .catch((error) => console.error(error));
     }
   }
 

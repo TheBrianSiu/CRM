@@ -16,20 +16,20 @@ export async function fetchProjects() {
 
 // Function to delete a project and its related data (customers and assignees)
 export async function deleteProjectWithRelatedData(id) {
-    try {
-      const projectDeletionResponse = await deleteProject(id);
-      const assigneesRemovalResponse = await removeAssignees(id);
-      const customersRemovalResponse = await removeCustomer(id);
-  
-      return {
-        projectDeletionResponse,
-        assigneesRemovalResponse,
-        customersRemovalResponse,
-      };
-    } catch (error) {
-      throw new Error(error.message);
-    }
+  try {
+    const projectDeletionResponse = await deleteProject(id);
+    const assigneesRemovalResponse = await removeAssignees(id);
+    const customersRemovalResponse = await removeCustomer(id);
+
+    return {
+      projectDeletionResponse,
+      assigneesRemovalResponse,
+      customersRemovalResponse,
+    };
+  } catch (error) {
+    throw new Error(error.message);
   }
+}
 
 // Function to delete a project by ID
 export async function deleteProject(id) {
@@ -56,7 +56,7 @@ export async function removeAssignees(project_id) {
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
     if (!response.ok) {
       throw new Error("Request failed");
@@ -76,7 +76,7 @@ export async function removeCustomer(project_id) {
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
     if (!response.ok) {
       throw new Error("Request failed");

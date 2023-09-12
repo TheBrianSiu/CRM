@@ -4,11 +4,11 @@ import "../styles/taskmenu.css";
 import { ContextMenu, MenuItem } from "react-contextmenu";
 import { deleteProjectWithRelatedData } from "../../api/api";
 
-const TaskMenu = ({task}) => {
+const TaskMenu = ({ task }) => {
   // const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const navigate = useNavigate();
 
-  // edit on the the taskitem 
+  // edit on the the taskitem
   // const handleEditClick = () => {
   //   setIsEditModalOpen(true);
   // };
@@ -32,7 +32,7 @@ const TaskMenu = ({task}) => {
       </ContextMenu>
       {/* {isEditModalOpen && (
         <EditModal task={task} onClose={handleCloseEditModal} />
-      )} */} 
+      )} */}
     </div>
   );
 };
