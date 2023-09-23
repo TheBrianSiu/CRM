@@ -15,6 +15,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { retreivedatabyid, supervisor } from "./api/api";
 
 export function Usersprofile() {
   const [Users, setUsers] = useState([]);
@@ -58,16 +59,14 @@ export function Usersprofile() {
 
   // retrieve supervisor id
   useEffect(() => {
-    fetch(`http://localhost:8080/users-table/supervisor`)
-      .then((reponse) => reponse.json())
+    supervisor(id)
       .then((data) => setUsers(data))
       .catch((error) => console.error(error));
   }, []);
 
   //extract data
   useEffect(() => {
-    fetch(`http://localhost:8080/users-table/${id}`)
-      .then((reponse) => reponse.json())
+    retreivedatabyid(id)
       .then((data) => {
         const dataArray = Array.isArray(data) ? data : [data];
         setUsersData(dataArray);
@@ -98,11 +97,7 @@ export function Usersprofile() {
         updatedData = { ...updatedData, username };
       }
 
-      fetch(`http://localhost:8080/users-table/update/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedData),
-      })
+      updatedData(id,updatedData)
         .then((res) => {
           if (!res.ok) {
             return res.text().then((text) => {

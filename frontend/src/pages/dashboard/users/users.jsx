@@ -11,13 +11,11 @@ import {
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Fuse from "fuse.js";
+import { deleteuser, retrievedata } from "./api/api";
 
 function Deleteuser(id) {
   if (window.confirm("Do you want to delete the user?")) {
-    fetch(`http://localhost:8080/users-table/delete/${id}`, {
-      method: "PUT",
-    })
-      .then((response) => response.json())
+      deleteuser(id)
       .then((data) => {
         console.log("Response data:", data);
         alert("The user is deleted");
@@ -52,13 +50,13 @@ export function Users() {
   const itemsPerPage = 10;
   const [lastItemIndex, setLastItemIndex] = useState(itemsPerPage);
 
+
   // retrieve data
   useEffect(() => {
-    fetch("http://localhost:8080/users-table")
-      .then((reponse) => reponse.json())
+    retrievedata()
       .then((data) => setUserdata(data))
       .catch((error) => console.error(error));
-  }, []);
+  }, [Userdata]);
 
   // navigation
   function adduser() {

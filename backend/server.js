@@ -1,8 +1,10 @@
 const usersroute = require('./users/usersroutes');
 const custroute = require('./customers/custroutes');
 const projectroute = require('./projects/projectroutes');
-const dashboardroute = require('./dashbaord/dashbaordroutes');
+const dashboardroute = require('./dashbaord/dashboardroutes');
 const {app,db} = require('./dbConfig');
+
+const PORT = 3000;
 
 app.get('/', (req, res) => {
     return res.json("from backend");
@@ -21,7 +23,6 @@ app.use('/', projectroute);
 app.use('/', dashboardroute);
 
 
-app.listen(8080),(()=> {
-    console.log("listening");
-})
-
+app.listen(process.env.PORT || PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

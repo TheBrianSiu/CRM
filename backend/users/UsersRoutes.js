@@ -2,13 +2,13 @@ const express = require("express");
 const router = express.Router();
 const { db } = require("../dbConfig");
 const { validateUser } = require("../validation/validation");
-const { hashPassword } = require("../encryption/Encryption");
-
+const { hashPassword } = require("../encryption/encryption");
 router.get("/users-table", (req, res) => {
   const sql =
     "SELECT user_id,first_name, last_name,email,phone_number,job_title, department,status,last_login FROM USERS WHERE IS_DELETED = 0";
   db.query(sql, (err, data) => {
     if (err) return res.json(err);
+    console.log(data);
     return res.json(data);
   });
 });
@@ -122,11 +122,6 @@ async function checkUsernameExists(username) {
     throw new Error("Error checking username in the function");
   }
 }
-
-
-
-
-
 
 // update users
 router.put("/users-table/update/:id", async (req, res) => {

@@ -1,4 +1,7 @@
-const API_BASE_URL = "http://localhost:8080";
+import { API_URL } from "@/settings"
+
+const API_BASE_URL = API_URL;
+
 
 // Function to fetch projects with assignees
 export async function fetchProjects() {

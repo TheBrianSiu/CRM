@@ -1,0 +1,1 @@
+export const API_URL = 'https://scuplin-crm-365085825c4c.herokuapp.com';
