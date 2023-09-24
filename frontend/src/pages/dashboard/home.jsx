@@ -21,7 +21,6 @@ import {
 } from "@heroicons/react/24/outline";
 import { StatisticsCard } from "@/widgets/cards";
 import { StatisticsChart } from "@/widgets/charts";
-import { useAuth0 } from "@auth0/auth0-react";
 import {
   FetchSalesRecords,
   FetchProjectTable,
@@ -79,11 +78,11 @@ export function Home() {
       formatNumber,
       setStatisticsCardsData,
     );
-  }, []);
+  }, [FetchSalesRecords]);
 
   useEffect(() => {
     FetchProjectTable(setProjectsTableData);
-  }, []);
+  }, [ProjectsTableData]);
 
   useEffect(() => {
     FetchProjectCompletion(

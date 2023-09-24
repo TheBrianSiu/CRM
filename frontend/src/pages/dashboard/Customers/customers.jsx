@@ -12,13 +12,11 @@ import {
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Fuse from "fuse.js";
+import { removecustomer, retrievecustomers } from "./api/api";
 
 function Deleteuser(id) {
   if (window.confirm("Do you want to delete this customer?")) {
-    fetch(`http://localhost:8080/customers-table/delete/${id}`, {
-      method: "PUT",
-    })
-      .then((response) => response.json())
+    removecustomer(id)
       .then((data) => {
         console.log("Response data:", data);
         alert("The customer is deleted");
@@ -46,11 +44,10 @@ export function Customers() {
 
   // retrieve data
   useEffect(() => {
-    fetch("http://localhost:8080/customers-table")
-      .then((reponse) => reponse.json())
+    retrievecustomers()
       .then((data) => setUserdata(data))
       .catch((error) => console.error(error));
-  });
+  },[Userdata]);
 
   // navigation
   function adduser() {

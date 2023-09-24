@@ -15,7 +15,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { retreivedatabyid, supervisor } from "./api/api";
+import { retreivedatabyid, supervisor, updateuser } from "./api/api";
 
 export function Usersprofile() {
   const [Users, setUsers] = useState([]);
@@ -62,7 +62,7 @@ export function Usersprofile() {
     supervisor(id)
       .then((data) => setUsers(data))
       .catch((error) => console.error(error));
-  }, []);
+  }, [Users]);
 
   //extract data
   useEffect(() => {
@@ -97,7 +97,7 @@ export function Usersprofile() {
         updatedData = { ...updatedData, username };
       }
 
-      updatedData(id,updatedData)
+      updateuser(id,updatedData)
         .then((res) => {
           if (!res.ok) {
             return res.text().then((text) => {

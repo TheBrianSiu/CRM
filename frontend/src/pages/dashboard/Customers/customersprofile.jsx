@@ -15,6 +15,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { retrievecustomers, updatecustomers } from "./api/api";
 
 export function Customersprofile() {
   const [CustData, setCustData] = useState([]);
@@ -23,28 +24,23 @@ export function Customersprofile() {
 
   //extract data
   useEffect(() => {
-    fetch(`http://localhost:8080/customers-table/${id}`)
-      .then((reponse) => reponse.json())
+    retrievecustomers(id)
       .then((data) => {
         const dataArray = Array.isArray(data) ? data : [data];
         setCustData(dataArray);
       })
       .catch((error) => console.error(error));
-  }, [id]);
+  }, [CustData]);
 
   //handle submit
   const handleSubmit = (e) => {
     e.preventDefault();
     if (window.confirm("Do you want to submit the form?")) {
       const customerToUpdate = CustData[0];
-      const updatedData = { ...customerToUpdate, ...CustData[0] };
-      delete updatedData.id;
+      const updateddata = { ...customerToUpdate, ...CustData[0] };
+      delete updateddata.id;
 
-      fetch(`http://localhost:8080/customers-table/update/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedData),
-      })
+      updatecustomers(id,updateddata)
         .then((res) => {
           if (!res.ok) {
             return res.text().then((text) => {

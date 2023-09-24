@@ -10,6 +10,7 @@ import {
 } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { supervisor } from "./api/api";
 
 export function Addusers() {
   const [CustData, setCustData] = useState({
@@ -73,11 +74,10 @@ export function Addusers() {
 
   //retrieve users for selecting supervisor
   useEffect(() => {
-    fetch(`http://localhost:8080/users-table/supervisor`)
-      .then((reponse) => reponse.json())
+    supervisor()
       .then((data) => setUsers(data))
       .catch((error) => console.error(error));
-  }, []);
+  }, [Users]);
 
   //handle submit
   const handleSubmit = (e) => {
@@ -85,11 +85,7 @@ export function Addusers() {
     if (window.confirm("Do you want to submit a new user?")) {
       const { confirm_password, ...customerdata } = CustData; // remove confirm password from state
 
-      fetch(`http://localhost:8080/users-table/add`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(customerdata),
-      })
+      adduser(customerdata)
         .then((res) => {
           if (!res.ok) {
             return res.text().then((text) => {

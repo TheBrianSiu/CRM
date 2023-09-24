@@ -50,11 +50,7 @@ export function Addcustomers() {
     if (window.confirm("Do you want to submit a new user?")) {
       const customerdata = { ...CustData[0] };
 
-      fetch(`http://localhost:8080/customers-table/add`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(customerdata),
-      })
+        Addcustomers(customerdata)
         .then((res) => {
           if (!res.ok) {
             return res.text().then((text) => {

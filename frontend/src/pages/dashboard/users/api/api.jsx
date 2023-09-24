@@ -41,7 +41,7 @@ export async function deleteuser(id){
 }
 
 
-  export async function adduser(id,customerdata){
+  export async function adduser(customerdata){
     try{
         const response = await fetch(`${API_BASE_URL}/users-table/add`,
         {
@@ -63,7 +63,7 @@ export async function deleteuser(id){
 
   export async function supervisor(){
     try{
-        const response = await fetch(`${API_BASE_URL}/users-table/supevisor`,{
+        const response = await fetch(`${API_BASE_URL}/users-table/supervisor`,{
             method: "GET",
             headers: {"content-Type": "applciation/json"},
         }
@@ -81,7 +81,7 @@ export async function deleteuser(id){
 
     export async function retreivedatabyid(id){
         try{
-            const response = await fetch(`${API_BASE_URL}/user-tabble/${id}`,{
+            const response = await fetch(`${API_BASE_URL}/users-table/${id}`,{
                 method: "GET",
                 header: {"content-Type": "application/json"},
             })
@@ -96,12 +96,12 @@ export async function deleteuser(id){
         }
     } 
 
-    export async function updateuser(id, data){
+    export async function updateuser(id, updateddata){
         try{
-            const response = await fetch(`${API_BASE_URL}/user-table.udpate/${id}`,{
+            const response = await fetch(`${API_BASE_URL}/users-table/update/${id}`,{
                 method: "PUT",
                 header: {"content-Type": "application/json"},
-                body: JSON.stringify(data)
+                body: JSON.stringify(updateddata)
             })
             if(!response.ok){
                 throw new Erorr(error.message);
