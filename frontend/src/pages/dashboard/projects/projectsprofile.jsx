@@ -17,6 +17,8 @@ import makeAnimated from "react-select/animated";
 import { useParams, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { useEffect, useState } from "react";
+import { supervisor } from "../users/api/api";
+import { customer_basic_info, retrieveprojects } from "./api/api";
 
 export function ProjectsProfile() {
   const animatedComponents = makeAnimated();
@@ -201,21 +203,18 @@ export function ProjectsProfile() {
 
   //retrieve user and cust data set
   useEffect(() => {
-    fetch(`http://localhost:8080/users-table/supervisor`)
-      .then((response) => response.json())
+    supervisor()
       .then((data) => setUser(data))
       .catch((error) => console.log(error));
 
-    fetch(`http://localhost:8080/customers-basicinfo`)
-      .then((response) => response.json())
+    customer_basic_info()
       .then((data) => setCust(data))
       .catch((error) => console.log(error));
   }, []);
 
   // retrieve records
   useEffect(() => {
-    fetch(`http://localhost:8080/inserted-projects/${id}`)
-      .then((response) => response.json())
+      retrieveprojects(id)
       .then((data) => {
         setData(data);
 

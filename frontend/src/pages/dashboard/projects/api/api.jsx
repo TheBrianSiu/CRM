@@ -90,3 +90,42 @@ export async function removeCustomer(project_id) {
     throw new Error(error.message);
   }
 }
+
+export async function customer_basic_info() {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/customers-basicinfo`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+
+export async function retrieveprojects(id) {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/inserted-projects/${id}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}

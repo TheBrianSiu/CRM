@@ -1,5 +1,9 @@
+import { API_URL } from "@/settings"
+
+const API_BASE_URL = API_URL;
+
 export const FetchChartsData = (year, setStatisticsChartsData) => {
-  fetch(`http://localhost:8080/monthly-project`)
+  fetch(`${API_BASE_URL}/monthly-project`)
     .then((response) => response.json())
     .then((responseData) => {
       const newTasksChart = {
@@ -38,7 +42,7 @@ export const FetchChartsData = (year, setStatisticsChartsData) => {
         }
       });
 
-      fetch(`http://localhost:8080/monthly-sales`)
+      fetch(`${API_BASE_URL}/monthly-sales`)
         .then((response) => response.json())
         .then((responseData) => {
           const monthlySalesChart = {
@@ -77,7 +81,7 @@ export const FetchChartsData = (year, setStatisticsChartsData) => {
             }
           });
 
-          fetch(`http://localhost:8080/monthly-clients`)
+          fetch(`${API_BASE_URL}/monthly-clients`)
             .then((response) => response.json())
             .then((responseData) => {
               const monthlyNewClientsChart = {

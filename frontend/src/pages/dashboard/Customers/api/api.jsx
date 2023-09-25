@@ -56,7 +56,7 @@ export async function removecustomer(id){
 }
 
 
-export async function retrievecustomers(id){
+export async function retrievecustomersbyid(id){
     try{
         const response = await fetch(`${API_BASE_URL}/customers-table/${id}`, {
         method: "GET",

@@ -5,6 +5,9 @@ import {
   UserIcon,
   ChartBarIcon,
 } from "@heroicons/react/24/solid";
+import { API_URL } from "@/settings"
+
+const API_BASE_URL = API_URL;
 
 export function FetchSalesRecords(
   formattedStartOfMonth,
@@ -16,12 +19,12 @@ export function FetchSalesRecords(
 ) {
   // Fetch sales data
   fetch(
-    `http://localhost:8080/sales-records?start=${formattedStartOfMonth}&end=${formattedEndOfMonth}`,
+    `${API_BASE_URL}/sales-records?start=${formattedStartOfMonth}&end=${formattedEndOfMonth}`,
   )
     .then((response) => response.json())
     .then((responseData) => {
       fetch(
-        `http://localhost:8080/sales-records?start=${formattedStartOfLastMonth}&end=${formattedEndOfLastMonth}`,
+        `${API_BASE_URL}/sales-records?start=${formattedStartOfLastMonth}&end=${formattedEndOfLastMonth}`,
       )
         .then((response) => response.json())
         .then((precendata) => {
@@ -43,12 +46,12 @@ export function FetchSalesRecords(
 
           // Fetch est sales value
           fetch(
-            `http://localhost:8080/est-sales-records?start=${formattedStartOfMonth}&end=${formattedEndOfMonth}`,
+            `${API_BASE_URL}/est-sales-records?start=${formattedStartOfMonth}&end=${formattedEndOfMonth}`,
           )
             .then((response) => response.json())
             .then((responseData) => {
               fetch(
-                `http://localhost:8080/est-sales-records?start=${formattedStartOfLastMonth}&end=${formattedEndOfLastMonth}`,
+                `${API_BASE_URL}//est-sales-records?start=${formattedStartOfLastMonth}&end=${formattedEndOfLastMonth}`,
               )
                 .then((response) => response.json())
                 .then((precendata) => {
@@ -70,12 +73,12 @@ export function FetchSalesRecords(
 
                   // Fetch project data
                   fetch(
-                    `http://localhost:8080/project-records?start=${formattedStartOfMonth}&end=${formattedEndOfMonth}`,
+                    `${API_BASE_URL}//project-records?start=${formattedStartOfMonth}&end=${formattedEndOfMonth}`,
                   )
                     .then((response) => response.json())
                     .then((responseData) => {
                       fetch(
-                        `http://localhost:8080/project-records?start=${formattedStartOfLastMonth}&end=${formattedEndOfLastMonth}`,
+                        `${API_BASE_URL}/project-records?start=${formattedStartOfLastMonth}&end=${formattedEndOfLastMonth}`,
                       )
                         .then((response) => response.json())
                         .then((precendata) => {
@@ -103,12 +106,12 @@ export function FetchSalesRecords(
                           };
                           // Fetch customers data
                           fetch(
-                            `http://localhost:8080/customers-records?start=${formattedStartOfMonth}&end=${formattedEndOfMonth}`,
+                            `${API_BASE_URL}/customers-records?start=${formattedStartOfMonth}&end=${formattedEndOfMonth}`,
                           )
                             .then((response) => response.json())
                             .then((responseData) => {
                               fetch(
-                                `http://localhost:8080/customers-records?start=${formattedStartOfLastMonth}&end=${formattedEndOfLastMonth}`,
+                                `${API_BASE_URL}/customers-records?start=${formattedStartOfLastMonth}&end=${formattedEndOfLastMonth}`,
                               )
                                 .then((response) => response.json())
                                 .then((precendata) => {

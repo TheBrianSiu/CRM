@@ -1,5 +1,10 @@
+import { API_URL } from "@/settings"
+
+const API_BASE_URL = API_URL;
+
+
 export function FetchProjectTable(setProjectsTableData) {
-  fetch("http://localhost:8080/projects-with-assignees")
+  fetch(`${API_BASE_URL}/projects-with-assignees`)
     .then((response) => response.json())
     .then((data) => {
       setProjectsTableData(data);
@@ -13,7 +18,7 @@ export function FetchProjectCompletion(
   setCompletedProject,
 ) {
   fetch(
-    `http://localhost:8080/closed-project-records?start=${formattedStartOfMonth}&end=${formattedEndOfMonth}`,
+    `${API_BASE_URL}/closed-project-records?start=${formattedStartOfMonth}&end=${formattedEndOfMonth}`,
   )
     .then((response) => response.json())
     .then((data) => {

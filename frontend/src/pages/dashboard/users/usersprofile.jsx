@@ -15,7 +15,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { retreivedatabyid, supervisor, updateuser } from "./api/api";
+import { retrieveDataById, supervisor, updateUser } from "./api/api";
 
 export function Usersprofile() {
   const [Users, setUsers] = useState([]);
@@ -66,7 +66,7 @@ export function Usersprofile() {
 
   //extract data
   useEffect(() => {
-    retreivedatabyid(id)
+    retrieveDataById(id)
       .then((data) => {
         const dataArray = Array.isArray(data) ? data : [data];
         setUsersData(dataArray);
@@ -97,16 +97,7 @@ export function Usersprofile() {
         updatedData = { ...updatedData, username };
       }
 
-      updateuser(id,updatedData)
-        .then((res) => {
-          if (!res.ok) {
-            return res.text().then((text) => {
-              throw new Error(text);
-            });
-          } else {
-            return res.json();
-          }
-        })
+      updateUser(id,updatedData)
         .then(function (data) {
           alert("Form submitted successfully!");
           navigate(-1); // Navigate back after the fetch is successful

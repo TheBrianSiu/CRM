@@ -15,7 +15,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { retrievecustomers, updatecustomers } from "./api/api";
+import { retrievecustomers, retrievecustomersbyid, updatecustomers } from "./api/api";
 
 export function Customersprofile() {
   const [CustData, setCustData] = useState([]);
@@ -24,7 +24,7 @@ export function Customersprofile() {
 
   //extract data
   useEffect(() => {
-    retrievecustomers(id)
+    retrievecustomersbyid(id)
       .then((data) => {
         const dataArray = Array.isArray(data) ? data : [data];
         setCustData(dataArray);
@@ -41,15 +41,6 @@ export function Customersprofile() {
       delete updateddata.id;
 
       updatecustomers(id,updateddata)
-        .then((res) => {
-          if (!res.ok) {
-            return res.text().then((text) => {
-              throw new Error(text);
-            });
-          } else {
-            return res.json();
-          }
-        })
         .then(function (data) {
           alert("Form submitted successfully!");
           navigate(-1); // Navigate back after the fetch is successful

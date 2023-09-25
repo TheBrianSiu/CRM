@@ -11,11 +11,11 @@ import {
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Fuse from "fuse.js";
-import { deleteuser, retrievedata } from "./api/api";
+import { deleteUser, retrieveData } from "./api/api";
 
 function Deleteuser(id) {
   if (window.confirm("Do you want to delete the user?")) {
-      deleteuser(id)
+      deleteUser(id)
       .then((data) => {
         console.log("Response data:", data);
         alert("The user is deleted");
@@ -53,7 +53,7 @@ export function Users() {
 
   // retrieve data
   useEffect(() => {
-    retrievedata()
+    retrieveData()
       .then((data) => setUserdata(data))
       .catch((error) => console.error(error));
   }, [Userdata]);

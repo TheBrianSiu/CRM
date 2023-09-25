@@ -8,7 +8,6 @@ router.get("/users-table", (req, res) => {
     "SELECT user_id,first_name, last_name,email,phone_number,job_title, department,status,last_login FROM USERS WHERE IS_DELETED = 0";
   db.query(sql, (err, data) => {
     if (err) return res.json(err);
-    console.log(data);
     return res.json(data);
   });
 });
@@ -55,7 +54,6 @@ router.post("/users-table/add", async (req, res) => {
   if (data.username !== undefined) {
     try {
       const usernameExists = await checkUsernameExists(data.username);
-      console.log("usernameExists : "+usernameExists);
       if (usernameExists) {
         return res
           .status(400)
@@ -145,7 +143,6 @@ router.put("/users-table/update/:id", async (req, res) => {
   if (updatedData.username !== undefined) {
     try {
       const usernameExists = await checkUsernameExists(updatedData.username);
-      console.log("usernameExists : "+usernameExists);
       if (usernameExists) {
         return res
           .status(400)
