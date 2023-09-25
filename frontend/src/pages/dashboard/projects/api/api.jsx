@@ -39,7 +39,7 @@ export async function deleteProject(id) {
   try {
     const response = await fetch(`${API_BASE_URL}/projects/delete/${id}`, {
       method: "PUT",
-    });
+    })
 
     if (!response.ok) {
       throw new Error("Request failed");
@@ -60,9 +60,9 @@ export async function removeAssignees(project_id) {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       },
-    );
+    )
     if (!response.ok) {
-      throw new Error("Request failed");
+      throw new Error(`Request failed with status ${response.status}`);
     }
     const data = await response.json();
     return data;
@@ -80,9 +80,9 @@ export async function removeCustomer(project_id) {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       },
-    );
+    )
     if (!response.ok) {
-      throw new Error("Request failed");
+      throw new Error(`Request failed with status ${response.status}`);
     }
     const data = await response.json();
     return data;
@@ -99,7 +99,7 @@ export async function customer_basic_info() {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       },
-    );
+    )
     if (!response.ok) {
       throw new Error("Request failed");
     }
@@ -119,7 +119,7 @@ export async function retrieveprojects(id) {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       },
-    );
+    )
     if (!response.ok) {
       throw new Error("Request failed");
     }
@@ -129,3 +129,110 @@ export async function retrieveprojects(id) {
     throw new Error(error.message);
   }
 }
+
+export async function addprojects(customerdata){
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/projects-table/add`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(customerdata),
+      },
+    )
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+
+export async function addassignees(userProjectData){
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/project_assignees/add`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userProjectData),
+      },
+    )
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function addcustomers(custProjectData){
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/project_customers/add`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(custProjectData),
+      }
+    )
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+
+export async function updatestatus(id, status){
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/projects-table/update-status/${id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify([status]),
+      }
+    )
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function updateprojects(id,taskData){
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/projects-table/update/${id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(taskData),
+      }
+    )
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+
+
+
+

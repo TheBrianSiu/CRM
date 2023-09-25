@@ -18,7 +18,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { useEffect, useState } from "react";
 import { supervisor } from "../users/api/api";
-import { customer_basic_info, retrieveprojects } from "./api/api";
+import { addassignees, addcustomers, customer_basic_info, removeAssignees, removeCustomer, retrieveprojects, updateprojects } from "./api/api";
 
 export function ProjectsProfile() {
   const animatedComponents = makeAnimated();
@@ -51,24 +51,10 @@ export function ProjectsProfile() {
       const customerdata = Data[0];
       const { project_id, assignees, customers, ...taskData } = customerdata;
 
-      fetch(`http://localhost:8080/projects-table/update/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(taskData),
-      })
-        .then((res) => {
-          if (!res.ok) {
-            return res.text().then((text) => {
-              throw new Error(text);
-            });
-          } else {
-            return res.json();
-          }
-        })
+      updateprojects(id,taskData)
         .then(function (data) {
           const generatedid = id;
-
-          removeAssigness(generatedid);
+          removeAssignees(generatedid);
           removeCustomer(generatedid);
 
           if (selectedUsers.length > 0) {
@@ -94,21 +80,8 @@ export function ProjectsProfile() {
       assignee_id: user.value,
     }));
 
-    fetch(`http://localhost:8080/project_assignees/add`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userProjectData),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          return res.text().then((text) => {
-            throw new Error(text);
-          });
-        } else {
-          return res.json();
-        }
-      })
-      .then(function (data) {
+    addassignees(userProjectData)
+      .then(function () {
         if (selectedCust.length === 0) {
           alert("The task is updated successfully!");
           navigate(-1);
@@ -126,67 +99,13 @@ export function ProjectsProfile() {
       customer_id: cust.value,
     }));
 
-    fetch(`http://localhost:8080/project_customers/add`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(custProjectData),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          return res.text().then((text) => {
-            throw new Error(text);
-          });
-        } else {
-          return res.json();
-        }
-      })
-      .then(function (data) {
+    addcustomers(custProjectData)
+      .then(function () {
         if (selectedUsers.length === 0) {
           alert("The task is updated successfully!");
           navigate(-1);
         }
       })
-      .catch((err) => {
-        alert(err);
-      });
-  }
-
-  // delete assignees linkage
-  function removeAssigness() {
-    fetch(`http://localhost:8080/project-assignee/delete/${id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          return res.text().then((text) => {
-            throw new Error(text);
-          });
-        } else {
-          return res.json();
-        }
-      })
-      .then(function (data) {})
-      .catch((err) => {
-        alert(err);
-      });
-  }
-  // delete customers linkage
-  function removeCustomer() {
-    fetch(`http://localhost:8080/project-customer/delete/${id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          return res.text().then((text) => {
-            throw new Error(text);
-          });
-        } else {
-          return res.json();
-        }
-      })
-      .then(function (data) {})
       .catch((err) => {
         alert(err);
       });
@@ -210,7 +129,7 @@ export function ProjectsProfile() {
     customer_basic_info()
       .then((data) => setCust(data))
       .catch((error) => console.log(error));
-  }, []);
+  }, [User,Cust]);
 
   // retrieve records
   useEffect(() => {
@@ -226,7 +145,7 @@ export function ProjectsProfile() {
         }
       })
       .catch((error) => console.log(error));
-  }, []);
+    }, [id]);
 
   return (
     <>
@@ -235,10 +154,7 @@ export function ProjectsProfile() {
       </div>
       <Card className="mx-3 -mt-16 mb-6 lg:mx-4">
         <CardBody className="p-4">
-          {Data.map((task, index) => {
-            const className = `py-3 px-5 ${
-              index === Data.length - 1 ? "" : "border-b border-blue-gray-50"
-            }`;
+          {Data.map((task) => {
             return (
               <div>
                 <div className="mb-10 flex items-center justify-between gap-6">
@@ -264,24 +180,6 @@ export function ProjectsProfile() {
                         {task.description}
                       </Typography>
                     </div>
-                  </div>
-                  <div className="w-96">
-                    <Tabs value="app">
-                      <TabsHeader>
-                        <Tab value="app">
-                          <HomeIcon className="-mt-1 mr-2 inline-block h-5 w-5" />
-                          App
-                        </Tab>
-                        <Tab value="message">
-                          <ChatBubbleLeftEllipsisIcon className="-mt-0.5 mr-2 inline-block h-5 w-5" />
-                          Message
-                        </Tab>
-                        <Tab value="settings">
-                          <Cog6ToothIcon className="-mt-1 mr-2 inline-block h-5 w-5" />
-                          Settings
-                        </Tab>
-                      </TabsHeader>
-                    </Tabs>
                   </div>
                 </div>
                 <div className="mt-10 sm:mt-0">

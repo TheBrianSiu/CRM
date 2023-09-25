@@ -17,6 +17,8 @@ import makeAnimated from "react-select/animated";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { useEffect, useState } from "react";
+import { addassignees, addcustomers, addprojects, customer_basic_info } from "./api/api";
+import { supervisor } from "../users/api/api";
 
 export function Addprojects() {
   const animatedComponents = makeAnimated();
@@ -58,20 +60,7 @@ export function Addprojects() {
     if (window.confirm("Do you want to submit a new task?")) {
       const customerdata = { ...Data[0] };
 
-      fetch(`http://localhost:8080/projects-table/add`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(customerdata),
-      })
-        .then((res) => {
-          if (!res.ok) {
-            return res.text().then((text) => {
-              throw new Error(text);
-            });
-          } else {
-            return res.json();
-          }
-        })
+      addprojects(customerdata)
         .then(function (data) {
           const generatedid = data.id;
           if (selectedUsers.length > 0) {
@@ -98,20 +87,7 @@ export function Addprojects() {
       assignee_id: user.value,
     }));
 
-    fetch(`http://localhost:8080/project_assignees/add`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userProjectData),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          return res.text().then((text) => {
-            throw new Error(text);
-          });
-        } else {
-          return res.json();
-        }
-      })
+      addassignees(userProjectData)
       .then(function (data) {
         if (selectedCust.length === 0) {
           alert("The task is added successfully!");
@@ -130,20 +106,7 @@ export function Addprojects() {
       customer_id: cust.value,
     }));
 
-    fetch(`http://localhost:8080/project_customers/add`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(custProjectData),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          return res.text().then((text) => {
-            throw new Error(text);
-          });
-        } else {
-          return res.json();
-        }
-      })
+    addcustomers(custProjectData)
       .then(function (data) {
         if (selectedUsers.length === 0) {
           alert("The task is added successfully!");
@@ -166,15 +129,13 @@ export function Addprojects() {
 
   //retrieve data
   useEffect(() => {
-    fetch(`http://localhost:8080/users-table/supervisor`)
-      .then((response) => response.json())
+    supervisor()
       .then((data) => setUser(data))
       .catch((error) => console.log(error));
   }, [User]);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/customers-basicinfo`)
-      .then((response) => response.json())
+    customer_basic_info()
       .then((data) => setCust(data))
       .catch((error) => console.log(error));
   }, [Cust]);
@@ -186,10 +147,7 @@ export function Addprojects() {
       </div>
       <Card className="mx-3 -mt-16 mb-6 lg:mx-4">
         <CardBody className="p-4">
-          {Data.map((task, index) => {
-            const className = `py-3 px-5 ${
-              index === Data.length - 1 ? "" : "border-b border-blue-gray-50"
-            }`;
+          {Data.map((task) => {
             return (
               <div>
                 <div className="mb-10 flex items-center justify-between gap-6">
