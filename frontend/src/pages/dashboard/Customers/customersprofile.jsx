@@ -15,7 +15,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { retrievecustomers, retrievecustomersbyid, updatecustomers } from "./api/api";
+import { retrievecustomersbyid, updatecustomers } from "./api/api";
 
 export function Customersprofile() {
   const [CustData, setCustData] = useState([]);
