@@ -1,20 +1,15 @@
 import {
   HomeIcon,
-  UserCircleIcon,
   TableCellsIcon,
-  BellIcon,
-  ArrowRightOnRectangleIcon,
-  UserPlusIcon,
 } from "@heroicons/react/24/solid";
 import {
   Home,
-  Profile,
-  Customers,
-  Notifications,
+  Projects,
   Users,
 } from "@/pages/dashboard";
-
-import Projects from "@/pages/dashboard/projects/projects";
+import {
+  Customers
+} from "@/pages/dashboard/customers"
 
 const icon = {
   className: "w-5 h-5 text-inherit",
