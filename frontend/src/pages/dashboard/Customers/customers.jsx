@@ -30,7 +30,7 @@ function formatPhoneNumber(phoneNumber) {
   return phoneNumber;
 }
 
-export function Customers() {
+const Customers = () => {
   const navigate = useNavigate();
   const [Userdata, setUserdata] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");

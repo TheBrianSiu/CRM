@@ -5,11 +5,9 @@ import {
 import {
   Home,
   Projects,
+  Customers,
   Users,
 } from "@/pages/dashboard";
-import {
-  Customers
-} from "@/pages/dashboard/customers"
 
 const icon = {
   className: "w-5 h-5 text-inherit",
