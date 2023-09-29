@@ -1,9 +1,9 @@
-import Addcustomers from "./pages/dashboard/customers/addcustomers";
 import Customersprofile from "./pages/dashboard/customers/customersprofile";
 import Usersprofile from "./pages/dashboard/users/usersprofile";
 import Addusers from "./pages/dashboard/users/addusers";
 import Addprojects from "./pages/dashboard/projects/addprojects";
 import ProjectsProfile from "./pages/dashboard/projects/projectsprofile";
+import Addcustomers from "./pages/dashboard/customers/addcustomers";
 
 
 export const routes = [
