@@ -3,7 +3,7 @@ import { Dashboard } from "@/layouts";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useAuth0 } from "@auth0/auth0-react";
-import Auth from "./layouts/Auth";
+import Auth from "./layouts/auth";
 
 function App() {
   const { isLoading, isAuthenticated} = useAuth0();
