@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "./component/utils/navbar";
 import TaskBoard from "./component/theme/taskboard";
 import Table from "./component/theme/table";
-import Pagination from "./component/utils/Pagiantion";
+import Pagination from "./component/utils/pagiantion";
 import { SwitchPage } from "./component/utils/switchpage";
 import { fetchProjects } from "./api/api";
 import { performSearch } from "./component/utils/search";
