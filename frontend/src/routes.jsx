@@ -4,10 +4,11 @@ import {
 } from "@heroicons/react/24/solid";
 import {
   Home,
-  Projects,
-  Customers,
   Users,
 } from "@/pages/dashboard";
+
+import Customers from "@/pages/dashboard/customers/customers"
+import Projects from "@/pages/dashboard/projects/projects"
 
 const icon = {
   className: "w-5 h-5 text-inherit",

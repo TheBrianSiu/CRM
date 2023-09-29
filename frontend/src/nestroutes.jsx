@@ -1,12 +1,9 @@
-import {
-  Addcustomers,
-  Customersprofile,
-  Usersprofile,
-  Addusers,
-  Addprojects,
-  ProjectsProfile,
-} from "./pages/dashboard";
-
+import Addusers from "@/pages/dashboard/users/addusers"
+import Usersprofile from "@/pages/dashboard/users/usersprofile"
+import Customersprofile from "@/pages/dashboard/customers/customersprofile"
+import Addcustomers from "@/pages/dashboard/customers/addcustomers"
+import Addprojects from "@/pages/dashboard/projects/addprojects"
+import ProjectsProfile from "@/pages/dashboard/projects/projectsprofile"
 
 export const routes = [
   {
