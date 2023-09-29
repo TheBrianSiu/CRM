@@ -1,4 +1,4 @@
-import Customersprofile from "./pages/dashboard/customers/customersprofile";
+import Customersprofile from "@/pages/dashboard/customers/addcustomers"
 import Usersprofile from "./pages/dashboard/users/usersprofile";
 import Addusers from "./pages/dashboard/users/addusers";
 import Addprojects from "./pages/dashboard/projects/addprojects";
