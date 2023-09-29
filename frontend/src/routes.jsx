@@ -7,7 +7,7 @@ import {
   Users,
 } from "@/pages/dashboard";
 
-import Customers from "@/pages/dashboard/customers/customers"
+import Customers from "./pages/dashboard/customers/customers"
 import Projects from "@/pages/dashboard/projects/projects"
 
 const icon = {
