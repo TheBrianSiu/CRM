@@ -77,7 +77,7 @@ export function Addusers() {
     supervisor()
       .then((data) => setUsers(data))
       .catch((error) => console.error(error));
-  }, [Users]);
+  }, []);
 
   //handle submit
   const handleSubmit = (e) => {

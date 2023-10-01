@@ -132,13 +132,13 @@ export function Addprojects() {
     supervisor()
       .then((data) => setUser(data))
       .catch((error) => console.log(error));
-  }, [User]);
+  }, []);
 
   useEffect(() => {
     customer_basic_info()
       .then((data) => setCust(data))
       .catch((error) => console.log(error));
-  }, [Cust]);
+  }, []);
 
   return (
     <>

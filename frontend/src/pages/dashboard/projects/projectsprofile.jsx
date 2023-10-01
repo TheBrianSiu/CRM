@@ -129,7 +129,7 @@ export function ProjectsProfile() {
     customer_basic_info()
       .then((data) => setCust(data))
       .catch((error) => console.log(error));
-  }, [User,Cust]);
+  }, []);
 
   // retrieve records
   useEffect(() => {

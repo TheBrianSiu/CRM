@@ -56,7 +56,7 @@ export function Users() {
     retrieveData()
       .then((data) => setUserdata(data))
       .catch((error) => console.error(error));
-  }, [Userdata]);
+  }, []);
 
   // navigation
   function adduser() {

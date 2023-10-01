@@ -62,7 +62,7 @@ export function Usersprofile() {
     supervisor(id)
       .then((data) => setUsers(data))
       .catch((error) => console.error(error));
-  }, [Users]);
+  }, []);
 
   //extract data
   useEffect(() => {

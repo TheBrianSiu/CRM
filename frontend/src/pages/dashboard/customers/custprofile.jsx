@@ -30,7 +30,7 @@ export function Customersprofile() {
         setCustData(dataArray);
       })
       .catch((error) => console.error(error));
-  }, [CustData]);
+  }, []);
 
   //handle submit
   const handleSubmit = (e) => {

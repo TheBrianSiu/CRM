@@ -82,7 +82,7 @@ export function Home() {
 
   useEffect(() => {
     FetchProjectTable(setProjectsTableData);
-  }, [ProjectsTableData]);
+  }, []);
 
   useEffect(() => {
     FetchProjectCompletion(

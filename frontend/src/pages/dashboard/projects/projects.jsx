@@ -33,7 +33,7 @@ const Projects = () => {
         setTasks(data);
       })
       .catch((error) => console.error(error));
-  }, [tasks]);
+  }, []);
 
   //search engine
   const filteredUserdata = performSearch(tasks, searchQuery);
