@@ -11,15 +11,15 @@ function App() {
   return (
     <DndProvider backend={HTML5Backend}>
       <Routes>
-        {/* {!isLoading && !isAuthenticated && (
+        {!isLoading && !isAuthenticated && (
         <>
         <Route path="/sign-in" element={<Auth />} />
         <Route path="/*" element={<Navigate to="/sign-in" replace />} />
         </>)}
         {isAuthenticated && (
-        <> */}
+        <>
         <Route path="/*" element={<Dashboard />} />
-        {/* </>)} */}
+        </>)}
       </Routes>
     </DndProvider>
   );
