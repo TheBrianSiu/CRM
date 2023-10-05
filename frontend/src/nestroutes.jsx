@@ -1,9 +1,9 @@
-import Addusers from "@/pages/dashboard/users/addusers"
-import Usersprofile from "@/pages/dashboard/users/usersprofile"
-import Customersprofile from "@/pages/dashboard/customers/custprofile"
-import Addcustomers from "@/pages/dashboard/customers/addcust"
-import Addprojects from "@/pages/dashboard/projects/addprojects"
-import ProjectsProfile from "@/pages/dashboard/projects/projectsprofile"
+import Addusers from "@/pages/users/addusers";
+import Usersprofile from "@/pages/users/usersprofile";
+import Customersprofile from "@/pages/customers/custprofile";
+import Addcustomers from "@/pages/customers/addcust";
+import Addprojects from "@/pages/projects/addprojects";
+import ProjectsProfile from "@/pages/projects/projectsprofile";
 
 export const routes = [
   {

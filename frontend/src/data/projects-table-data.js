@@ -1,7 +1,6 @@
-import { API_URL } from "@/settings"
+import { API_URL } from "@/settings";
 
 const API_BASE_URL = API_URL;
-
 
 export function FetchProjectTable(setProjectsTableData) {
   fetch(`${API_BASE_URL}/projects-with-assignees`)

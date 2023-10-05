@@ -10,6 +10,7 @@ import {
 import routes from "@/routes";
 import nestroutes from "@/nestroutes";
 import { useMaterialTailwindController, setOpenConfigurator } from "@/context";
+import { Typography } from "@material-tailwind/react";
 
 export function Dashboard() {
   const [controller, dispatch] = useMaterialTailwindController();

@@ -6,14 +6,8 @@ import {
   IconButton,
   Breadcrumbs,
 } from "@material-tailwind/react";
-import {
-  UserCircleIcon,
-  Bars3Icon,
-} from "@heroicons/react/24/solid";
-import {
-  useMaterialTailwindController,
-  setOpenSidenav,
-} from "@/context";
+import { UserCircleIcon, Bars3Icon } from "@heroicons/react/24/solid";
+import { useMaterialTailwindController, setOpenSidenav } from "@/context";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export function DashboardNavbar() {

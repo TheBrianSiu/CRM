@@ -5,7 +5,7 @@ import {
   UserIcon,
   ChartBarIcon,
 } from "@heroicons/react/24/solid";
-import { API_URL } from "@/settings"
+import { API_URL } from "@/settings";
 
 const API_BASE_URL = API_URL;
 
@@ -51,7 +51,7 @@ export function FetchSalesRecords(
             .then((response) => response.json())
             .then((responseData) => {
               fetch(
-                `${API_BASE_URL}//est-sales-records?start=${formattedStartOfLastMonth}&end=${formattedEndOfLastMonth}`,
+                `${API_BASE_URL}/est-sales-records?start=${formattedStartOfLastMonth}&end=${formattedEndOfLastMonth}`,
               )
                 .then((response) => response.json())
                 .then((precendata) => {
@@ -73,7 +73,7 @@ export function FetchSalesRecords(
 
                   // Fetch project data
                   fetch(
-                    `${API_BASE_URL}//project-records?start=${formattedStartOfMonth}&end=${formattedEndOfMonth}`,
+                    `${API_BASE_URL}/project-records?start=${formattedStartOfMonth}&end=${formattedEndOfMonth}`,
                   )
                     .then((response) => response.json())
                     .then((responseData) => {

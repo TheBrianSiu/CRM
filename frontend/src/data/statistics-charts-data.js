@@ -1,4 +1,4 @@
-import { API_URL } from "@/settings"
+import { API_URL } from "@/settings";
 
 const API_BASE_URL = API_URL;
 

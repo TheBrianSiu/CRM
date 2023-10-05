@@ -7,7 +7,6 @@ import {
   IconButton,
   Typography,
 } from "@material-tailwind/react";
-import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/solid";
 import { useMaterialTailwindController, setOpenSidenav } from "@/context";
 import { useAuth0 } from "@auth0/auth0-react";
 

@@ -6,20 +6,20 @@ import { useAuth0 } from "@auth0/auth0-react";
 import Auth from "./layouts/auth";
 
 function App() {
-  const { isLoading, isAuthenticated} = useAuth0();
+  const { isLoading, isAuthenticated } = useAuth0();
 
   return (
     <DndProvider backend={HTML5Backend}>
       <Routes>
-        {!isLoading && !isAuthenticated && (
+        {/* {!isLoading && !isAuthenticated && (
         <>
         <Route path="/sign-in" element={<Auth />} />
         <Route path="/*" element={<Navigate to="/sign-in" replace />} />
         </>)}
         {isAuthenticated && (
-        <>
+        <> */}
         <Route path="/*" element={<Dashboard />} />
-        </>)}
+        {/* </>)} */}
       </Routes>
     </DndProvider>
   );

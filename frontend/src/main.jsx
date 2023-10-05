@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@material-tailwind/react";
@@ -7,7 +7,10 @@ import { MaterialTailwindControllerProvider } from "@/context";
 import Auth0ProviderWithHistory from "./auth0Provider";
 import "../public/css/tailwind.css";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+const root = document.getElementById("root");
+const rootRoot = createRoot(root);
+
+rootRoot.render(
   <React.StrictMode>
     <Auth0ProviderWithHistory>
       <BrowserRouter>

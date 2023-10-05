@@ -1,60 +1,214 @@
-export const projectsData = [
-  {
-    img: "/img/home-decor-1.jpeg",
-    title: "Modern",
-    tag: "Project #1",
-    description:
-      "As Uber works through a huge amount of internal management turmoil.",
-    route: "/dashboard/profile",
-    members: [
-      { img: "/img/team-1.jpeg", name: "Romina Hadid" },
-      { img: "/img/team-2.jpeg", name: "Ryan Tompson" },
-      { img: "/img/team-3.jpeg", name: "Jessica Doe" },
-      { img: "/img/team-4.jpeg", name: "Alexander Smith" },
-    ],
-  },
-  {
-    img: "/img/home-decor-2.jpeg",
-    title: "Scandinavian",
-    tag: "Project #2",
-    description:
-      "Music is something that every person has his or her own specific opinion about.",
-    route: "/dashboard/profile",
-    members: [
-      { img: "/img/team-4.jpeg", name: "Alexander Smith" },
-      { img: "/img/team-3.jpeg", name: "Jessica Doe" },
-      { img: "/img/team-2.jpeg", name: "Ryan Tompson" },
-      { img: "/img/team-1.jpeg", name: "Romina Hadid" },
-    ],
-  },
-  {
-    img: "/img/home-decor-3.jpeg",
-    title: "Minimalist",
-    tag: "Project #3",
-    description:
-      "Different people have different taste, and various types of music.",
-    route: "/dashboard/profile",
-    members: [
-      { img: "/img/team-1.jpeg", name: "Romina Hadid" },
-      { img: "/img/team-2.jpeg", name: "Ryan Tompson" },
-      { img: "/img/team-3.jpeg", name: "Jessica Doe" },
-      { img: "/img/team-4.jpeg", name: "Alexander Smith" },
-    ],
-  },
-  {
-    img: "/img/home-decor-4.jpeg",
-    title: "Gothic",
-    tag: "Project #4",
-    description:
-      "Why would anyone pick blue over pink? Pink is obviously a better color.",
-    route: "/dashboard/profile",
-    members: [
-      { img: "/img/team-4.jpeg", name: "Alexander Smith" },
-      { img: "/img/team-3.jpeg", name: "Jessica Doe" },
-      { img: "/img/team-2.jpeg", name: "Ryan Tompson" },
-      { img: "/img/team-1.jpeg", name: "Romina Hadid" },
-    ],
-  },
-];
+import { API_URL } from "@/settings";
 
-export default projectsData;
+const API_BASE_URL = API_URL;
+
+// Function to fetch projects with assignees
+export async function fetchProjects() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/projects-with-assignees`);
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+// Function to delete a project and its related data (customers and assignees)
+export async function deleteProjectWithRelatedData(id) {
+  try {
+    const projectDeletionResponse = await deleteProject(id);
+    const assigneesRemovalResponse = await removeAssignees(id);
+    const customersRemovalResponse = await removeCustomer(id);
+
+    return {
+      projectDeletionResponse,
+      assigneesRemovalResponse,
+      customersRemovalResponse,
+    };
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+// Function to delete a project by ID
+export async function deleteProject(id) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/projects/delete/${id}`, {
+      method: "PUT",
+    });
+
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+// Function to remove assignees linkage for a project
+export async function removeAssignees(project_id) {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/project-assignee/delete/${project_id}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+// Function to remove customers linkage for a project
+export async function removeCustomer(project_id) {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/project-customer/delete/${project_id}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function customer_basic_info() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/customers-basicinfo`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function retrieveprojects(id) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/inserted-projects/${id}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function addprojects(customerdata) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/projects-table/add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(customerdata),
+    });
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function addassignees(userProjectData) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/project_assignees/add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userProjectData),
+    });
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function addcustomers(custProjectData) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/project_customers/add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(custProjectData),
+    });
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function updatestatus(id, status) {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/projects-table/update-status/${id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify([status]),
+      },
+    );
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function updateprojects(id, taskData) {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/projects-table/update/${id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(taskData),
+      },
+    );
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
