@@ -33,7 +33,7 @@ export function Navbar({
           <input
             className="px-4 py-2 text-sm font-medium text-gray-400 outline-none"
             type="text"
-            placeholder="Search your name, address..."
+            placeholder="Search ..."
             required
             value={searchQuery === null ? "" : searchQuery}
             onChange={handleSearch}

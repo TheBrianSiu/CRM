@@ -129,6 +129,7 @@ export async function addprojects(customerdata) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(customerdata),
     });
+    console.log(response)
     if (!response.ok) {
       throw new Error("Request failed");
     }

@@ -8,9 +8,9 @@ import {
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Fuse from "fuse.js";
-import { removecustomer, retrievecustomers } from "@/data/customers-data";
+import { retrievecustomers } from "@/data/customers-data";
 import { Table } from "./component/theme/table";
-import Pagination from "@/utils/pagiantion";
+import {Pagination, totalPages, SwitchPage } from "@/utils";
 import Navbar from "./component/utils/navbar";
 
 function Customers() {
@@ -66,19 +66,6 @@ function Customers() {
     : Userdata;
 
   // switching pages
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    const totalPages = Math.ceil(filteredUserdata.length / itemsPerPage);
-    if (currentPage < totalPages) {
-      setCurrentPage((prevPage) => prevPage + 1);
-    }
-  };
-
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredUserdata.slice(
@@ -114,10 +101,10 @@ function Customers() {
                 setCurrentPage={setCurrentPage}
                 indexOfLastItem={indexOfLastItem}
                 handlePrevPage={() =>
-                  SwitchPage("prev", currentPage, totalPages, setCurrentPage)
+                  SwitchPage("prev", currentPage, totalPages(filteredUserdata.length,itemsPerPage), setCurrentPage)
                 }
                 handleNextPage={() =>
-                  SwitchPage("next", currentPage, totalPages, setCurrentPage)
+                  SwitchPage("next", currentPage, totalPages(filteredUserdata.length,itemsPerPage), setCurrentPage)
                 }
               />
             ) : null}

@@ -1,6 +1,6 @@
 import Columns from "../structures/columns";
-import { HandleSubmit } from "@/utils/handlesubmit";
-import { HandleUpdate } from "@/utils/handleupdate";
+import { HandleSubmit } from "@/pages/projects/component/utils/handlesubmit";
+import { HandleUpdate } from "@/pages/projects/component/utils/handleupdate";
 
 const TaskBoard = ({ tasks, columns }) => {
   const addTask = (status) => {

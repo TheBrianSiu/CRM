@@ -9,10 +9,8 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "./component/utils/navbar";
 import TaskBoard from "./component/theme/taskboard";
 import Table from "./component/theme/table";
-import Pagination from "@/utils/pagiantion";
-import { SwitchPage } from "@/utils/switchpage";
+import { SwitchPage, performSearch,Pagination, totalPages } from "@/utils";
 import { fetchProjects } from "@/data/projects-data";
-import { performSearch } from "@/utils/search";
 
 const Projects = () => {
   const [Istheme, setIsthem] = useState("All");
@@ -107,10 +105,10 @@ const Projects = () => {
                 setCurrentPage={setCurrentPage}
                 indexOfLastItem={indexOfLastItem}
                 handlePrevPage={() =>
-                  SwitchPage("prev", currentPage, totalPages, setCurrentPage)
+                  SwitchPage("prev", currentPage, totalPages(filteredUserdata.length,itemsPerPage), setCurrentPage)
                 }
                 handleNextPage={() =>
-                  SwitchPage("next", currentPage, totalPages, setCurrentPage)
+                  SwitchPage("next", currentPage, totalPages(filteredUserdata.length,itemsPerPage) , setCurrentPage)
                 }
               />
             ) : null}

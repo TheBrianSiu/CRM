@@ -23,21 +23,13 @@ import {
   FetchProjectCompletion,
   FetchChartsData,
 } from "@/data";
+import { formatDaterange, formatNumber } from "@/utils/formatting";
 
 export function Home() {
   const [StatisticsCardsData, setStatisticsCardsData] = useState([]);
   const [ProjectsTableData, setProjectsTableData] = useState([]);
   const [CompletedProject, setCompletedProject] = useState();
   const [statisticsChartsData, setStatisticsChartsData] = useState([]);
-
-  function formatDate(date) {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return `${year}-${month.toString().padStart(2, "0")}-${day
-      .toString()
-      .padStart(2, "0")}`;
-  }
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -48,22 +40,10 @@ export function Home() {
   const startOfMonth = new Date(year, month, 1);
   const endOfMonth = new Date(year, month + 1, 0);
 
-  const formattedStartOfMonth = formatDate(startOfMonth);
-  const formattedEndOfMonth = formatDate(endOfMonth);
-  const formattedStartOfLastMonth = formatDate(startOfLastMonth);
-  const formattedEndOfLastMonth = formatDate(endOfLastMonth);
-
-  function formatNumber(number) {
-    if (number >= 1000000000) {
-      return (number / 1000000000).toFixed(1) + " billion";
-    } else if (number >= 1000000) {
-      return (number / 1000000).toFixed(1) + " million";
-    } else if (number >= 1000) {
-      return (number / 1000).toFixed(1) + " thousand";
-    } else {
-      return number.toString();
-    }
-  }
+  const formattedStartOfMonth = formatDaterange(startOfMonth);
+  const formattedEndOfMonth = formatDaterange(endOfMonth);
+  const formattedStartOfLastMonth = formatDaterange(startOfLastMonth);
+  const formattedEndOfLastMonth = formatDaterange(endOfLastMonth);
 
   useEffect(() => {
     FetchSalesRecords(
@@ -74,7 +54,7 @@ export function Home() {
       formatNumber,
       setStatisticsCardsData,
     );
-  }, [FetchSalesRecords]);
+  }, []);
 
   useEffect(() => {
     FetchProjectTable(setProjectsTableData);

@@ -11,6 +11,7 @@ import Fuse from "fuse.js";
 import { retrieveData } from "../../data/users-data";
 import Navbar from "./component/utils/navbar";
 import { Table } from "./component/theme/table";
+import { totalPages } from "@/utils";
 
 export function Users() {
   const [Istheme, setIsthem] = useState("All");
@@ -89,10 +90,10 @@ export function Users() {
                 setCurrentPage={setCurrentPage}
                 indexOfLastItem={indexOfLastItem}
                 handlePrevPage={() =>
-                  SwitchPage("prev", currentPage, totalPages, setCurrentPage)
+                  SwitchPage("prev", currentPage, totalPages(filteredUserdata.length,itemsPerPage), setCurrentPage)
                 }
                 handleNextPage={() =>
-                  SwitchPage("next", currentPage, totalPages, setCurrentPage)
+                  SwitchPage("next", currentPage, totalPages(filteredUserdata.length,itemsPerPage), setCurrentPage)
                 }
               />
             ) : null}
