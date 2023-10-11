@@ -10,6 +10,18 @@ app.get('/', (req, res) => {
     return res.json("from backend");
   });
 
+
+// check any repeating calls 
+  // app.use((req, res, next) => {
+  //   const timestamp = new Date().toISOString();
+  //   console.log(`${timestamp} - API Request: ${req.method} ${req.url}`);
+  //   console.log(`Headers: ${JSON.stringify(req.headers)}`);
+  //   console.log(`Parameters: ${JSON.stringify(req.query)}`);
+  
+  //   next();
+  // });
+  
+
 // users table
 app.use('/', usersroute);
 

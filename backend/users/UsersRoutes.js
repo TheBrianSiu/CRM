@@ -33,7 +33,7 @@ router.get("/users-table/users", (req, res) => {
 
 router.get("/users-table/:id", (req, res) => {
   const userid = req.params.id;
-  const sql = `SELECT username,first_name, last_name,email,phone_number,job_title, department,status,address,IS_ADMIN,supervisor_id FROM USERS WHERE user_id = ? AND IS_DELETED = 0`;
+  const sql = `SELECT username,first_name, last_name,email,phone_number,job_title, department,status,address,is_admin,supervisor_id FROM USERS WHERE user_id = ? AND IS_DELETED = 0`;
   db.query(sql, [userid], (err, data) => {
     if (err) {
       return res.status(404).json({ message: "user not found" });
@@ -69,7 +69,7 @@ router.post("/users-table/add", async (req, res) => {
     const hashedPassword = await hashPassword(data.password);
     data.password = hashedPassword;
     const dataarray = [Object.values(data)];
-    const sql = `INSERT INTO USERS ( username,first_name, last_name,email,phone_number,job_title, department,status,address,IS_ADMIN,password,supervisor_id) VALUES ?`;
+    const sql = `INSERT INTO USERS ( username,first_name, last_name,email,phone_number,job_title, department,status,address,is_admin,password,supervisor_id) VALUES ?`;
     await db.query(sql, [dataarray]);
     return res.json({ message: "Users data added sucessfully" });
   } catch {

@@ -95,11 +95,11 @@ const validateUser = (userData) => {
   if (userData.password && !validator.isStrongPassword(userData.password)) {
     errors.push('Password must be strong (8-16 characters, uppercase, lowercase, number, and special character)');
   }
-  if (!userData.status || !['0', '1'].includes(userData.status)) {
-    errors.push('Status must be either Active or Inative');
+  if (!userData.status || !['active', 'inactive'].includes(userData.status)) {
+    errors.push('Status must be either active or inative');
   }
-  if (!userData.IS_ADMIN || !['0', '1'].includes(userData.IS_ADMIN)) {
-    errors.push('IS_ADMIN must be either Yes or No');
+  if (!userData.is_admin || !['yes', 'no'].includes(userData.is_admin)) {
+    errors.push('admin option must be either Yes or No');
   }
   if (userData.username && !validator.isAlphanumeric(userData.username, 'en-US')) {
     errors.push('Username is required and should contain only alphanumeric characters');

@@ -38,6 +38,7 @@ router.put('/customers-table/update/:id', async (req, res) => {
     const updatedData = req.body;
 
     const validation = validateCustomer(updatedData);
+
     if (!validation.isValid) {
      return res.status(400).json( validation.errors );
     }
@@ -45,7 +46,7 @@ router.put('/customers-table/update/:id', async (req, res) => {
     try {
       let sql = 'UPDATE CUSTOMERS SET';
       const values = [];
-  
+      
       // Iterate over the updatedData object to generate the SQL query
       Object.keys(updatedData).forEach((key, index) => {
         if (index > 0) sql += ',';
@@ -65,13 +66,12 @@ router.put('/customers-table/update/:id', async (req, res) => {
   });
 
 
-// insert a user
-
 
 router.post('/customers-table/add', async (req, res) => {
   const data = req.body;
 
   const validation = validateCustomer(data);
+
   if (!validation.isValid) {
    return res.status(400).json( validation.errors );
   }
