@@ -10,7 +10,7 @@ import Navbar from "./component/utils/navbar";
 import TaskBoard from "./component/theme/taskboard";
 import Table from "./component/theme/table";
 import { SwitchPage, performSearch,Pagination, totalPages } from "@/utils";
-import { fetchProjects } from "@/data/projects-data";
+import { RetreiveDataLocal, fetchDataAndStoreLocal } from "@/data/indexdb";
 
 const Projects = () => {
   const [Istheme, setIsthem] = useState("All");
@@ -21,15 +21,23 @@ const Projects = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [lastItemIndex, setLastItemIndex] = useState(itemsPerPage);
+  
 
-  // retrieve data
+  //retrieve data and put into local
   useEffect(() => {
-    fetchProjects()
-      .then((data) => {
-        setTasks(data);
-      })
-      .catch((error) => console.error(error));
+    const fetchData = async () => {
+      await fetchDataAndStoreLocal();
+    }
+    fetchData();
   }, []);
+
+  // retreieve from local
+  useEffect(() => {
+    const storeTasks = async () => {
+      await RetreiveDataLocal(setTasks);
+    };
+    storeTasks();
+  }, [tasks]);
 
   //search engine
   const filteredUserdata = performSearch(tasks, searchQuery);

@@ -1,5 +1,6 @@
+import { deleteProjectWithRelatedData } from "@/data";
+import { fetchDataAndStoreLocal } from "@/data/indexdb";
 import { Typography, Chip } from "@material-tailwind/react";
-import { deleteProjectWithRelatedData } from "@/data/projects-data";
 
 export function Table({ currentItems, tasks }) {
   function deleteProject(id) {

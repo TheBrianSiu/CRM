@@ -1,4 +1,5 @@
 import { API_URL } from "@/settings";
+import { fetchDataAndStoreLocal } from "./indexdb";
 
 const API_BASE_URL = API_URL;
 
@@ -22,7 +23,7 @@ export async function deleteProjectWithRelatedData(id) {
     const projectDeletionResponse = await deleteProject(id);
     const assigneesRemovalResponse = await removeAssignees(id);
     const customersRemovalResponse = await removeCustomer(id);
-
+    fetchDataAndStoreLocal();  
     return {
       projectDeletionResponse,
       assigneesRemovalResponse,
@@ -39,7 +40,6 @@ export async function deleteProject(id) {
     const response = await fetch(`${API_BASE_URL}/projects/delete/${id}`, {
       method: "PUT",
     });
-
     if (!response.ok) {
       throw new Error("Request failed");
     }
@@ -129,7 +129,7 @@ export async function addprojects(customerdata) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(customerdata),
     });
-    console.log(response)
+    fetchDataAndStoreLocal()
     if (!response.ok) {
       throw new Error("Request failed");
     }
@@ -184,6 +184,7 @@ export async function updatestatus(id, status) {
         body: JSON.stringify([status]),
       },
     );
+    fetchDataAndStoreLocal()
     if (!response.ok) {
       throw new Error("Request failed");
     }
