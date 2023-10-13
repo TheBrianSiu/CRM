@@ -13,6 +13,8 @@ export const fetchDataAndStoreLocal = async () => {
         }
       }
     });
+
+    console.log(db);
   
     try {
       const transaction = db.transaction("tasks", "readwrite");
