@@ -23,11 +23,11 @@ const Projects = () => {
   const [lastItemIndex, setLastItemIndex] = useState(itemsPerPage);
   
 
-  const db = openDB('projects', 1, {
-    upgrade(db) {
-      db.createObjectStore('tasks',{keyPath: "project_id"});
-    },
-  });
+  // const db = openDB('projects', 1, {
+  //   upgrade(db) {
+  //     db.createObjectStore('tasks',{keyPath: "project_id"});
+  //   },
+  // });
 
   //retrieve data and put into local
   useEffect(() => {

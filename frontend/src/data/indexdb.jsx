@@ -6,13 +6,7 @@ export const fetchDataAndStoreLocal = async () => {
 
     const data = await fetchProjects();
 
-
-    // const db = openDB('projects', 1, {
-    //   upgrade(db) {
-    //     db.createObjectStore('tasks',{keyPath: "project_id"});
-    //   },
-    // });
-  
+  // regenerate the DB if it doesn't have, but it doesn't work in Neltify for initalize DB 
     const db = await openDB("projects", 1, {
       upgrade(db) {
         if (!db.objectStoreNames.contains("tasks")) {
