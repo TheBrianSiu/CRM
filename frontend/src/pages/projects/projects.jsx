@@ -21,16 +21,16 @@ const Projects = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [lastItemIndex, setLastItemIndex] = useState(itemsPerPage);
-  
 
-  // const db = openDB('projects', 1, {
-  //   upgrade(db) {
-  //     db.createObjectStore('tasks',{keyPath: "project_id"});
-  //   },
-  // });
 
   //retrieve data and put into local
   useEffect(() => {
+    // initalize the DB exclusively for Netlify hosting coz it doesn't have on calling another fucntion
+    const db = openDB('projects', 1, {
+      upgrade(db) {
+        db.createObjectStore('tasks',{keyPath: "project_id"});
+      },
+    });
     const fetchData = async () => {
       await fetchDataAndStoreLocal();
     }
