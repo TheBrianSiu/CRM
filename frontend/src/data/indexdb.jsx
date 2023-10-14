@@ -7,19 +7,19 @@ export const fetchDataAndStoreLocal = async () => {
     const data = await fetchProjects();
 
 
-    const db = openDB('projects', 1, {
-      upgrade(db) {
-        db.createObjectStore('tasks',{keyPath: "project_id"});
-      },
-    });
-  
-    // const db = await openDB("projects", 1, {
+    // const db = openDB('projects', 1, {
     //   upgrade(db) {
-    //     if (!db.objectStoreNames.contains("tasks")) {
-    //       db.createObjectStore("tasks", { keyPath: "project_id" });
-    //     }
-    //   }
+    //     db.createObjectStore('tasks',{keyPath: "project_id"});
+    //   },
     // });
+  
+    const db = await openDB("projects", 1, {
+      upgrade(db) {
+        if (!db.objectStoreNames.contains("tasks")) {
+          db.createObjectStore("tasks", { keyPath: "project_id" });
+        }
+      }
+    });
   
     try {
       const transaction = db.transaction("tasks", "readwrite");
