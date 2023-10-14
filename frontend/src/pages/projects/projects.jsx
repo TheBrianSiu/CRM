@@ -11,7 +11,7 @@ import TaskBoard from "./component/theme/taskboard";
 import Table from "./component/theme/table";
 import { SwitchPage, performSearch,Pagination, totalPages } from "@/utils";
 import { RetreiveDataLocal, fetchDataAndStoreLocal } from "@/data/indexdb";
-
+import { openDB } from "idb";
 const Projects = () => {
   const [Istheme, setIsthem] = useState("All");
   const navigate = useNavigate();
@@ -22,6 +22,14 @@ const Projects = () => {
   const itemsPerPage = 10;
   const [lastItemIndex, setLastItemIndex] = useState(itemsPerPage);
   
+
+
+
+  const dbPromise = openDB('keyval-store', 1, {
+    upgrade(db) {
+      db.createObjectStore('keyval');
+    },
+  });
 
   //retrieve data and put into local
   useEffect(() => {
