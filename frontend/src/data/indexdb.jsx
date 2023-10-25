@@ -1,7 +1,7 @@
 import { openDB } from "idb";
 import { fetchProjects } from "@/data/projects-data";
 
-
+// projects
 export const fetchDataAndStoreLocal = async () => {
 
     const data = await fetchProjects();
@@ -50,6 +50,7 @@ export const fetchDataAndStoreLocal = async () => {
     const tasks = await db.getAll("tasks");
     setTasks(tasks);
 }
+
 
 
   

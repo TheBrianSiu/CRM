@@ -3,6 +3,8 @@ const router = express.Router();
 const { db } = require("../dbConfig");
 const { validateUser } = require("../validation/validation");
 const { hashPassword } = require("../encryption/encryption");
+
+
 router.get("/users-table", (req, res) => {
   const sql =
     "SELECT user_id,first_name, last_name,email,phone_number,job_title, department,status,last_login FROM USERS WHERE IS_DELETED = 0";

@@ -1,5 +1,6 @@
 import { deleteProjectWithRelatedData } from "@/data";
 import { fetchDataAndStoreLocal } from "@/data/indexdb";
+import { formatNumber } from "@/utils";
 import { Typography, Chip } from "@material-tailwind/react";
 
 export function Table({ currentItems, tasks }) {
@@ -88,7 +89,7 @@ export function Table({ currentItems, tasks }) {
                   <td className={className}>
                     <Typography className="text-xs font-semibold text-blue-gray-600">
                       {"$"}
-                      {est_value}
+                      {formatNumber(est_value)}
                     </Typography>
                   </td>
                   <td className={className}>
