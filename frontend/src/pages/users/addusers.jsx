@@ -48,9 +48,8 @@ export function Addusers() {
       [name]: value === "" ? null : value,
     }));
   };
-
-  // password valdiation
-  function validatePassword() {
+   // password valdiation
+   function validatePassword() {
     const { password, confirm_password } = Data;
     const passwordPattern =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$/;
@@ -80,7 +79,6 @@ export function Addusers() {
       }));
     }
   }
-
   //retrieve users for selecting supervisor
   useEffect(() => {
     supervisor()
@@ -320,54 +318,54 @@ export function Addusers() {
                                     )
                                   }
                                 />
+                                </div>
+
+<div className="col-span-6 sm:col-span-3">
+  <label
+    htmlFor="password"
+    className="block text-sm font-medium text-gray-700"
+  >
+    Password
+  </label>
+  <input
+    type="password"
+    name="password"
+    autoComplete="new-password"
+    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+    value={Data.password || ""}
+    onChange={handleChange}
+    onBlur={validatePassword}
+    placeholder="Enter password"
+    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
+    required
+  />
+  {Errors.password && (
+    <p className="text-red-500">
+      {Errors.confirm_password}
+    </p>
+  )}
+</div>
+
+<div className="col-span-6 sm:col-span-3">
+  <label className="block text-sm font-medium text-gray-700">
+    Confirm Password
+  </label>
+  <input
+    type="password"
+    name="confirm_password"
+    autoComplete="new-password"
+    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+    value={Data.confirm_password || ""}
+    onChange={handleChange}
+    onBlur={validatePassword}
+    placeholder="Enter confirm password"
+    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
+    required
+  />
+  {Errors.password && (
+    <p className="text-red-500">{Errors.password}</p>
+  )}
                               </div>
-
-                        <div className="col-span-6 sm:col-span-3">
-                          <label
-                            htmlFor="password"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Password
-                          </label>
-                          <input
-                            type="password"
-                            name="password"
-                            autoComplete="new-password"
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.password || ""}
-                            onChange={handleChange}
-                            onBlur={validatePassword}
-                            placeholder="Enter password"
-                            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
-                            required
-                          />
-                          {Errors.password && (
-                            <p className="text-red-500">
-                              {Errors.confirm_password}
-                            </p>
-                          )}
-                        </div>
-
-                        <div className="col-span-6 sm:col-span-3">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Confirm Password
-                          </label>
-                          <input
-                            type="password"
-                            name="confirm_password"
-                            autoComplete="new-password"
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.confirm_password || ""}
-                            onChange={handleChange}
-                            onBlur={validatePassword}
-                            placeholder="Enter confirm password"
-                            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
-                            required
-                          />
-                          {Errors.password && (
-                            <p className="text-red-500">{Errors.password}</p>
-                          )}
-                        </div>
 
                         <div className="col-span-6 sm:col-span-3">
                                 <label

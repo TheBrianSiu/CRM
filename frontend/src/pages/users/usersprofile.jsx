@@ -17,8 +17,14 @@ import makeAnimated from "react-select/animated";
 import Select from "react-select";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { retrieveDataById, supervisor, updateUser } from "@/data/users-data";
-import { adminOptions, statusOptions } from "@/data";
+import {
+  adminOptions,
+  statusOptions,
+  changePassword,
+  retrieveDataById,
+  supervisor,
+  updateUser,
+} from "@/data";
 
 export function Usersprofile() {
   const animatedComponents = makeAnimated();
@@ -34,37 +40,19 @@ export function Usersprofile() {
     label: `${user.first_name} ${user.last_name}`,
   }));
 
-  // password valdiation
-  function validatePassword() {
-    const { password, confirm_password } = Data;
-    const passwordPattern =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$/;
-
-    if (!passwordPattern.test(password)) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        password:
-          "Password must contain 8-16 characters, including uppercase, lowercase, numbers, and special characters.",
-      }));
-    } else {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        password: "",
-      }));
+  // change password request
+  const Resetpassword = (email) => {
+    if (window.confirm("Do you want to reset/change the password?")) {
+      changePassword(email)
+        .then(function (data) {
+          alert("Link is sent to user mail box successfully!");
+          navigate(-1); // Navigate back after the fetch is successful
+        })
+        .catch((err) => {
+          alert(err);
+        });
     }
-
-    if (password !== confirm_password) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        confirm_password: "Passwords do not match.",
-      }));
-    } else {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        confirm_password: "",
-      }));
-    }
-  }
+  };
 
   // retrieve supervisor id
   useEffect(() => {
@@ -95,12 +83,6 @@ export function Usersprofile() {
       let updatedData = { ...userData };
       delete updatedData.id;
 
-      // Check if the user has updated the password
-      if (password !== null && confirm_password !== null) {
-        // put it back
-        updatedData = { ...updatedData, password };
-      }
-
       //check username has udpated or not
       if (initialUsername !== username) {
         updatedData = { ...updatedData, username };
@@ -121,8 +103,8 @@ export function Usersprofile() {
     const { name, value } = e.target;
     setData((prevData) =>
       prevData.map((users, i) =>
-        i === index ? { ...users, [name]: value } : users,
-      ),
+        i === index ? { ...users, [name]: value } : users
+      )
     );
   };
 
@@ -296,7 +278,9 @@ export function Usersprofile() {
                                   value={users.email || ""}
                                   onChange={(e) => handleChange(e, index)}
                                   placeholder="Enter email address"
-                                  required
+                                  readOnly
+                                  disabled
+                                  color="gray"
                                 />
                               </div>
 
@@ -375,7 +359,7 @@ export function Usersprofile() {
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                   value={supervisorOptions.find(
                                     (option) =>
-                                      option.value === Data[0].supervisor_id,
+                                      option.value === Data[0].supervisor_id
                                   )}
                                   onChange={(selectedOption) =>
                                     handleChange(
@@ -385,57 +369,10 @@ export function Usersprofile() {
                                           value: selectedOption.value,
                                         },
                                       },
-                                      0,
+                                      0
                                     )
                                   }
                                 />
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-3">
-                                <label
-                                  htmlFor="password"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  Password
-                                </label>
-                                <input
-                                  type="password"
-                                  name="password"
-                                  autoComplete="new-password"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={users.password || ""}
-                                  onChange={(e) => handleChange(e, index)}
-                                  onBlur={validatePassword}
-                                  placeholder="Enter password"
-                                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
-                                />
-                                {Errors.password && (
-                                  <p className="text-red-500">
-                                    {Errors.confirm_password}
-                                  </p>
-                                )}
-                              </div>
-
-                              <div className="col-span-6 sm:col-span-3">
-                                <label className="block text-sm font-medium text-gray-700">
-                                  Confirm Password
-                                </label>
-                                <input
-                                  type="password"
-                                  name="confirm_password"
-                                  autoComplete="new-password"
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={users.confirm_password || ""}
-                                  onChange={(e) => handleChange(e, index)}
-                                  onBlur={validatePassword}
-                                  placeholder="Enter confirm password"
-                                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
-                                />
-                                {Errors.password && (
-                                  <p className="text-red-500">
-                                    {Errors.password}
-                                  </p>
-                                )}
                               </div>
 
                               <div className="col-span-6 sm:col-span-3">
@@ -451,7 +388,7 @@ export function Usersprofile() {
                                   options={statusOptions}
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                   value={statusOptions.find(
-                                    (option) => option.value === Data[0].status,
+                                    (option) => option.value === Data[0].status
                                   )}
                                   onChange={(selectedOption) =>
                                     handleChange(
@@ -461,7 +398,7 @@ export function Usersprofile() {
                                           value: selectedOption.value,
                                         },
                                       },
-                                      0,
+                                      0
                                     )
                                   }
                                 />
@@ -481,7 +418,7 @@ export function Usersprofile() {
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                   value={adminOptions.find(
                                     (option) =>
-                                      option.value === Data[0].is_admin,
+                                      option.value === Data[0].is_admin
                                   )}
                                   onChange={(selectedOption) =>
                                     handleChange(
@@ -491,23 +428,38 @@ export function Usersprofile() {
                                           value: selectedOption.value,
                                         },
                                       },
-                                      0,
+                                      0
                                     )
                                   }
                                 />
                               </div>
                             </div>
                           </div>
-                          <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                            <Button
-                              type="submit"
-                              color="indigo"
-                              buttonType="filled"
-                              size="regular"
-                              ripple="light"
-                            >
-                              Save
-                            </Button>
+
+                          <div className=" bg-gray-50 grid grid-cols-2 gap-6">
+                            <div className=" px-4 py-3 text-left sm:px-6">
+                              <Button
+                                variant="text"
+                                size="regular"
+                                ripple="light"
+                                onClick={() => {
+                                  Resetpassword(Data[0].email);
+                                }}
+                              >
+                                Reset/Change password
+                              </Button>
+                            </div>
+                            <div className=" px-4 py-3 text-right sm:px-6">
+                              <Button
+                                type="submit"
+                                color="indigo"
+                                buttonType="filled"
+                                size="regular"
+                                ripple="light"
+                              >
+                                Save
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </form>

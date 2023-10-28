@@ -2,8 +2,9 @@ const usersroute = require('./users/usersroutes');
 const custroute = require('./customers/custroutes');
 const projectroute = require('./projects/projectroutes');
 const dashboardroute = require('./dashbaord/dashboardroutes');
+const authroute = require('./auth/authroutes')
 const { app, db } = require('./dbConfig');
-const { retrieve_and_insert_newuser } = require('./auth/auth');
+const { retrieve_and_insert_newuser} = require('./auth/auth');
 
 const PORT = process.env.PORT || 3000;
 
@@ -12,7 +13,7 @@ app.get('/', (req, res) => {
 });
 
 // Schedule periodic task to retrieve and insert new users
-setInterval(retrieve_and_insert_newuser, 6000);
+setInterval(retrieve_and_insert_newuser, 60000);
 
 // Logging middleware (if needed)
 // app.use((req, res, next) => {
@@ -24,10 +25,11 @@ setInterval(retrieve_and_insert_newuser, 6000);
 // });
 
 // Define routes
-app.use('/', usersroute);      // Users table routes
-app.use('/', custroute);      // Customer routes
-app.use('/', projectroute);   // Project routes
-app.use('/', dashboardroute);  // Dashboard routes
+app.use('/', authroute);
+app.use('/', usersroute);     
+app.use('/', custroute);      
+app.use('/', projectroute);   
+app.use('/', dashboardroute);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

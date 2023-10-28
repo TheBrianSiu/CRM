@@ -22,6 +22,7 @@ export async function retrieveData() {
 
 export async function deleteUser(id) {
   try {
+
     const response = await fetch(`${API_BASE_URL}/users-table/delete/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },

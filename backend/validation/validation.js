@@ -92,9 +92,6 @@ const validateUser = (userData) => {
   if (!userData.job_title || validator.isEmpty(userData.job_title)) {
     errors.push('Job title is required');
   }
-  if (userData.password && !validator.isStrongPassword(userData.password)) {
-    errors.push('Password must be strong (8-16 characters, uppercase, lowercase, number, and special character)');
-  }
   if (!userData.status || !['active', 'inactive'].includes(userData.status)) {
     errors.push('Status must be either active or inative');
   }

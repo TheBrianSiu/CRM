@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { db } = require("../dbConfig");
 const { validateUser } = require("../validation/validation");
+const { insertAuth0User, deleteAuthUser } = require("../auth/auth");
 const { hashPassword } = require("../encryption/encryption");
-
 
 router.get("/users-table", (req, res) => {
   const sql =
@@ -65,26 +65,34 @@ router.post("/users-table/add", async (req, res) => {
       return res.status(500).json({ message: "Internal Server Error" });
     }
   }
-  
+
+  // hashpassword
+  // const hashedPassword = await hashPassword(data.password);
+  //   data.password = hashedPassword;
+
+
+  // Create a new object with the password property removed and email added
+  const userId = await insertAuth0User(data.email, data.password);
+  const { password, ...userData } = data;
 
   try {
-    const hashedPassword = await hashPassword(data.password);
-    data.password = hashedPassword;
-    const dataarray = [Object.values(data)];
-    const sql = `INSERT INTO USERS ( username,first_name, last_name,email,phone_number,job_title, department,status,address,is_admin,password,supervisor_id) VALUES ?`;
-    await db.query(sql, [dataarray]);
-    return res.json({ message: "Users data added sucessfully" });
-  } catch {
+    userData.user_id = userId;
+    const dataValues = Object.values(userData);
+    const sql = `INSERT INTO USERS (username, first_name, last_name, email, phone_number, job_title, department, status, address, is_admin, supervisor_id,user_id) VALUES (?)`;
+    await db.query(sql, [dataValues]);
+    return res.json({ message: "Users data added successfully" });
+  } catch (error) {
     console.error("Error adding customer data:", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
+
 // delete
 router.put("/users-table/delete/:id", async (req, res) => {
   const id = req.params.id;
-
   try {
+    deleteAuthUser(id);
     const sql = "UPDATE USERS SET IS_DELETED = 1 WHERE user_id = ?";
     const data = await new Promise((resolve, reject) => {
       db.query(sql, [id], (err, result) => {
@@ -131,15 +139,6 @@ router.put("/users-table/update/:id", async (req, res) => {
   const validation = validateUser(updatedData);
   if (!validation.isValid) {
     return res.status(400).json(validation.errors);
-  }
-
-  if (updatedData.password != null) {
-    try {
-      const hashedPassword = await hashPassword(updatedData.password);
-      updatedData.password = hashedPassword;
-    } catch (error) {
-      return res.status(500).json({ message: "Hashing password failed" });
-    }
   }
 
   if (updatedData.username !== undefined) {

@@ -4,10 +4,11 @@ import { Typography } from "@material-tailwind/react";
 import { formatDate, formatPhoneNumber } from "@/utils/formatting";
 
 export function Table({ currentItems, Userdata }) {
+
   function Deleteuser(id) {
     if (window.confirm("Do you want to delete the user?")) {
       deleteUser(id)
-        .then((data) => {
+        .then(() => {
           alert("The user is deleted");
           window.location.reload();
         })
