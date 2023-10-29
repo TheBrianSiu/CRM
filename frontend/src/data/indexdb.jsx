@@ -151,7 +151,6 @@ export const fetchCustDataAndStoreLocal = async () => {
         "is_deleted": cust.is_deleted,
         "created_time": cust.created_time
     }
-    console.log(eachCust)
       await objectStore.put(eachCust);
     }
 

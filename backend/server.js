@@ -3,6 +3,7 @@ const custroute = require('./customers/custroutes');
 const projectroute = require('./projects/projectroutes');
 const dashboardroute = require('./dashbaord/dashboardroutes');
 const authroute = require('./auth/authroutes')
+const cors = require('cors');
 const { app, db } = require('./dbConfig');
 const { retrieve_and_insert_newuser, retreiveLoginRecord} = require('./auth/auth');
 
@@ -14,7 +15,7 @@ app.get('/', (req, res) => {
 
 const corsOptions = {
   origin: function (origin, callback) {
-      if (process.env.ALLOWEDORIGINS.includes(origin) || !origin) {
+      if (process.env.ALLOWEDORIGINS.includes(origin)) {
           callback(null, true);
       } else {
           callback(new Error('Not allowed by CORS'));
