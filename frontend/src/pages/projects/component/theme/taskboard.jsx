@@ -1,4 +1,3 @@
-import { fetchDataAndStoreLocal } from "@/data/indexdb";
 import Columns from "../structures/columns";
 import { HandleSubmit } from "@/pages/projects/component/utils/handlesubmit";
 import { HandleUpdate } from "@/pages/projects/component/utils/handleupdate";

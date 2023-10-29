@@ -57,7 +57,7 @@ export function Table({ currentItems, Userdata }) {
             }`;
             const p_umber = formatPhoneNumber(phone_number);
             return (
-              <tr key={first_name + last_name}>
+              <tr key={user_id}>
                 <td className={className}>
                   <div className="flex items-center gap-4">
                     <div>

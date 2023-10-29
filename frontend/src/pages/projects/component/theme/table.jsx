@@ -1,5 +1,4 @@
 import { deleteProjectWithRelatedData } from "@/data";
-import { fetchDataAndStoreLocal } from "@/data/indexdb";
 import { formatNumber } from "@/utils";
 import { Typography, Chip } from "@material-tailwind/react";
 

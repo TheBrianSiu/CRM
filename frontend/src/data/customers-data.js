@@ -1,4 +1,5 @@
 import { API_URL } from "@/settings";
+import { fetchCustDataAndStoreLocal } from "./indexdb";
 
 const API_BASE_URL = API_URL;
 
@@ -9,6 +10,7 @@ export async function Addcusts(customerdata) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(customerdata),
     });
+    fetchCustDataAndStoreLocal();
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData || "Request failed");
@@ -45,6 +47,7 @@ export async function removecustomer(id) {
         headers: { "Content-Type": "application/json" },
       },
     );
+    fetchCustDataAndStoreLocal();
     if (!response.ok) {
       throw new error.message();
     }
@@ -81,6 +84,7 @@ export async function updatecustomers(id, updateddata) {
         body: JSON.stringify(updateddata),
       },
     );
+    fetchCustDataAndStoreLocal();
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData || "Request failed");

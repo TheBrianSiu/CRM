@@ -39,18 +39,7 @@ async function retrieveAuth0Users() {
   }
 }
 
-//Auth0
-const auth_user_update = async (USER_ID, EMAIL, USERNAME) => {
-  const sql =
-    "INSERT INTO USERS (USER_ID, EMAIL, USERNAME, FIRST_NAME, LAST_NAME, status) VALUES (?, ?, ?, 'N/A','N/A', 'active')";
-  try {
-    await db.query(sql, [USER_ID, EMAIL, USERNAME]);
-    console.log("Data successfully inserted into USERS table");
-  } catch (error) {
-    console.error("Error while inserting data into USERS table:", error);
-  }
-};
-
+//retireve user from DB
 const retrieve_user_id = async (res) => {
   const sql = "SELECT user_id FROM USERS";
   try {
@@ -69,6 +58,32 @@ const retrieve_user_id = async (res) => {
     res.status(500).json({ error: "Error while retrieving user data" });
   }
 };
+
+//Update data to DB
+const loginupdate = async (userID, loginTime) => {
+  const sql =
+    "UPDATE USERS SET last_login = ? WHERE USER_ID = ?";
+  try {
+    await db.query(sql, [loginTime, userID]); 
+    console.log("Data successfully updated into USERS table");
+  } catch (error) {
+    console.error("Error while updating data into USERS table:", error);
+  }
+};
+
+
+//Insert data to DB 
+const auth_user_update = async (USER_ID, EMAIL, USERNAME) => {
+  const sql =
+    "INSERT INTO USERS (USER_ID, EMAIL, USERNAME, FIRST_NAME, LAST_NAME, status) VALUES (?, ?, ?, 'N/A','N/A', 'active')";
+  try {
+    await db.query(sql, [USER_ID, EMAIL, USERNAME]);
+    console.log("Data successfully inserted into USERS table");
+  } catch (error) {
+    console.error("Error while inserting data into USERS table:", error);
+  }
+};
+
 //insert user from auth0
 const retrieve_and_insert_newuser = async () => {
   const user_set = new Set();
@@ -87,6 +102,28 @@ const retrieve_and_insert_newuser = async () => {
     });
   } catch (error) {
     console.error("Error in retrieve_and_insert_newuser:", error);
+  }
+};
+
+// insert login record
+const retreiveLoginRecord = async () =>{
+  const user_set = new Set();
+  try{
+    const user_data = await retrieve_user_id();
+    const auth_user_data = await retrieveAuth0Users();
+
+    user_data.forEach((user) => {
+      user_set.add(user.user_id);
+    });
+
+    auth_user_data.forEach((user) => {
+      if (user_set.has(user.user_id)) {
+        loginupdate(user.user_id, user.last_login);
+      }
+    });
+  }
+  catch(error){
+    console.error("Error in updating user to DB", error);
   }
 };
 
@@ -153,6 +190,7 @@ const deleteAuthUser = async (id) => {
 
 
 module.exports = {
+  retreiveLoginRecord,
   retrieve_and_insert_newuser,
   insertAuth0User,
   deleteAuthUser,

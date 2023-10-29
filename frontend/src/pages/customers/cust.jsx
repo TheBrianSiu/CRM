@@ -7,11 +7,16 @@ import {
 } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { openDB } from "idb";
 import Fuse from "fuse.js";
 import { retrievecustomers } from "@/data/customers-data";
 import { Table } from "./component/theme/table";
-import {Pagination, totalPages, SwitchPage } from "@/utils";
+import { Pagination, totalPages, SwitchPage } from "@/utils";
 import Navbar from "./component/utils/navbar";
+import {
+  RetreiveCustDataLocal,
+  fetchCustDataAndStoreLocal,
+} from "@/data/indexdb";
 
 function Customers() {
   const [Istheme, setIsthem] = useState("All");
@@ -21,6 +26,28 @@ function Customers() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [lastItemIndex, setLastItemIndex] = useState(itemsPerPage);
+
+  //retrieve data and put into local
+  useEffect(() => {
+    // initalize the DB exclusively for Netlify hosting coz it doesn't have on calling another fucntion
+    const db = openDB("customers", 1, {
+      upgrade(db) {
+        db.createObjectStore("cust", { keyPath: "id" });
+      },
+    });
+    const fetchData = async () => {
+      await fetchCustDataAndStoreLocal();
+    };
+    fetchData();
+  }, []);
+
+  // retreieve from local
+  useEffect(() => {
+    const storeCust = async () => {
+      await RetreiveCustDataLocal(setUserdata);
+    };
+    storeCust();
+  }, [Userdata]);
 
   // retrieve data
   useEffect(() => {
@@ -70,7 +97,7 @@ function Customers() {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredUserdata.slice(
     indexOfFirstItem,
-    indexOfLastItem,
+    indexOfLastItem
   );
 
   return (
@@ -101,10 +128,20 @@ function Customers() {
                 setCurrentPage={setCurrentPage}
                 indexOfLastItem={indexOfLastItem}
                 handlePrevPage={() =>
-                  SwitchPage("prev", currentPage, totalPages(filteredUserdata.length,itemsPerPage), setCurrentPage)
+                  SwitchPage(
+                    "prev",
+                    currentPage,
+                    totalPages(filteredUserdata.length, itemsPerPage),
+                    setCurrentPage
+                  )
                 }
                 handleNextPage={() =>
-                  SwitchPage("next", currentPage, totalPages(filteredUserdata.length,itemsPerPage), setCurrentPage)
+                  SwitchPage(
+                    "next",
+                    currentPage,
+                    totalPages(filteredUserdata.length, itemsPerPage),
+                    setCurrentPage
+                  )
                 }
               />
             ) : null}

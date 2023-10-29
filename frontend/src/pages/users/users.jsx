@@ -7,11 +7,13 @@ import {
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "@/utils/pagiantion";
+import { openDB } from "idb";
 import Fuse from "fuse.js";
 import { retrieveData } from "../../data/users-data";
 import Navbar from "./component/utils/navbar";
 import { Table } from "./component/theme/table";
 import { totalPages } from "@/utils";
+import { RetreiveUserDataLocal, fetchUserDataAndStoreLocal } from "@/data/indexdb";
 
 export function Users() {
   const [Istheme, setIsthem] = useState("All");
@@ -21,6 +23,29 @@ export function Users() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [lastItemIndex, setLastItemIndex] = useState(itemsPerPage);
+
+
+  //retrieve data and put into local
+  useEffect(() => {
+    // initalize the DB exclusively for Netlify hosting coz it doesn't have on calling another fucntion
+    const db = openDB('users', 1, {
+      upgrade(db) {
+        db.createObjectStore('user',{keyPath: "user_id"});
+      },
+    });
+    const fetchData = async () => {
+      await fetchUserDataAndStoreLocal();
+    }
+    fetchData();
+  }, []);
+
+  // retreieve from local
+  useEffect(() => {
+    const storeUsers = async () => {
+      await RetreiveUserDataLocal(setUserdata);
+    };
+    storeUsers();
+  }, [Userdata]);
 
   // retrieve data
   useEffect(() => {

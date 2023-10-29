@@ -4,7 +4,7 @@ const projectroute = require('./projects/projectroutes');
 const dashboardroute = require('./dashbaord/dashboardroutes');
 const authroute = require('./auth/authroutes')
 const { app, db } = require('./dbConfig');
-const { retrieve_and_insert_newuser} = require('./auth/auth');
+const { retrieve_and_insert_newuser, retreiveLoginRecord} = require('./auth/auth');
 
 const PORT = process.env.PORT || 3000;
 
@@ -13,7 +13,8 @@ app.get('/', (req, res) => {
 });
 
 // Schedule periodic task to retrieve and insert new users
-setInterval(retrieve_and_insert_newuser, 60000);
+setInterval(retrieve_and_insert_newuser, 60000); // every min
+setInterval(retreiveLoginRecord,900000); // every 15 mins
 
 // Logging middleware (if needed)
 // app.use((req, res, next) => {

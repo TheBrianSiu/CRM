@@ -1,4 +1,5 @@
 import { API_URL } from "@/settings";
+import { fetchUserDataAndStoreLocal } from "./indexdb";
 
 const API_BASE_URL = API_URL;
 
@@ -28,11 +29,13 @@ export async function deleteUser(id) {
       headers: { "Content-Type": "application/json" },
     });
 
+    fetchUserDataAndStoreLocal();
     if (!response.ok) {
       throw new Error("Delete attempt failed");
     }
 
     const data = await response.json();
+
     return data;
   } catch (error) {
     throw new Error(error.message);
@@ -46,6 +49,8 @@ export async function addUser(customerData) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(customerData),
     });
+
+    fetchUserDataAndStoreLocal();
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -102,7 +107,7 @@ export async function updateUser(id, updatedData) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedData),
     });
-
+    fetchUserDataAndStoreLocal();
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData || "Request failed");
