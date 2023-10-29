@@ -12,6 +12,16 @@ app.get('/', (req, res) => {
   return res.json("from backend");
 });
 
+const corsOptions = {
+  origin: function (origin, callback) {
+      if (process.env.ALLOWEDORIGINS.includes(origin) || !origin) {
+          callback(null, true);
+      } else {
+          callback(new Error('Not allowed by CORS'));
+      }
+  },
+};
+
 // Schedule periodic task to retrieve and insert new users
 setInterval(retrieve_and_insert_newuser, 60000); // every min
 setInterval(retreiveLoginRecord,900000); // every 15 mins
@@ -26,11 +36,11 @@ setInterval(retreiveLoginRecord,900000); // every 15 mins
 // });
 
 // Define routes
-app.use('/', authroute);
-app.use('/', usersroute);     
-app.use('/', custroute);      
-app.use('/', projectroute);   
-app.use('/', dashboardroute);
+app.use('/', cors(corsOptions), authroute);
+app.use('/', cors(corsOptions), usersroute);     
+app.use('/', cors(corsOptions), custroute);      
+app.use('/', cors(corsOptions), projectroute);   
+app.use('/', cors(corsOptions), dashboardroute);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
