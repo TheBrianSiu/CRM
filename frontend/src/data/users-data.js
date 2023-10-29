@@ -43,7 +43,6 @@ export async function retrieveData() {
   if (result.error) {
     return { error: 'Failed to retrieve data: ' + result.error };
   }
-  fetchUserDataAndStoreLocal();
   return result;
 }
 
