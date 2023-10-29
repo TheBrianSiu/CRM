@@ -65,7 +65,7 @@ const loginupdate = async (userID, loginTime) => {
     "UPDATE USERS SET last_login = ? WHERE USER_ID = ?";
   try {
     await db.query(sql, [loginTime, userID]); 
-    console.log("Data successfully updated into USERS table");
+    console.log("login data successfully updated into USERS table");
   } catch (error) {
     console.error("Error while updating data into USERS table:", error);
   }

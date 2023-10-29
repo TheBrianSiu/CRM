@@ -1,97 +1,90 @@
 import { API_URL } from "@/settings";
-import { fetchCustDataAndStoreLocal } from "./indexdb";
+import { refreshToken, isTokenExpired } from "./auth-data";
 
 const API_BASE_URL = API_URL;
 
-export async function Addcusts(customerdata) {
+async function makeApiRequest(url, method, data) {
+  let token = localStorage.getItem('token');
+
+  if (!token || isTokenExpired(token)) {
+    try {
+      token = await refreshToken();
+    } catch (error) {
+      console.error(error);
+      return { error: 'Token refresh failed' };
+    }
+  }
+
   try {
-    const response = await fetch(`${API_BASE_URL}/customers-table/add`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(customerdata),
+    const response = await fetch(url, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `${token}`,
+      },
+      body: data !== null ? JSON.stringify(data) : null,
     });
-    fetchCustDataAndStoreLocal();
+
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData || "Request failed");
+      return { error: errorData || 'API request failed' };
     }
-    const data = await response.json();
-    return data;
+
+    const responseData = await response.json();
+    return responseData;
   } catch (error) {
-    throw new Error(error);
+    return { error: 'API request error: ' + error.message };
   }
+}
+
+export async function Addcusts(customerdata) {
+  const result = await makeApiRequest(`${API_BASE_URL}/customers-table/add`, "POST", customerdata);
+  if (result.error) {
+    return { error: 'Failed to add customer: ' + result.error };
+  }
+
+  fetchCustDataAndStoreLocal();
+
+  return result;
 }
 
 export async function retrievecustomers() {
-  try {
-    const response = await fetch(`${API_BASE_URL}/customers-table`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    if (!response.ok) {
-      throw new error.message();
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    throw new Error(error);
+  const result = await makeApiRequest(`${API_BASE_URL}/customers-table`, "GET", null);
+  if (result.error) {
+    return { error: 'Failed to retrieve customers: ' + result.error };
   }
+
+  return result;
 }
 
 export async function removecustomer(id) {
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/customers-table/delete/${id}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-      },
-    );
-    fetchCustDataAndStoreLocal();
-    if (!response.ok) {
-      throw new error.message();
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    throw new Error(error);
+  const result = await makeApiRequest(`${API_BASE_URL}/customers-table/delete/${id}`, "PUT", null);
+  if (result.error) {
+    return { error: 'Failed to remove customer: ' + result.error };
   }
+
+  fetchCustDataAndStoreLocal();
+
+  return result;
 }
 
 export async function retrievecustomersbyid(id) {
-  try {
-    const response = await fetch(`${API_BASE_URL}/customers-table/${id}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    if (!response.ok) {
-      throw new error.message();
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    throw new Error(error);
+  const result = await makeApiRequest(`${API_BASE_URL}/customers-table/${id}`, "GET", null);
+  if (result.error) {
+    return { error: 'Failed to retrieve customer by ID: ' + result.error };
   }
+
+  return result;
 }
 
 export async function updatecustomers(id, updateddata) {
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/customers-table/update/${id}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updateddata),
-      },
-    );
-    fetchCustDataAndStoreLocal();
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData || "Request failed");
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    throw new Error(error);
+  const result = await makeApiRequest(`${API_BASE_URL}/customers-table/update/${id}`, "PUT", updateddata);
+  if (result.error) {
+    return { error: 'Failed to update customer: ' + result.error };
   }
+
+  fetchCustDataAndStoreLocal();
+
+  return result;
 }
+
