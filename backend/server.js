@@ -13,15 +13,15 @@ const PORT = process.env.PORT || 3000;
 
 const corsOptions = {
   origin: function (origin, callback) {
-      if (process.env.ALLOWEDORIGINS.includes(origin)) {
+      // if (process.env.ALLOWEDORIGINS.includes(origin)) {
           callback(null, true);
-      } 
-      else if(!origin){
-        callback(new Error('Its origin is undisclosed, and access is prohibited.'))
-      } 
-      else {
-          callback(new Error('Not allowed by CORS'));
-      }
+      // } 
+      // else if(!origin){
+      //   callback(new Error('Its origin is undisclosed, and access is prohibited.'))
+      // } 
+      // else {
+      //     callback(new Error('Not allowed by CORS'));
+      // }
   },
 };
 
@@ -62,8 +62,8 @@ app.use((req, res,next)=>{
     res.status(401).json({message: 'Authentication required'})
   }
 
-
   jwt.verify(token, process.env.SECRETKEY, (err, user) =>{
+
     if(err){
       return res.status(403).json({message: "Invalid token"})
     }

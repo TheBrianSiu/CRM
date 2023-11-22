@@ -2,22 +2,58 @@ import { API_URL } from "@/settings";
 
 const API_BASE_URL = API_URL;
 
+async function makeApiRequest(url, method, data) {
+  let token = localStorage.getItem('token');
 
-export async function changePassword(email){
-  try{
-    const response = await fetch(`${API_BASE_URL}/changepassword/${email}`,{
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-    })
-    if(!response.ok){
-      throw new Error("Request failed");
+  if (!token || isTokenExpired(token)) {
+    try {
+      token = json.stringify(await refreshToken());
+    } catch (error) {
+      console.error(error);
+      return { error: 'Token refresh failed' };
     }
-    const data = await response.json();
-    return data;
+  }
+
+  try {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `${token}`,
+      },
+      body: data !== null ? JSON.stringify(data) : null,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      return { error: errorData || 'API request failed' };
+    }
+
+    const responseData = await response.json();
+    return responseData;
   } catch (error) {
-    throw new Error(error.message);
+    return { error: 'API request error: ' + error.message };
   }
 }
+
+export async function changePassword(email){
+  const result = await makeApiRequest(`${API_BASE_URL}/changepassword/${email}`, "PUT");
+  if (result.error) {
+    return { error: 'Failed to change passwords: ' + result.error };
+  }
+
+  return result;
+}
+
+export async function userRole(userId){
+  const result = await makeApiRequest(`${API_BASE_URL}/userrolesrequest/${userId}`, "PUT");
+  if (result.error) {
+    return { error: 'Failed to retrieve user role ' + result.error };
+  }
+
+  return result;
+}
+
 
 
 export function isTokenExpired(token) {

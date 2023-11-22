@@ -1,6 +1,6 @@
-import { Routes, Route } from "react-router-dom";
-import { Cog6ToothIcon } from "@heroicons/react/24/solid";
+import { Routes, Route, redirect } from "react-router-dom";
 import { IconButton } from "@material-tailwind/react";
+
 import {
   Sidenav,
   DashboardNavbar,
@@ -10,18 +10,46 @@ import {
 import routes from "@/routes";
 import nestroutes from "@/nestroutes";
 import { useMaterialTailwindController, setOpenConfigurator } from "@/context";
-import { useAuth0 } from "@auth0/auth0-react";
+import { Cog6ToothIcon } from "@heroicons/react/24/solid";
+import { useContext, useEffect, useState } from "react";
+import {UserRolesContext} from "@/userrolescontext"
+
 
 export function Dashboard() {
-  const { user } = useAuth0();
   const [controller, dispatch] = useMaterialTailwindController();
   const { sidenavType } = controller;
+  const [route, setRoute] = useState(null);
+  const { userRoles, isLoading } = useContext(UserRolesContext);
 
-  const hasRole = (role) => {
-    const userRoles =
-      user["https://dev-8dixmhiwz587kgpl.us.auth0.com/roles"];
-    return userRoles && userRoles.includes(role);
+  useEffect(()=>{
+    const renderRoutes = () => {
+      const renderedRoute = (routes.flatMap(({ layout, pages}) => {
+        if (layout === "dashboard") {
+          return pages
+            .filter(({ roles }) => hasRole(roles))
+            .map(({ path, element }) => (
+              <Route key={path} exact path={path} element={element} />
+            ));
+        }
+      }))
+      setRoute(renderedRoute)
+    };
+
+    renderRoutes();
+
+  },[isLoading,userRoles])
+
+  const hasRole = (roles) => {
+    if (userRoles) {
+      const lowerCaseUserRoles = userRoles.map((role) => role.toLowerCase());
+      const hasMatchingRole = roles.some((pagerole) =>
+        lowerCaseUserRoles.includes(pagerole.toLowerCase())
+      );
+      return hasMatchingRole;
+    }
+    return false;
   };
+
 
   return (
     <div className="min-h-screen bg-blue-gray-50/50">
@@ -44,16 +72,7 @@ export function Dashboard() {
           <Cog6ToothIcon className="h-5 w-5" />
         </IconButton>
         <Routes>
-          {routes.map(
-            ({ layout, pages }) =>
-              layout === "dashboard" &&
-              pages.map(
-                ({ path, element, roles }) =>
-                  hasRole(roles) && (
-                    <Route exact path={path} element={element} />
-                  )
-              )
-          )}
+        {route}
           {nestroutes.map(
             ({ layout, pages }) =>
               layout === "dashboard_subpages" &&

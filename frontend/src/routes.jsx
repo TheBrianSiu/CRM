@@ -17,28 +17,28 @@ export const routes = [
         name: "dashboard",
         path: "/",
         element: <Home />,
-        roles: ["admin", "user"]
+        roles: ["admin", "users"]
       },
       {
         icon: <TableCellsIcon {...icon} />,
         name: "users",
         path: "/users",
         element: <Users />,
-        roles: ["admin", "user"]
+        roles: ["admin"]
       },
       {
         icon: <TableCellsIcon {...icon} />,
         name: "customers",
         path: "/customers",
         element: <Customers />,
-        roles: ["admin", "user"]
+        roles: ["admin", "users"]
       },
       {
         icon: <TableCellsIcon {...icon} />,
         name: "projects",
         path: "/projects",
         element: <Projects />,
-        roles: ["admin", "user"]
+        roles: ["admin", "users"]
       },
     ],
   },

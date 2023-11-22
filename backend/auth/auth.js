@@ -190,6 +190,7 @@ const deleteAuthUser = async (id) => {
 
 
 module.exports = {
+  retrieveToken,
   retreiveLoginRecord,
   retrieve_and_insert_newuser,
   insertAuth0User,
