@@ -7,7 +7,7 @@ async function makeApiRequest(url, method, data) {
 
   if (!token || isTokenExpired(token)) {
     try {
-      token = json.stringify(await refreshToken());
+      token = await refreshToken();
     } catch (error) {
       console.error(error);
       return { error: 'Token refresh failed' };
@@ -83,7 +83,7 @@ export async function refreshToken() {
 
     const newToken = await response.json();
     localStorage.setItem('token', newToken.token); 
-    return newToken;
+    return newToken.token;
   } catch (error) {
     throw new Error('Token refresh error: ' + error.message);
   }
