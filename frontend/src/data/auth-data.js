@@ -54,8 +54,6 @@ export async function userRole(userId){
   return result;
 }
 
-
-
 export function isTokenExpired(token) {
   const tokenData = JSON.parse(atob(token.split('.')[1]));
   const expirationTime = tokenData.exp * 1000; 
