@@ -48,9 +48,9 @@ export function FetchProjectTable(setProjectsTableData) {
   }
 }
 
-export function FetchProjectCompletion(formattedStartOfMonth, formattedEndOfMonth, setCompletedProject) {
+export function FetchProjectCompletion(formattedStartOfMonth, formattedEndOfMonth, setCompletedProject,userid) {
   try {
-    makeApiRequest(`${API_BASE_URL}/closed-project-records?start=${formattedStartOfMonth}&end=${formattedEndOfMonth}`)
+    makeApiRequest(`${API_BASE_URL}/closed-project-records?start=${formattedStartOfMonth}&end=${formattedEndOfMonth}&userid=${userid}`)
       .then((data) => {
         setCompletedProject(data);
       });

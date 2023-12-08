@@ -4,7 +4,6 @@ const { db } = require('../dbConfig');
 const { validateProject } = require('../validation/validation');
 
 // projects
-
 router.get('/projects',(req, res)=>{
     const sql = `select project_id, Task_name, due_date,description,est_value,lead_status, priority from projects where is_deleted = 0`;
     db.query(sql,(err,data)=>{

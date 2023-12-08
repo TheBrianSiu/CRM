@@ -1,9 +1,9 @@
 const axios = require("axios");
 const { db } = require("../dbConfig");
-
+const cache = {};
 
 //retreive token
-async function retrieveToken(){
+async function retrieveToken() {
   try {
     const auth0ApiUrl = `${process.env.AUTH0DOMAIN}/oauth/token`;
 
@@ -40,29 +40,39 @@ async function retrieveAuth0Users() {
 }
 
 // retrieve user permission
-const retreieve_user_permission = async (userid, permission) =>{
+async function retreieve_user_permission(userid, permission) {
   try {
-
+    const cacheKey = `${userid}_${permission}`;
     const accessToken = await retrieveToken();
-
     const apiEndpoint = `${process.env.AUTH0DOMAIN}/api/v2/users/${userid}/permissions`;
-    const apiResponse = await axios.get(apiEndpoint, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    let apiResponse;
+
+    if (
+      cache[cacheKey] &&
+      cache[cacheKey].timestamp + parseInt(process.env.CACHE_EXPIRATION_TIME) >
+        Date.now()
+    ) {
+      return cache[cacheKey].data;
+    } else {
+      apiResponse = await axios.get(apiEndpoint, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+    }
 
     const permissions = apiResponse.data;
     const permissionToCheck = permission;
+    const hasPermission = permissions.some(
+      (permission) => permission.permission_name === permissionToCheck
+    );
 
-    const hasPermission = permissions.some(permission => permission.permission_name === permissionToCheck);
+    cache[cacheKey] = {
+      data: hasPermission,
+      timestamp: Date.now(),
+    };
 
-    if(hasPermission){
-      return true;
-    }
-    else{
-      return false
-    }
+    return hasPermission;
   } catch (error) {
     throw new Error(`Error: ${error.message}`);
   }
@@ -90,17 +100,16 @@ const retrieve_user_id = async (res) => {
 
 //Update data to DB
 const loginupdate = async (userID, loginTime) => {
-  const sql =
-    "UPDATE USERS SET last_login = ? WHERE USER_ID = ?";
+  const sql = "UPDATE USERS SET last_login = ? WHERE USER_ID = ?";
   try {
-    await db.query(sql, [loginTime, userID]); 
+    await db.query(sql, [loginTime, userID]);
     console.log("login data successfully updated into USERS table");
   } catch (error) {
     console.error("Error while updating data into USERS table:", error);
   }
 };
 
-//Insert data to DB 
+//Insert data to DB
 const auth_user_update = async (USER_ID, EMAIL, USERNAME) => {
   const sql =
     "INSERT INTO USERS (USER_ID, EMAIL, USERNAME, FIRST_NAME, LAST_NAME, status) VALUES (?, ?, ?, 'N/A','N/A', 'active')";
@@ -134,9 +143,9 @@ const retrieve_and_insert_newuser = async () => {
 };
 
 // insert login record
-const retreiveLoginRecord = async () =>{
+const retreiveLoginRecord = async () => {
   const user_set = new Set();
-  try{
+  try {
     const user_data = await retrieve_user_id();
     const auth_user_data = await retrieveAuth0Users();
 
@@ -149,8 +158,7 @@ const retreiveLoginRecord = async () =>{
         loginupdate(user.user_id, user.last_login);
       }
     });
-  }
-  catch(error){
+  } catch (error) {
     console.error("Error in updating user to DB", error);
   }
 };
@@ -176,16 +184,19 @@ const insertAuth0User = async (email, hashedPassword) => {
       });
 
       if (response.status === 201) {
-        console.log("User created successfully && User ID:", response.data.user_id);
+        console.log(
+          "User created successfully && User ID:",
+          response.data.user_id
+        );
         const id = response.data.user_id;
         resolve(id);
       } else {
         console.error("User creation failed. Response:", response.data);
-        reject(new Error("User creation failed")); 
+        reject(new Error("User creation failed"));
       }
     } catch (error) {
       console.error("An error occurred:", error.message);
-      reject(error); 
+      reject(error);
     }
   });
 };
@@ -198,9 +209,9 @@ const deleteAuthUser = async (id) => {
 
     const userData = {
       blocked: true,
-    }
-    
-    const apiResponse = await axios.patch(apiEndpoint, userData,{
+    };
+
+    const apiResponse = await axios.patch(apiEndpoint, userData, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -209,13 +220,14 @@ const deleteAuthUser = async (id) => {
     if (apiResponse.status === 200) {
       return true;
     } else {
-      throw new Error(`Auth0 user deletion failed with status code ${apiResponse.status}`);
+      throw new Error(
+        `Auth0 user deletion failed with status code ${apiResponse.status}`
+      );
     }
   } catch (error) {
     throw new Error(`Error deleting Auth0 user: ${error.message}`);
   }
 };
-
 
 module.exports = {
   retrieveToken,

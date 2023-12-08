@@ -1,63 +1,29 @@
 import { API_URL } from "@/settings";
-import { isTokenExpired, refreshToken } from "./auth-data";
+import { makeApiRequest } from "./mainApi";
 
 const API_BASE_URL = API_URL;
 
-async function makeApiRequest(url, method, data) {
-  let token = localStorage.getItem('token');
-
-  if (!token || isTokenExpired(token)) {
-    try {
-      token = await refreshToken();
-    } catch (error) {
-      console.error(error);
-      return { error: 'Token refresh failed' };
-    }
-  }
-
+async function fetchMonthlyProjectData(userid) {
   try {
-    const response = await fetch(url, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `${token}`,
-      },
-      body: data !== null ? JSON.stringify(data) : null,
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      return { error: errorData || 'API request failed' };
-    }
-
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    return { error: 'API request error: ' + error.message };
-  }
-}
-
-async function fetchMonthlyProjectData() {
-  try {
-    return await makeApiRequest(`${API_BASE_URL}/monthly-project`, "GET", null);
+    return await makeApiRequest(`${API_BASE_URL}/monthly-project?userid=${userid}`, "GET", null);
   } catch (error) {
     console.error(error);
     throw error;
   }
 }
 
-async function fetchMonthlySalesData() {
+async function fetchMonthlySalesData(userid) {
   try {
-    return await makeApiRequest(`${API_BASE_URL}/monthly-sales`, "GET", null);
+    return await makeApiRequest(`${API_BASE_URL}/monthly-sales?userid=${userid}`, "GET", null);
   } catch (error) {
     console.error(error);
     throw error;
   }
 }
 
-async function fetchMonthlyClientsData() {
+async function fetchMonthlyClientsData(userid) {
   try {
-    return await makeApiRequest(`${API_BASE_URL}/monthly-clients`, "GET", null);
+    return await makeApiRequest(`${API_BASE_URL}/monthly-clients?userid=${userid}`, "GET", null);
   } catch (error) {
     console.error(error);
     throw error;
@@ -91,11 +57,11 @@ function createChart(data, type, name, categoryLabels, itemKey) {
   return chart;
 }
 
-export async function FetchChartsData(year, setStatisticsChartsData) {
+export async function FetchChartsData(year, setStatisticsChartsData,userid) {
   try {
-    const projectData = await fetchMonthlyProjectData();
-    const salesData = await fetchMonthlySalesData();
-    const clientsData = await fetchMonthlyClientsData();
+    const projectData = await fetchMonthlyProjectData(userid);
+    const salesData = await fetchMonthlySalesData(userid);
+    const clientsData = await fetchMonthlyClientsData(userid);
 
     const newTasksChart = createChart(projectData, "bar", "Tasks", [
       "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"

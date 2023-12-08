@@ -24,8 +24,10 @@ import {
   FetchChartsData,
 } from "@/data";
 import { formatDaterange, formatNumber } from "@/utils/formatting";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function Home() {
+  const { user } = useAuth0();
   const [StatisticsCardsData, setStatisticsCardsData] = useState([]);
   const [ProjectsTableData, setProjectsTableData] = useState([]);
   const [CompletedProject, setCompletedProject] = useState();
@@ -53,6 +55,7 @@ export function Home() {
       formattedEndOfLastMonth,
       formatNumber,
       setStatisticsCardsData,
+      user.sub
     );
   }, []);
 
@@ -65,11 +68,12 @@ export function Home() {
       formattedStartOfMonth,
       formattedEndOfMonth,
       setCompletedProject,
+      user.sub,
     );
   }, []);
 
   useEffect(() => {
-    FetchChartsData(year, setStatisticsChartsData);
+    FetchChartsData(year, setStatisticsChartsData,user.sub);
   }, []);
 
   return (
