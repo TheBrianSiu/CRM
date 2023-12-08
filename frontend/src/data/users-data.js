@@ -1,87 +1,53 @@
 import { API_URL } from "@/settings";
 import { fetchUserDataAndStoreLocal } from "./indexdb";
-import { isTokenExpired, refreshToken } from "./auth-data";
+import { makeApiRequest } from "./mainApi";
 const API_BASE_URL = API_URL;
 
-async function makeApiRequest(url, method, data) {
-  let token = localStorage.getItem('token');
-  
-  if (!token || isTokenExpired(token)) {
-    try {
-      token = await refreshToken();
-    } catch (error) {
-      console.error(error);
-      return { error: 'Token refresh failed' };
-    }
-  }
 
-  try {
-    const response = await fetch(url, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `${token}`,
-      },
-      body: data !== null ? JSON.stringify(data) : null,
-    });
-
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      return { error: errorData || 'API request failed' };
-    }
-
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    return { error: 'API request error: ' + error.message };
-  }
-}
-
-export async function retrieveData() {
-  const result = await makeApiRequest(`${API_BASE_URL}/users-table`, "GET", null);
+export async function retrieveData(userid) {
+  const result = await makeApiRequest(`${API_BASE_URL}/users-table/${userid}`, "GET", null);
   if (result.error) {
     return { error: 'Failed to retrieve data: ' + result.error };
   }
   return result;
 }
 
-export async function deleteUser(id) {
-  const result = await makeApiRequest(`${API_BASE_URL}/users-table/delete/${id}`, "PUT", null);
+export async function deleteUser(id,userid) {
+  const result = await makeApiRequest(`${API_BASE_URL}/users-table/delete/${id}/${userid}`, "PUT", null);
   if (result.error) {
     return { error: 'Failed to delete user: ' + result.error };
   }
-  fetchUserDataAndStoreLocal();
+  fetchUserDataAndStoreLocal(userid);
   return result;
 }
 
-export async function addUser(customerData) {
-  const result = await makeApiRequest(`${API_BASE_URL}/users-table/add`, "POST", customerData);
+export async function addUser(customerData,userid) {
+  const result = await makeApiRequest(`${API_BASE_URL}/users-table/add/${userid}`, "POST", customerData);
   if (result.error) {
     return { error: 'Failed to add user: ' + result.error };
   }
-
+  fetchUserDataAndStoreLocal(userid);
   return result;
 }
 
 export async function supervisor() {
-  const result = await makeApiRequest(`${API_BASE_URL}/users-table/supervisor`, "GET", null);
+  const result = await makeApiRequest(`${API_BASE_URL}/users-table/get/supervisor`, "GET", null);
   if (result.error) {
     return { error: 'Failed to retrieve supervisor data: ' + result.error };
   }
   return result;
 }
 
-export async function retrieveDataById(id) {
-  const result = await makeApiRequest(`${API_BASE_URL}/users-table/${id}`, "GET", null);
+export async function retrieveDataById(id,userid) {
+  const result = await makeApiRequest(`${API_BASE_URL}/users-table/${id}/${userid}`, "GET", null);
   if (result.error) {
     return { error: 'Failed to retrieve data by ID: ' + result.error };
   }
   return result;
 }
 
-export async function updateUser(id, updatedData) {
-  const result = await makeApiRequest(`${API_BASE_URL}/users-table/update/${id}`, "PUT", updatedData);
+export async function updateUser(id, updatedData,userid) {
+  const result = await makeApiRequest(`${API_BASE_URL}/users-table/update/${id}/${userid}`, "PUT", updatedData);
   if (result.error) {
     return { error: 'Failed to update user: ' + result.error };
   }

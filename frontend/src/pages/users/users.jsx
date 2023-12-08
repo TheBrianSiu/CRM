@@ -14,8 +14,10 @@ import Navbar from "./component/utils/navbar";
 import { Table } from "./component/theme/table";
 import { totalPages } from "@/utils";
 import { RetreiveUserDataLocal, fetchUserDataAndStoreLocal } from "@/data/indexdb";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function Users() {
+  const { user } = useAuth0();
   const [Istheme, setIsthem] = useState("All");
   const navigate = useNavigate();
   const [Userdata, setUserdata] = useState([]);
@@ -34,7 +36,7 @@ export function Users() {
       },
     });
     const fetchData = async () => {
-      await fetchUserDataAndStoreLocal();
+      await fetchUserDataAndStoreLocal(user.sub);
     }
     fetchData();
   }, []);
@@ -46,13 +48,6 @@ export function Users() {
     };
     storeUsers();
   }, [Userdata]);
-
-  // retrieve data
-  useEffect(() => {
-    retrieveData()
-      .then((data) => setUserdata(data))
-      .catch((error) => console.error(error));
-  }, []);
 
   // navigation
   function adduser() {

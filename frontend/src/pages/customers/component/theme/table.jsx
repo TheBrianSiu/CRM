@@ -2,14 +2,21 @@ import { Chip } from "@material-tailwind/react";
 import { removecustomer } from "@/data";
 import { Typography } from "@material-tailwind/react";
 import { formatPhoneNumber } from "@/utils/formatting";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function Table({ currentItems, Userdata }) {
+  const { user } = useAuth0();
   function Deleteuser(id) {
     if (window.confirm("Do you want to delete this customer?")) {
-      removecustomer(id)
-        .then(() => {
+      let userid = user.sub;
+      removecustomer(id,userid)
+        .then((result) => {
+          if (result.error) {
+            alert(result.error);
+          } else {
           alert("The customer is deleted");
           window.location.reload();
+        }
         })
         .catch((error) => console.error(error));
     }

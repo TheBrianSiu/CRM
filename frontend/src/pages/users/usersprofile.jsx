@@ -25,6 +25,7 @@ import {
   supervisor,
   updateUser,
 } from "@/data";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function Usersprofile() {
   const animatedComponents = makeAnimated();
@@ -34,6 +35,8 @@ export function Usersprofile() {
   const [Errors, setErrors] = useState({});
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth0();
+  
 
   const supervisorOptions = Users.map((user) => ({
     value: user.user_id,
@@ -56,14 +59,14 @@ export function Usersprofile() {
 
   // retrieve supervisor id
   useEffect(() => {
-    supervisor(id)
+    supervisor()
       .then((data) => setUsers(data))
       .catch((error) => console.error(error));
   }, []);
 
   //extract data
   useEffect(() => {
-    retrieveDataById(id)
+    retrieveDataById(id,user.sub)
       .then((data) => {
         const dataArray = Array.isArray(data) ? data : [data];
         setData(dataArray);
@@ -88,7 +91,7 @@ export function Usersprofile() {
         updatedData = { ...updatedData, username };
       }
 
-      updateUser(id, updatedData)
+      updateUser(id, updatedData, user.sub)
         .then(function (data) {
           alert("Form submitted successfully!");
           navigate(-1); // Navigate back after the fetch is successful

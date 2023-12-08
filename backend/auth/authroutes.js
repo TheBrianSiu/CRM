@@ -25,6 +25,7 @@ router.put("/changepassword/:email", async (req, res) => {
     }
   });
 
+  // user role check
   router.put("/userrolesrequest/:userid", async (req, res) => {
     try {
       const userId = req.params.userid;
@@ -44,8 +45,5 @@ router.put("/changepassword/:email", async (req, res) => {
       res.status(500).json({ error: 'An error occurred while locating user roles' }); 
     }
   });
-  
-  
-
 
   module.exports = router;

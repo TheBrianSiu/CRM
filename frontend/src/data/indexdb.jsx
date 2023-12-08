@@ -53,9 +53,8 @@ export const fetchDataAndStoreLocal = async () => {
 }
 
 // users
-export const fetchUserDataAndStoreLocal = async () => {
-
-  const data = await retrieveData();
+export const fetchUserDataAndStoreLocal = async (userid) => {
+  const data = await retrieveData(userid);
 
 // regenerate the DB if it doesn't have, but it doesn't work in Neltify for initalize DB 
   const db = await openDB("users", 1, {
@@ -105,9 +104,9 @@ export const RetreiveUserDataLocal = async (setUserdata) =>{
 }
 
 // Customers
-export const fetchCustDataAndStoreLocal = async () => {
+export const fetchCustDataAndStoreLocal = async (userid) => {
 
-  const data = await retrievecustomers();
+  const data = await retrievecustomers(userid);
 
 // regenerate the DB if it doesn't have, but it doesn't work in Neltify for initalize DB 
   const db = await openDB("customers", 1, {

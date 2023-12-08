@@ -2,16 +2,38 @@ const express = require('express');
 const router = express.Router();
 const { db } = require('../dbConfig');
 const { validateCustomer } = require('../validation/validation');
+const { retreieve_user_permission } = require('../auth/auth');
 
 
 // customers table
-router.get('/customers-table', (req, res)=>{
-    const sql = "SELECT* FROM CUSTOMERS WHERE IS_DELETED = 0";
-    db.query(sql,(err,data)=>{
-        if(err) return res.json(err);
-        return res.json(data);
-    })
-})
+router.get('/customers-table/:userid', async (req, res) => {
+  const userid = req.params.userid;
+  const sql = "SELECT * FROM CUSTOMERS WHERE IS_DELETED = 0";
+
+  try {
+    const hasPermission = await retreieve_user_permission(userid, "read:customers");
+
+    if (!hasPermission) {
+      return res.status(401).json({ message: 'You don\'t have permission' });
+    }
+
+    const data = await new Promise((resolve, reject) => {
+      db.query(sql, (err, result) => {
+        if (err) {
+          console.error('Error executing SQL query:', err);
+          reject(err);
+        } else {
+          resolve(result); 
+        }
+      });
+    });
+
+    return res.json(data);
+  } catch (error) {
+    console.error('Error:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 //customers-basic info
 router.get('/customers-basicinfo', (req, res)=>{
@@ -23,8 +45,9 @@ router.get('/customers-basicinfo', (req, res)=>{
 })
 
 // retrieve each user
-router.get('/customers-table/:id', (req, res)=>{
+router.get('/customer/:id', (req, res)=>{
     const userid = req.params.id;
+
     const sql = `SELECT * FROM CUSTOMERS WHERE ID = ${userid} AND IS_DELETED = 0`;
     db.query(sql,(err,data)=>{
         if(err){ return res.status(404).json( { message :  'user not found'});}
@@ -33,14 +56,21 @@ router.get('/customers-table/:id', (req, res)=>{
 })
 
 //update each user 
-router.put('/customers-table/update/:id', async (req, res) => {
-    const userid = req.params.id;
+router.put('/customers-table/update/:id/:userid', async (req, res) => {
+    const id = req.params.id;
+    const userid = req.params.userid;
     const updatedData = req.body;
+
+    const hasPermission = await retreieve_user_permission(userid, "update:customers");
+
+    if (!hasPermission) {
+      return res.status(401).json({ message: 'You don\'t have permission' });
+    }
 
     const validation = validateCustomer(updatedData);
 
     if (!validation.isValid) {
-     return res.status(400).json( validation.errors );
+     return res.status(403).json({ message: validation.errors });
     }
     
     try {
@@ -55,7 +85,7 @@ router.put('/customers-table/update/:id', async (req, res) => {
       });
   
       sql += ' WHERE ID = ?';
-      values.push(userid);
+      values.push(id);
 
       await db.query(sql, values);
       return res.json({ message: 'Customer data updated successfully' });
@@ -65,15 +95,22 @@ router.put('/customers-table/update/:id', async (req, res) => {
     }
   });
 
-
-
-router.post('/customers-table/add', async (req, res) => {
+//add new customer
+router.post('/customers-table/add/:userid', async (req, res) => {
   const data = req.body;
+  const userid = req.params.userid;
+  const hasPermission = await retreieve_user_permission(userid, "create:customers");
+
+  if (!hasPermission) {
+    return res.status(401).json({ message: 'You don\'t have permission' });
+  }
 
   const validation = validateCustomer(data);
 
+  console.log(validation)
+
   if (!validation.isValid) {
-   return res.status(400).json( validation.errors );
+    return res.status(403).json({ message: validation.errors });
   }
 
   try {
@@ -87,14 +124,19 @@ router.post('/customers-table/add', async (req, res) => {
   }
 });
 
-
 // delete a customer
-
-router.put('/customers-table/delete/:id', async (req, res) => {
+router.put('/customers-table/delete/:id/:userid', async (req, res) => {
   const id = req.params.id;
+  const userid = req.params.userid;
   
   try {
     const sql = 'UPDATE CUSTOMERS SET IS_DELETED = 1 WHERE ID = ?';
+
+    const hasPermission = await retreieve_user_permission(userid, "delete:customers");
+
+    if (!hasPermission) {
+      return res.status(401).json({ message: 'You don\'t have permission' });
+    }
 
     const data = await new Promise((resolve, reject) => {
       db.query(sql, [id], (err, result) => {
@@ -102,11 +144,11 @@ router.put('/customers-table/delete/:id', async (req, res) => {
           console.error('Error executing SQL query:', err);
           reject(err);
         } else {
-          resolve(result); // result data
+          resolve(result);
         }
       });
     });
-    return res.json(data); // Send the result data in the response
+    return res.json(data);
   } catch (error) {
     return res.status(500).json({ message: 'Internal Server Error' });
   }

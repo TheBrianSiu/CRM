@@ -2,10 +2,22 @@ const express = require("express");
 const router = express.Router();
 const { db } = require("../dbConfig");
 const { validateUser } = require("../validation/validation");
-const { insertAuth0User, deleteAuthUser } = require("../auth/auth");
-const { hashPassword } = require("../encryption/encryption");
+const {
+  insertAuth0User,
+  deleteAuthUser,
+  retreieve_user_permission,
+} = require("../auth/auth");
 
-router.get("/users-table", (req, res) => {
+//retireve all users
+router.get("/users-table/:userid", async (req, res) => {
+  const userid = req.params.userid;
+
+  const hasPermission = await retreieve_user_permission(userid, "read:users");
+
+  if (!hasPermission) {
+    return res.status(401).json({ message: "You don't have permission" });
+  }
+
   const sql =
     "SELECT user_id,first_name, last_name,email,phone_number,job_title, department,status,last_login FROM USERS WHERE IS_DELETED = 0";
   db.query(sql, (err, data) => {
@@ -14,7 +26,8 @@ router.get("/users-table", (req, res) => {
   });
 });
 
-router.get("/users-table/supervisor", (req, res) => {
+//retrieve supervisor
+router.get("/users-table/get/supervisor", (req, res) => {
   const sql =
     "SELECT user_id,first_name, last_name FROM USERS WHERE IS_DELETED = 0";
   db.query(sql, (err, data) => {
@@ -23,7 +36,7 @@ router.get("/users-table/supervisor", (req, res) => {
   });
 });
 
-// retrieve users
+// retrieve simple users info
 router.get("/users-table/users", (req, res) => {
   const sql =
     "SELECT img,user_id,first_name, last_name FROM USERS WHERE IS_DELETED = 0";
@@ -33,10 +46,19 @@ router.get("/users-table/users", (req, res) => {
   });
 });
 
-router.get("/users-table/:id", (req, res) => {
-  const userid = req.params.id;
+//retrieve users by id
+router.get("/users-table/:id/:userid", async (req, res) => {
+  const userid = req.params.userid;
+  const id = req.params.id;
+
+  const hasPermission = await retreieve_user_permission(userid, "read:users");
+
+  if (!hasPermission) {
+    return res.status(401).json({ message: "You don't have permission" });
+  }
+
   const sql = `SELECT username,first_name, last_name,email,phone_number,job_title, department,status,address,is_admin,supervisor_id FROM USERS WHERE user_id = ? AND IS_DELETED = 0`;
-  db.query(sql, [userid], (err, data) => {
+  db.query(sql, [id], (err, data) => {
     if (err) {
       return res.status(404).json({ message: "user not found" });
     }
@@ -45,12 +67,19 @@ router.get("/users-table/:id", (req, res) => {
 });
 
 // add
-router.post("/users-table/add", async (req, res) => {
+router.post("/users-table/add/:userid", async (req, res) => {
   const data = req.body;
+  const userid = req.params.userid;
+
+  const hasPermission = await retreieve_user_permission(userid, "create:users");
+
+  if (!hasPermission) {
+    return res.status(401).json({ message: "You don't have permission" });
+  }
 
   const validation = validateUser(data);
   if (!validation.isValid) {
-    return res.status(400).json(validation.errors);
+    return res.status(403).json({ message: validation.errors });
   }
 
   if (data.username !== undefined) {
@@ -70,12 +99,15 @@ router.post("/users-table/add", async (req, res) => {
   // const hashedPassword = await hashPassword(data.password);
   //   data.password = hashedPassword;
 
-
-  // Create a new object with the password property removed and email added
-  const userId = await insertAuth0User(data.email, data.password);
-  const { password, ...userData } = data;
-
   try {
+    // Create a new object with the password property removed and email added
+    const userId = await insertAuth0User(data.email, data.password);
+
+ if (!userId || userId.errors) {
+      return res.status(403).json({ message: userId.errors });
+    }
+    const { password, ...userData } = data;
+
     userData.user_id = userId;
     const dataValues = Object.values(userData);
     const sql = `INSERT INTO USERS (username, first_name, last_name, email, phone_number, job_title, department, status, address, is_admin, supervisor_id,user_id) VALUES (?)`;
@@ -87,10 +119,17 @@ router.post("/users-table/add", async (req, res) => {
   }
 });
 
-
 // delete
-router.put("/users-table/delete/:id", async (req, res) => {
+router.put("/users-table/delete/:id/:userid", async (req, res) => {
   const id = req.params.id;
+  const userid = req.params.userid;
+
+  const hasPermission = await retreieve_user_permission(userid, "delete:users");
+
+  if (!hasPermission) {
+    return res.status(401).json({ message: "You don't have permission" });
+  }
+
   try {
     deleteAuthUser(id);
     const sql = "UPDATE USERS SET IS_DELETED = 1 WHERE user_id = ?";
@@ -109,7 +148,6 @@ router.put("/users-table/delete/:id", async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
 
 // Function to check if the username already exists in the database
 async function checkUsernameExists(username) {
@@ -132,9 +170,16 @@ async function checkUsernameExists(username) {
 }
 
 // update users
-router.put("/users-table/update/:id", async (req, res) => {
-  const userid = req.params.id;
+router.put("/users-table/update/:id/:userid", async (req, res) => {
+  const id = req.params.id;
+  const userid = req.params.userid;
   const updatedData = req.body;
+
+  const hasPermission = await retreieve_user_permission(userid, "update:users");
+
+  if (!hasPermission) {
+    return res.status(401).json({ message: "You don't have permission" });
+  }
 
   const validation = validateUser(updatedData);
   if (!validation.isValid) {
@@ -166,7 +211,7 @@ router.put("/users-table/update/:id", async (req, res) => {
     });
 
     sql += " WHERE user_ID = ?";
-    values.push(userid);
+    values.push(id);
     await db.query(sql, values);
     return res.json({ message: "Customer data updated successfully" });
   } catch (error) {

@@ -22,10 +22,12 @@ import {
   updatecustomers,
   statusOptions,
 } from "@/data";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function Customersprofile() {
   const [Data, setData] = useState([]);
   const { id } = useParams();
+  const { user } = useAuth0();
   const navigate = useNavigate();
 
   //extract data
@@ -45,11 +47,14 @@ export function Customersprofile() {
       const customerToUpdate = Data[0];
       const updateddata = { ...customerToUpdate, ...Data[0] };
       delete updateddata.id;
-
-      updatecustomers(id, updateddata)
-        .then(function () {
+      updatecustomers(id, user.sub, updateddata)
+      .then((result) => {
+        if (result.error) {
+          alert(result.error);
+        } else {
           alert("Form submitted successfully!");
-          navigate(-1); // Navigate back after the fetch is successful
+          navigate(-1);
+        }
         })
         .catch((err) => {
           alert(err);
@@ -205,8 +210,8 @@ export function Customersprofile() {
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                   value={customer.phone_number}
                                   onChange={(e) => handleChange(e, index)}
-                                  placeholder="999-999-999"
-                                  pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+                                  placeholder="999-999-9999"
+                                  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                                   required
                                 />
                               </div>

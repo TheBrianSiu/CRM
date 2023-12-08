@@ -26,7 +26,6 @@ export function Dashboard() {
       const renderedRoute = (routes.flatMap(({ layout, pages}) => {
         if (layout === "dashboard") {
           return pages
-            .filter(({ roles }) => hasRole(roles))
             .map(({ path, element }) => (
               <Route key={path} exact path={path} element={element} />
             ));
@@ -39,17 +38,16 @@ export function Dashboard() {
 
   },[isLoading,userRoles])
 
-  const hasRole = (roles) => {
-    if (userRoles) {
-      const lowerCaseUserRoles = userRoles.map((role) => role.toLowerCase());
-      const hasMatchingRole = roles.some((pagerole) =>
-        lowerCaseUserRoles.includes(pagerole.toLowerCase())
-      );
-      return hasMatchingRole;
-    }
-    return false;
-  };
-
+  // const hasRole = (roles) => {
+  //   if (userRoles) {
+  //     const lowerCaseUserRoles = userRoles.map((role) => role.toLowerCase());
+  //     const hasMatchingRole = roles.some((pagerole) =>
+  //       lowerCaseUserRoles.includes(pagerole.toLowerCase())
+  //     );
+  //     return hasMatchingRole;
+  //   }
+  //   return false;
+  // };
 
   return (
     <div className="min-h-screen bg-blue-gray-50/50">

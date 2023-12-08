@@ -17,8 +17,10 @@ import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Addcusts, countryOptions, statusOptions } from "@/data";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function Addcustomers() {
+  const { user } = useAuth0();
   const [Data, setData] = useState([
     {
       first_name: "",
@@ -51,12 +53,14 @@ export function Addcustomers() {
     e.preventDefault();
     if (window.confirm("Do you want to submit a new customer?")) {
       const customerdata = { ...Data[0] };
-
-      Addcusts(customerdata)
-        .then(function () {
+      Addcusts(customerdata,user.sub)
+      .then((result) => {
+        if (result.error) {
+          alert(result.error);
+        } else {
           alert("The customer is added successfully!");
-          navigate(-1); // Navigate back after the fetch is successful
-        })
+          navigate(-1);
+        }})
         .catch((err) => {
           alert(err);
         });

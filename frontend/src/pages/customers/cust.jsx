@@ -17,8 +17,10 @@ import {
   RetreiveCustDataLocal,
   fetchCustDataAndStoreLocal,
 } from "@/data/indexdb";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Customers() {
+  const {user} = useAuth0();
   const [Istheme, setIsthem] = useState("All");
   const navigate = useNavigate();
   const [Userdata, setUserdata] = useState([]);
@@ -36,7 +38,7 @@ function Customers() {
       },
     });
     const fetchData = async () => {
-      await fetchCustDataAndStoreLocal();
+      await fetchCustDataAndStoreLocal(user.sub);
     };
     fetchData();
   }, []);
@@ -48,13 +50,6 @@ function Customers() {
     };
     storeCust();
   }, [Userdata]);
-
-  // retrieve data
-  useEffect(() => {
-    retrievecustomers()
-      .then((data) => setUserdata(data))
-      .catch((error) => console.error(error));
-  }, []);
 
   // navigation
   function adduser() {

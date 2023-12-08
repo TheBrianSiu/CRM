@@ -2,12 +2,14 @@ import { Chip } from "@material-tailwind/react";
 import { deleteUser } from "@/data";
 import { Typography } from "@material-tailwind/react";
 import { formatDate, formatPhoneNumber } from "@/utils/formatting";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function Table({ currentItems, Userdata }) {
+  const { user } = useAuth0();
 
   function Deleteuser(id) {
     if (window.confirm("Do you want to delete the user?")) {
-      deleteUser(id)
+      deleteUser(id,user.sub)
         .then(() => {
           alert("The user is deleted");
           window.location.reload();

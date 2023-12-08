@@ -39,6 +39,35 @@ async function retrieveAuth0Users() {
   }
 }
 
+// retrieve user permission
+const retreieve_user_permission = async (userid, permission) =>{
+  try {
+
+    const accessToken = await retrieveToken();
+
+    const apiEndpoint = `${process.env.AUTH0DOMAIN}/api/v2/users/${userid}/permissions`;
+    const apiResponse = await axios.get(apiEndpoint, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const permissions = apiResponse.data;
+    const permissionToCheck = permission;
+
+    const hasPermission = permissions.some(permission => permission.permission_name === permissionToCheck);
+
+    if(hasPermission){
+      return true;
+    }
+    else{
+      return false
+    }
+  } catch (error) {
+    throw new Error(`Error: ${error.message}`);
+  }
+}
+
 //retireve user from DB
 const retrieve_user_id = async (res) => {
   const sql = "SELECT user_id FROM USERS";
@@ -70,7 +99,6 @@ const loginupdate = async (userID, loginTime) => {
     console.error("Error while updating data into USERS table:", error);
   }
 };
-
 
 //Insert data to DB 
 const auth_user_update = async (USER_ID, EMAIL, USERNAME) => {
@@ -192,6 +220,7 @@ const deleteAuthUser = async (id) => {
 module.exports = {
   retrieveToken,
   retreiveLoginRecord,
+  retreieve_user_permission,
   retrieve_and_insert_newuser,
   insertAuth0User,
   deleteAuthUser,

@@ -14,8 +14,10 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { addUser, supervisor } from "@/data/users-data";
 import { adminOptions, statusOptions } from "@/data";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function Addusers() {
+  const { user } = useAuth0();
   const animatedComponents = makeAnimated();
   const [Data, setData] = useState({
     username: null,
@@ -48,8 +50,8 @@ export function Addusers() {
       [name]: value === "" ? null : value,
     }));
   };
-   // password valdiation
-   function validatePassword() {
+  // password valdiation
+  function validatePassword() {
     const { password, confirm_password } = Data;
     const passwordPattern =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$/;
@@ -86,17 +88,20 @@ export function Addusers() {
       .catch((error) => console.error(error));
   }, []);
 
-
   //handle submit
   const handleSubmit = (e) => {
     e.preventDefault();
     if (window.confirm("Do you want to submit a new user?")) {
       const { confirm_password, ...customerdata } = Data; // remove confirm password from state
 
-      addUser(customerdata)
-        .then(function () {
-          alert("The user is added successfully!");
-          navigate(-1); // Navigate back after the fetch is successful
+      addUser(customerdata, user.sub)
+        .then((result) => {
+          if (result.error) {
+            alert(result.error);
+          } else {
+            alert("The user is added successfully!");
+            navigate(-1); 
+          }
         })
         .catch((err) => {
           alert(err);
@@ -290,140 +295,138 @@ export function Addusers() {
                         </div>
 
                         <div className="col-span-6 sm:col-span-3">
-                                <label
-                                  htmlFor="supervisor_id"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  Supervisor
-                                </label>
-                                <Select
-                                  id="supervisor_id"
-                                  name="supervisor_id"
-                                  components={animatedComponents}
-                                  options={supervisorOptions}
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={supervisorOptions.find(
-                                    (option) =>
-                                      option.value === Data.supervisor_id,
-                                  )}
-                                  onChange={(selectedOption) =>
-                                    handleChange(
-                                      {
-                                        target: {
-                                          name: "supervisor_id",
-                                          value: selectedOption.value,
-                                        },
-                                      },
-                                      0,
-                                    )
-                                  }
-                                />
-                                </div>
-
-<div className="col-span-6 sm:col-span-3">
-  <label
-    htmlFor="password"
-    className="block text-sm font-medium text-gray-700"
-  >
-    Password
-  </label>
-  <input
-    type="password"
-    name="password"
-    autoComplete="new-password"
-    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-    value={Data.password || ""}
-    onChange={handleChange}
-    onBlur={validatePassword}
-    placeholder="Enter password"
-    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
-    required
-  />
-  {Errors.password && (
-    <p className="text-red-500">
-      {Errors.confirm_password}
-    </p>
-  )}
-</div>
-
-<div className="col-span-6 sm:col-span-3">
-  <label className="block text-sm font-medium text-gray-700">
-    Confirm Password
-  </label>
-  <input
-    type="password"
-    name="confirm_password"
-    autoComplete="new-password"
-    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-    value={Data.confirm_password || ""}
-    onChange={handleChange}
-    onBlur={validatePassword}
-    placeholder="Enter confirm password"
-    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
-    required
-  />
-  {Errors.password && (
-    <p className="text-red-500">{Errors.password}</p>
-  )}
-                              </div>
+                          <label
+                            htmlFor="supervisor_id"
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Supervisor
+                          </label>
+                          <Select
+                            id="supervisor_id"
+                            name="supervisor_id"
+                            components={animatedComponents}
+                            options={supervisorOptions}
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            value={supervisorOptions.find(
+                              (option) => option.value === Data.supervisor_id
+                            )}
+                            onChange={(selectedOption) =>
+                              handleChange(
+                                {
+                                  target: {
+                                    name: "supervisor_id",
+                                    value: selectedOption.value,
+                                  },
+                                },
+                                0
+                              )
+                            }
+                          />
+                        </div>
 
                         <div className="col-span-6 sm:col-span-3">
-                                <label
-                                  htmlFor="status"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  Status
-                                </label>
-                                <Select
-                                  id="status"
-                                  name="status"
-                                  options={statusOptions}
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={statusOptions.find(
-                                    (option) => option.value === Data.status,
-                                  )}
-                                  onChange={(selectedOption) =>
-                                    handleChange(
-                                      {
-                                        target: {
-                                          name: "status",
-                                          value: selectedOption.value,
-                                        },
-                                      },
-                                      0,
-                                    )
-                                  }
-                                />
-                              </div>
-                              <div className="col-span-6 sm:col-span-3">
-                                <label
-                                  htmlFor="is_admin"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  Admin
-                                </label>
-                                <Select
-                                  id="is_admin"
-                                  name="admin"
-                                  options={adminOptions}
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={adminOptions.find(
-                                    (option) =>
-                                      option.value === Data.is_admin,
-                                  )}
-                                  onChange={(selectedOption) =>
-                                    handleChange(
-                                      {
-                                        target: {
-                                          name: "is_admin",
-                                          value: selectedOption.value,
-                                        },
-                                      },
-                                      0,
-                                    )
-                                  }
-                                />
-                              </div>
+                          <label
+                            htmlFor="password"
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Password
+                          </label>
+                          <input
+                            type="password"
+                            name="password"
+                            autoComplete="new-password"
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            value={Data.password || ""}
+                            onChange={handleChange}
+                            onBlur={validatePassword}
+                            placeholder="Enter password"
+                            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
+                            required
+                          />
+                          {Errors.password && (
+                            <p className="text-red-500">
+                              {Errors.confirm_password}
+                            </p>
+                          )}
+                        </div>
+
+                        <div className="col-span-6 sm:col-span-3">
+                          <label className="block text-sm font-medium text-gray-700">
+                            Confirm Password
+                          </label>
+                          <input
+                            type="password"
+                            name="confirm_password"
+                            autoComplete="new-password"
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            value={Data.confirm_password || ""}
+                            onChange={handleChange}
+                            onBlur={validatePassword}
+                            placeholder="Enter confirm password"
+                            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
+                            required
+                          />
+                          {Errors.password && (
+                            <p className="text-red-500">{Errors.password}</p>
+                          )}
+                        </div>
+
+                        <div className="col-span-6 sm:col-span-3">
+                          <label
+                            htmlFor="status"
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Status
+                          </label>
+                          <Select
+                            id="status"
+                            name="status"
+                            options={statusOptions}
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            value={statusOptions.find(
+                              (option) => option.value === Data.status
+                            )}
+                            onChange={(selectedOption) =>
+                              handleChange(
+                                {
+                                  target: {
+                                    name: "status",
+                                    value: selectedOption.value,
+                                  },
+                                },
+                                0
+                              )
+                            }
+                          />
+                        </div>
+                        <div className="col-span-6 sm:col-span-3">
+                          <label
+                            htmlFor="is_admin"
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Admin
+                          </label>
+                          <Select
+                            id="is_admin"
+                            name="admin"
+                            options={adminOptions}
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            value={adminOptions.find(
+                              (option) => option.value === Data.is_admin
+                            )}
+                            onChange={(selectedOption) =>
+                              handleChange(
+                                {
+                                  target: {
+                                    name: "is_admin",
+                                    value: selectedOption.value,
+                                  },
+                                },
+                                0
+                              )
+                            }
+                          />
+                        </div>
                       </div>
                     </div>
                     <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
