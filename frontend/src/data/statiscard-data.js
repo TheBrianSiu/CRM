@@ -101,10 +101,10 @@ function createStatisticsCard(color, icon, title, value, increase) {
     color,
     icon,
     title,
-    value: `$${value}`,
+    value: `${value !== "" ? `$${value}` : "N/A"}`,
     footer: {
       color: increase >= 0 ? "text-green-500" : "text-red-500",
-      value: increase.toFixed(0),
+      value: !isNaN(increase) ? increase.toFixed(0) : "N/A",
       label: "than last month",
     },
   };

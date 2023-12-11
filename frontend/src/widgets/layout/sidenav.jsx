@@ -9,6 +9,8 @@ import {
 } from "@material-tailwind/react";
 import { useMaterialTailwindController, setOpenSidenav } from "@/context";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect, useState } from "react";
+import { userpermission } from "@/data";
 
 export function Sidenav({ brandImg, brandName, routes }) {
   const [controller, dispatch] = useMaterialTailwindController();
@@ -18,8 +20,130 @@ export function Sidenav({ brandImg, brandName, routes }) {
     white: "bg-white shadow-lg",
     transparent: "bg-transparent",
   };
-
+  const [routePermissions, setRoutePermissions] = useState([]);
   const { loginWithRedirect, logout, user, isLoading } = useAuth0();
+
+  useEffect(() => {
+    if (routes) {
+      const checkPermissions = async () => {
+        const permissions = [];
+        for (const route of routes) {
+          for (const page of route.pages) {
+            let hasPermission = false;
+
+            if (page.permissions.length > 0) {
+              hasPermission = await userpermission(user.sub, page.permissions);
+            } else {
+              hasPermission = true;
+            }
+
+            let pageName = page.name;
+            if (hasPermission) {
+              if (!permissions.includes(pageName)) {
+                permissions.push(pageName);
+              }
+            }
+          }
+        }
+        setRoutePermissions(permissions);
+      };
+
+      checkPermissions();
+    }
+  }, [routes, user]);
+
+  const renderRoutes = ({ title, pages }, key) => {
+    return (
+      <ul key={key} className="mb-4 flex flex-col gap-1">
+        {title && (
+          <li className="mx-3.5 mb-2 mt-4">
+            <Typography
+              variant="small"
+              color={sidenavType === "dark" ? "white" : "blue-gray"}
+              className="font-black uppercase opacity-75"
+            >
+              {title}
+            </Typography>
+          </li>
+        )}
+        {pages
+          .filter(({ name }) => routePermissions.includes(name))
+          .map(({ icon, name, path }) => (
+            <li key={name}>
+              <NavLink to={`${path}`}>
+                {({ isActive }) => (
+                  <Button
+                    variant={isActive ? "gradient" : "text"}
+                    color={
+                      isActive
+                        ? sidenavColor
+                        : sidenavType === "dark"
+                        ? "white"
+                        : "blue-gray"
+                    }
+                    className="flex items-center gap-4 px-4 capitalize"
+                    fullWidth
+                  >
+                    {icon}
+                    <Typography
+                      color="inherit"
+                      className="font-medium capitalize"
+                    >
+                      {name}
+                    </Typography>
+                  </Button>
+                )}
+              </NavLink>
+            </li>
+          ))}
+        <li className="mx-3.5 mb-2 mt-4">
+          <Typography
+            variant="small"
+            color={sidenavType === "dark" ? "white" : "blue-gray"}
+            className="font-black uppercase opacity-75"
+          >
+            Auth Page
+          </Typography>
+        </li>
+        {!isLoading && !user && (
+          <li key="signin">
+            <Button
+              variant="text"
+              color="white"
+              className="flex items-center gap-4 px-4 capitalize"
+              fullWidth
+              onClick={() => loginWithRedirect()}
+            >
+              {/* {<ArrowRightOnRectangleIcon/>} */}
+              <Typography color="inherit" className="font-medium capitalize">
+                sign in
+              </Typography>
+            </Button>
+          </li>
+        )}
+        {!isLoading && user && (
+          <li key="signout">
+            <Button
+              variant="text"
+              color="white"
+              className="flex items-center gap-4 px-4 capitalize"
+              fullWidth
+              onClick={() =>
+                logout({
+                  logoutParams: { returnTo: window.location.origin },
+                })
+              }
+            >
+              {/* {<ArrowRightOnRectangleIcon/>} */}
+              <Typography color="inherit" className="font-medium capitalize">
+                sign out
+              </Typography>
+            </Button>
+          </li>
+        )}
+      </ul>
+    );
+  };
 
   return (
     <aside
@@ -53,100 +177,10 @@ export function Sidenav({ brandImg, brandName, routes }) {
         </IconButton>
       </div>
       <div className="m-4">
-        {routes.map(({ title, pages }, key) => (
-          <ul key={key} className="mb-4 flex flex-col gap-1">
-            {title && (
-              <li className="mx-3.5 mb-2 mt-4">
-                <Typography
-                  variant="small"
-                  color={sidenavType === "dark" ? "white" : "blue-gray"}
-                  className="font-black uppercase opacity-75"
-                >
-                  {title}
-                </Typography>
-              </li>
-            )}
-            {pages.map(({ icon, name, path }) => (
-              <li key={name}>
-                <NavLink to={`${path}`}>
-                  {({ isActive }) => (
-                    <Button
-                      variant={isActive ? "gradient" : "text"}
-                      color={
-                        isActive
-                          ? sidenavColor
-                          : sidenavType === "dark"
-                          ? "white"
-                          : "blue-gray"
-                      }
-                      className="flex items-center gap-4 px-4 capitalize"
-                      fullWidth
-                    >
-                      {icon}
-                      <Typography
-                        color="inherit"
-                        className="font-medium capitalize"
-                      >
-                        {name}
-                      </Typography>
-                    </Button>
-                  )}
-                </NavLink>
-              </li>
-            ))}
-            <li className="mx-3.5 mb-2 mt-4">
-              <Typography
-                variant="small"
-                color={sidenavType === "dark" ? "white" : "blue-gray"}
-                className="font-black uppercase opacity-75"
-              >
-                Auth Page
-              </Typography>
-            </li>
-            {!isLoading && !user && (
-              <li key="signin">
-                <Button
-                  variant="text"
-                  color="white"
-                  className="flex items-center gap-4 px-4 capitalize"
-                  fullWidth
-                  onClick={() => loginWithRedirect()}
-                >
-                  {/* {<ArrowRightOnRectangleIcon/>} */}
-                  <Typography
-                    color="inherit"
-                    className="font-medium capitalize"
-                  >
-                    sign in
-                  </Typography>
-                </Button>
-              </li>
-            )}
-            {!isLoading && user && (
-              <li key="signout">
-                <Button
-                  variant="text"
-                  color="white"
-                  className="flex items-center gap-4 px-4 capitalize"
-                  fullWidth
-                  onClick={() =>
-                    logout({
-                      logoutParams: { returnTo: window.location.origin },
-                    })
-                  }
-                >
-                  {/* {<ArrowRightOnRectangleIcon/>} */}
-                  <Typography
-                    color="inherit"
-                    className="font-medium capitalize"
-                  >
-                    sign out
-                  </Typography>
-                </Button>
-              </li>
-            )}
-          </ul>
-        ))}
+        {routes &&
+          routes.map(({ title, pages }, key) =>
+            renderRoutes({ title, pages }, key)
+          )}
       </div>
     </aside>
   );

@@ -54,13 +54,22 @@ export async function userRole(userId){
   return result;
 }
 
+export async function userpermission(userid,permission){
+  const result = await makeApiRequest(`${API_BASE_URL}/userpermission?userid=${userid}&permission=${permission}`, "GET");
+
+  if (result.error) {
+    return { error: 'Failed to retrieve user role ' + result.error };
+  }
+
+  return result;
+}
+
 export function isTokenExpired(token) {
   const tokenData = JSON.parse(atob(token.split('.')[1]));
   const expirationTime = tokenData.exp * 1000; 
   const currentTime = Date.now();
   return expirationTime < currentTime;
 }
-
 
 export async function refreshToken() {
   try {

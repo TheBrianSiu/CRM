@@ -17,24 +17,28 @@ export const routes = [
         name: "dashboard",
         path: "/",
         element: <Home />,
+        permissions: []
       },
       {
         icon: <TableCellsIcon {...icon} />,
         name: "users",
         path: "/users",
         element: <Users />,
+        permissions: ["read:users"]
       },
       {
         icon: <TableCellsIcon {...icon} />,
         name: "customers",
         path: "/customers",
         element: <Customers />,
+        permissions: ["read:customers"]
       },
       {
         icon: <TableCellsIcon {...icon} />,
         name: "projects",
         path: "/projects",
         element: <Projects />,
+        permissions: ["read:projects"]
       },
     ],
   },

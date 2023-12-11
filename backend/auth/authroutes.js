@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const axios = require('axios');
-const { retrieveToken } = require("./auth");
+const { retrieveToken, retreieve_user_permission } = require("./auth");
 
 
 //change password
@@ -45,5 +45,23 @@ router.put("/changepassword/:email", async (req, res) => {
       res.status(500).json({ error: 'An error occurred while locating user roles' }); 
     }
   });
+
+  //check permission
+  router.get("/userpermission", async (req, res) => {
+    const userid = req.query.userid;
+    const permission = req.query.permission;
+  
+    if (!permission) {
+      return res.json(true);
+    } else {
+      const hasPermission = await retreieve_user_permission(userid, permission);
+      if (hasPermission) {
+        return res.json(true);
+      } else {
+        return res.json(false);
+      }
+    }
+  });
+  
 
   module.exports = router;
