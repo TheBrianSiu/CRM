@@ -47,12 +47,14 @@ function createChart(data, type, name, categoryLabels, itemKey) {
     },
   };
 
-  data.forEach((item) => {
-    const monthIndex = item.month - 1;
-    if (monthIndex >= 0 && monthIndex < 12) {
-      chart.series[0].data[monthIndex] = item[itemKey];
-    }
-  });
+  if(data){
+    data.forEach((item) => {
+      const monthIndex = item.month - 1;
+      if (monthIndex >= 0 && monthIndex < 12) {
+        chart.series[0].data[monthIndex] = item[itemKey];
+      }
+    });
+  }
 
   return chart;
 }
