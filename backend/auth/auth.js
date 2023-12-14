@@ -1,6 +1,7 @@
 const axios = require("axios");
 const cache = {};
 
+
 //retreive token
 async function retrieveToken() {
   try {
@@ -16,23 +17,6 @@ async function retrieveToken() {
 
     const accessToken = response.data.access_token;
     return accessToken;
-  } catch (error) {
-    throw new Error(`Error: ${error.message}`);
-  }
-}
-
-// retrieve users
-async function retrieveAuth0Users() {
-  try {
-    const accessToken = await retrieveToken();
-
-    const apiEndpoint = `${process.env.AUTH0DOMAIN}/api/v2/users`;
-    const apiResponse = await axios.get(apiEndpoint, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return apiResponse.data;
   } catch (error) {
     throw new Error(`Error: ${error.message}`);
   }
@@ -145,9 +129,7 @@ const deleteAuthUser = async (id) => {
 
 module.exports = {
   retrieveToken,
-  retreiveLoginRecord,
   retreieve_user_permission,
-  retrieve_and_insert_newuser,
   insertAuth0User,
   deleteAuthUser,
 };

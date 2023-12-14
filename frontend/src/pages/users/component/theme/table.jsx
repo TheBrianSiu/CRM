@@ -3,9 +3,11 @@ import { deleteUser } from "@/data";
 import { Typography } from "@material-tailwind/react";
 import { formatDate, formatPhoneNumber } from "@/utils/formatting";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
 
 export function Table({ currentItems, Userdata }) {
   const { user } = useAuth0();
+  const navigate = useNavigate();
 
   function Deleteuser(id) {
     if (window.confirm("Do you want to delete the user?")) {
@@ -102,7 +104,7 @@ export function Table({ currentItems, Userdata }) {
                 <td className={className}>
                   <Typography
                     as="a"
-                    href={`users/edit/${user_id}`}
+                    onClick={() => navigate(`edit/${user_id}`)}
                     className="text-xs font-semibold text-blue-gray-600"
                   >
                     Edit

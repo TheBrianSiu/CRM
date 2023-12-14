@@ -1,8 +1,10 @@
 import { deleteProjectWithRelatedData } from "@/data";
 import { formatNumber } from "@/utils";
 import { Typography, Chip } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
 
 export function Table({ currentItems, tasks }) {
+  const navigate = useNavigate();
   function deleteProject(id) {
     if (window.confirm("Do you want to delete this item?")) {
       deleteProjectWithRelatedData(id)
@@ -119,7 +121,7 @@ export function Table({ currentItems, tasks }) {
                   <td className={className}>
                     <Typography
                       as="a"
-                      href={`projects/edit/${project_id}`}
+                      onClick={() => navigate(`edit/${project_id}`)}
                       className="text-xs font-semibold text-blue-gray-600"
                     >
                       Edit

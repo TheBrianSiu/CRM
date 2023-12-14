@@ -3,9 +3,11 @@ import { removecustomer } from "@/data";
 import { Typography } from "@material-tailwind/react";
 import { formatPhoneNumber } from "@/utils/formatting";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
 
 export function Table({ currentItems, Userdata }) {
   const { user } = useAuth0();
+  const navigate = useNavigate();
   function Deleteuser(id) {
     if (window.confirm("Do you want to delete this customer?")) {
       let userid = user.sub;
@@ -119,7 +121,7 @@ export function Table({ currentItems, Userdata }) {
                 <td className={className}>
                   <Typography
                     as="a"
-                    href={`customers/edit/${id}`}
+                    onClick={()=>navigate(`edit/${id}`)}
                     className="text-xs font-semibold text-blue-gray-600"
                   >
                     Edit

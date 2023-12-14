@@ -9,7 +9,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { openDB } from "idb";
 import Fuse from "fuse.js";
-import { retrievecustomers } from "@/data/customers-data";
 import { Table } from "./component/theme/table";
 import { Pagination, totalPages, SwitchPage } from "@/utils";
 import Navbar from "./component/utils/navbar";

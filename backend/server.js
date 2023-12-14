@@ -77,11 +77,6 @@ app.get('/', (req, res) => {
   return res.json("from backend");
 });
 
-// Schedule periodic task
-setInterval(retrieve_and_insert_newuser, 60000); // every min
-setInterval(retreiveLoginRecord,900000); // every 15 mins
-
-
 // Define routes
 app.use('/', cors(corsOptions), authroute);
 app.use('/', cors(corsOptions), usersroute);     
