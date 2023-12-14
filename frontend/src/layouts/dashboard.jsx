@@ -12,8 +12,7 @@ import nestroutes from "@/nestroutes";
 import { useMaterialTailwindController, setOpenConfigurator } from "@/context";
 import { Cog6ToothIcon } from "@heroicons/react/24/solid";
 import { useContext, useEffect, useState } from "react";
-import {UserRolesContext} from "@/userrolescontext"
-
+import { UserRolesContext } from "@/userrolescontext";
 
 export function Dashboard() {
   const [controller, dispatch] = useMaterialTailwindController();
@@ -21,22 +20,20 @@ export function Dashboard() {
   const [route, setRoute] = useState(null);
   const { userRoles, isLoading } = useContext(UserRolesContext);
 
-  useEffect(()=>{
+  useEffect(() => {
     const renderRoutes = () => {
-      const renderedRoute = (routes.flatMap(({ layout, pages}) => {
+      const renderedRoute = routes.flatMap(({ layout, pages }) => {
         if (layout === "dashboard") {
-          return pages
-            .map(({ path, element }) => (
-              <Route key={path} exact path={path} element={element} />
-            ));
+          return pages.map(({ path, element }) => (
+            <Route key={path} exact path={path} element={element} />
+          ));
         }
-      }))
-      setRoute(renderedRoute)
+      });
+      setRoute(renderedRoute);
     };
 
     renderRoutes();
-
-  },[isLoading,userRoles])
+  }, [isLoading, userRoles]);
 
   // const hasRole = (roles) => {
   //   if (userRoles) {
@@ -70,7 +67,7 @@ export function Dashboard() {
           <Cog6ToothIcon className="h-5 w-5" />
         </IconButton>
         <Routes>
-        {route}
+          {route}
           {nestroutes.map(
             ({ layout, pages }) =>
               layout === "dashboard_subpages" &&

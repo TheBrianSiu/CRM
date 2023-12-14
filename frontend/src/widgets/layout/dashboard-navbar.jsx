@@ -30,7 +30,7 @@ export function DashboardNavbar() {
     >
       <div className="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
         <div className="capitalize">
-          <Breadcrumbs
+          {/* <Breadcrumbs
             className={`bg-transparent p-0 transition-all ${
               fixedNavbar ? "mt-1" : ""
             }`}
@@ -45,7 +45,7 @@ export function DashboardNavbar() {
           </Breadcrumbs>
           <Typography variant="h6" color="blue-gray">
             {page}
-          </Typography>
+          </Typography> */}
         </div>
         <div className="flex items-center">
           <IconButton

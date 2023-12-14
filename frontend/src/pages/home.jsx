@@ -68,12 +68,12 @@ export function Home() {
       formattedStartOfMonth,
       formattedEndOfMonth,
       setCompletedProject,
-      user.sub,
+      user.sub
     );
   }, []);
 
   useEffect(() => {
-    FetchChartsData(year, setStatisticsChartsData,user.sub);
+    FetchChartsData(year, setStatisticsChartsData, user.sub);
   }, []);
 
   return (
@@ -176,7 +176,7 @@ export function Home() {
                           {el}
                         </Typography>
                       </th>
-                    ),
+                    )
                   )}
                 </tr>
               </thead>
@@ -204,24 +204,14 @@ export function Home() {
                           </div>
                         </td>
                         <td className={className}>
-                          {assignees.map(({ first_name, last_name }, key) => (
+                          {assignees.map(({ first_name, last_name }, index) => (
                             <Typography
+                              key={`${first_name}-${last_name}-${index}`} 
                               variant="small"
                               className="text-xs font-medium text-blue-gray-600"
                             >
                               {first_name} {last_name}
                             </Typography>
-                            // <Tooltip key={first_name} content={first_name}>
-                            //   <Avatar
-                            //     src={""}
-                            //     alt={""}
-                            //     size="xs"
-                            //     variant="circular"
-                            //     className={`cursor-pointer border-2 border-white ${
-                            //       key === 0 ? "" : "-ml-2.5"
-                            //     }`}
-                            //   />
-                            // </Tooltip>
                           ))}
                         </td>
                         <td className={className}>
@@ -249,7 +239,7 @@ export function Home() {
                         </td>
                       </tr>
                     );
-                  },
+                  }
                 )}
               </tbody>
             </table>
