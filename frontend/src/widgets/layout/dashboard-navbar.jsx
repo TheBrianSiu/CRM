@@ -1,29 +1,29 @@
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link } from 'react-router-dom';
 import {
   Navbar,
   Typography,
   Button,
   IconButton,
   Breadcrumbs,
-} from "@material-tailwind/react";
-import { UserCircleIcon, Bars3Icon } from "@heroicons/react/24/solid";
-import { useMaterialTailwindController, setOpenSidenav } from "@/context";
-import { useAuth0 } from "@auth0/auth0-react";
+} from '@material-tailwind/react';
+import { UserCircleIcon, Bars3Icon } from '@heroicons/react/24/solid';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useMaterialTailwindController, setOpenSidenav } from '@/context';
 
 export function DashboardNavbar() {
   const [controller, dispatch] = useMaterialTailwindController();
   const { fixedNavbar, openSidenav } = controller;
   const { pathname } = useLocation();
-  const [layout, page] = pathname.split("/").filter((el) => el !== "");
+  const [layout, page] = pathname.split('/').filter((el) => el !== '');
   const { loginWithRedirect, logout, user, isLoading } = useAuth0();
 
   return (
     <Navbar
-      color={fixedNavbar ? "white" : "transparent"}
+      color={fixedNavbar ? 'white' : 'transparent'}
       className={`rounded-xl transition-all ${
         fixedNavbar
-          ? "sticky top-4 z-40 py-3 shadow-md shadow-blue-gray-500/5"
-          : "px-0 py-1"
+          ? 'sticky top-4 z-40 py-3 shadow-md shadow-blue-gray-500/5'
+          : 'px-0 py-1'
       }`}
       fullWidth
       blurred={fixedNavbar}
@@ -95,6 +95,6 @@ export function DashboardNavbar() {
   );
 }
 
-DashboardNavbar.displayName = "/src/widgets/layout/dashboard-navbar.jsx";
+DashboardNavbar.displayName = '/src/widgets/layout/dashboard-navbar.jsx';
 
 export default DashboardNavbar;

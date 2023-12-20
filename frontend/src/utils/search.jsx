@@ -1,16 +1,16 @@
-import Fuse from "fuse.js";
+import Fuse from 'fuse.js';
 
 // Function to perform a search using Fuse.js
 export function performSearch(data, searchQuery, setSearchQuery) {
   const options = {
     keys: [
-      "task_name",
-      "assignees.first_name",
-      "assignees.last_name",
-      "description",
-      "est_value",
-      "lead_status",
-      "priority",
+      'taskname',
+      'assignees.firstName',
+      'assignees.lastName',
+      'description',
+      'estValue',
+      'leadStatus',
+      'priority',
     ],
     threshold: 0.3,
     location: 0,

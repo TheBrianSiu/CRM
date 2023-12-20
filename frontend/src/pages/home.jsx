@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Typography,
   Card,
@@ -9,22 +9,22 @@ import {
   MenuHandler,
   MenuList,
   MenuItem,
-} from "@material-tailwind/react";
+} from '@material-tailwind/react';
 import {
   ClockIcon,
   CheckIcon,
   EllipsisVerticalIcon,
-} from "@heroicons/react/24/outline";
-import { StatisticsCard } from "@/widgets/cards";
-import { StatisticsChart } from "@/widgets/charts";
+} from '@heroicons/react/24/outline';
+import { useAuth0 } from '@auth0/auth0-react';
+import { StatisticsCard } from '@/widgets/cards';
+import { StatisticsChart } from '@/widgets/charts';
 import {
-  FetchSalesRecords,
-  FetchProjectTable,
-  FetchProjectCompletion,
-  FetchChartsData,
-} from "@/data";
-import { formatDaterange, formatNumber } from "@/utils/formatting";
-import { useAuth0 } from "@auth0/auth0-react";
+  fetchSalesRecords,
+  fetchProjectTable,
+  fetchProjectCompletion,
+  fetchChartsData,
+} from '@/data';
+import { formatDaterange, formatNumber } from '@/utils/formatting';
 
 export function Home() {
   const { user } = useAuth0();
@@ -48,32 +48,32 @@ export function Home() {
   const formattedEndOfLastMonth = formatDaterange(endOfLastMonth);
 
   useEffect(() => {
-    FetchSalesRecords(
+    fetchSalesRecords(
       formattedStartOfMonth,
       formattedEndOfMonth,
       formattedStartOfLastMonth,
       formattedEndOfLastMonth,
       formatNumber,
       setStatisticsCardsData,
-      user.sub
+      user.sub,
     );
   }, []);
 
   useEffect(() => {
-    FetchProjectTable(setProjectsTableData);
+    fetchProjectTable(setProjectsTableData);
   }, []);
 
   useEffect(() => {
-    FetchProjectCompletion(
+    fetchProjectCompletion(
       formattedStartOfMonth,
       formattedEndOfMonth,
       setCompletedProject,
-      user.sub
+      user.sub,
     );
   }, []);
 
   useEffect(() => {
-    FetchChartsData(year, setStatisticsChartsData, user.sub);
+    fetchChartsData(year, setStatisticsChartsData, user.sub);
   }, []);
 
   return (
@@ -85,16 +85,14 @@ export function Home() {
             {...rest}
             title={title}
             icon={React.createElement(icon, {
-              className: "w-6 h-6 text-white",
+              className: 'w-6 h-6 text-white',
             })}
             footer={
               <Typography className="font-normal text-blue-gray-600">
                 <span>
-                  <strong className={footer.color}>
-                    {footer.value}
-                    {"%"}
-                  </strong>
-                  &nbsp;{footer.label}
+                  <strong className={footer.color}>{footer.value}%</strong>
+                  &nbsp;
+                  {footer.label}
                 </span>
               </Typography>
             }
@@ -112,7 +110,8 @@ export function Home() {
                 className="flex items-center font-normal text-blue-gray-600"
               >
                 <ClockIcon strokeWidth={2} className="h-4 w-4 text-inherit" />
-                &nbsp;{props.footer}
+                &nbsp;
+                {props.footer}
               </Typography>
             }
           />
@@ -137,8 +136,8 @@ export function Home() {
                 <CheckIcon strokeWidth={3} className="h-4 w-4 text-blue-500" />
                 <strong>
                   {CompletedProject}
-                  {" done"}
-                </strong>{" "}
+                  {' done'}
+                </strong>{' '}
                 this month
               </Typography>
             </div>
@@ -163,7 +162,7 @@ export function Home() {
             <table className="w-full min-w-[640px] table-auto">
               <thead>
                 <tr>
-                  {["Task item", "assignees", "est value", "status"].map(
+                  {['Task item', 'Assignees', 'est value', 'status'].map(
                     (el) => (
                       <th
                         key={el}
@@ -176,7 +175,7 @@ export function Home() {
                           {el}
                         </Typography>
                       </th>
-                    )
+                    ),
                   )}
                 </tr>
               </thead>
@@ -186,9 +185,8 @@ export function Home() {
                     const isLastItem =
                       key === Math.min(9, ProjectsTableData.length - 1);
                     const className = `py-3 px-5 ${
-                      isLastItem ? "" : "border-b border-blue-gray-50"
+                      isLastItem ? '' : 'border-b border-blue-gray-50'
                     }`;
-
                     return (
                       <tr key={task_name}>
                         <td className={className}>
@@ -206,7 +204,7 @@ export function Home() {
                         <td className={className}>
                           {assignees.map(({ first_name, last_name }, index) => (
                             <Typography
-                              key={`${first_name}-${last_name}-${index}`} 
+                              key={`${first_name}-${last_name}-${index}`}
                               variant="small"
                               className="text-xs font-medium text-blue-gray-600"
                             >
@@ -234,12 +232,12 @@ export function Home() {
                               value={lead_status}
                               variant="gradient"
                               className="h-1"
-                            ></div>
+                            />
                           </div>
                         </td>
                       </tr>
                     );
-                  }
+                  },
                 )}
               </tbody>
             </table>

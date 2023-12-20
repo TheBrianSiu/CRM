@@ -14,9 +14,9 @@ export function Navbar({
         <button
           type="button"
           className={`${
-            Istheme === "All" && "border-b border-black"
+            Istheme === 'All' && 'border-b border-black'
           } round-lg bg-transparent px-4 py-2 text-sm font-medium text-gray-900 `}
-          onClick={() => setIstheme("All")}
+          onClick={() => setIstheme('All')}
         >
           All
         </button>
@@ -35,7 +35,7 @@ export function Navbar({
             type="text"
             placeholder="Search ..."
             required
-            value={searchQuery === null ? "" : searchQuery}
+            value={searchQuery === null ? '' : searchQuery}
             onChange={handleSearch}
           />
           <button className="round-lg border-gray-300 bg-transparent px-4 py-2 text-sm font-medium text-gray-900 hover:bg-blue-500 hover:text-white focus:z-10 focus:bg-blue-900 focus:text-white">

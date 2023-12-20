@@ -4,36 +4,36 @@ import {
   CardBody,
   Typography,
   Chip,
-} from "@material-tailwind/react";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { openDB } from "idb";
-import Fuse from "fuse.js";
-import { Table } from "./component/theme/table";
-import { Pagination, totalPages, SwitchPage } from "@/utils";
-import Navbar from "./component/utils/navbar";
+} from '@material-tailwind/react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { openDB } from 'idb';
+import Fuse from 'fuse.js';
+import { useAuth0 } from '@auth0/auth0-react';
+import { Table } from './component/theme/table';
+import { pagination, totalPages, switchPage } from '@/utils';
+import Navbar from './component/utils/navbar';
 import {
-  RetreiveCustDataLocal,
+  retreiveCustDataLocal,
   fetchCustDataAndStoreLocal,
-} from "@/data/indexdb";
-import { useAuth0 } from "@auth0/auth0-react";
+} from '@/data/index-db';
 
 function Customers() {
-  const {user} = useAuth0();
-  const [Istheme, setIsthem] = useState("All");
+  const { user } = useAuth0();
+  const [Istheme, setIsthem] = useState('All');
   const navigate = useNavigate();
   const [Userdata, setUserdata] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [lastItemIndex, setLastItemIndex] = useState(itemsPerPage);
 
-  //retrieve data and put into local
+  // retrieve data and put into local
   useEffect(() => {
     // initalize the DB exclusively for Netlify hosting coz it doesn't have on calling another fucntion
-    const db = openDB("customers", 1, {
+    const db = openDB('customers', 1, {
       upgrade(db) {
-        db.createObjectStore("cust", { keyPath: "id" });
+        db.createObjectStore('cust', { keyPath: 'id' });
       },
     });
     const fetchData = async () => {
@@ -45,14 +45,14 @@ function Customers() {
   // retreieve from local
   useEffect(() => {
     const storeCust = async () => {
-      await RetreiveCustDataLocal(setUserdata);
+      await retreiveCustDataLocal(setUserdata);
     };
     storeCust();
   }, [Userdata]);
 
   // navigation
   function adduser() {
-    navigate("add");
+    navigate('add');
   }
 
   // search
@@ -62,15 +62,15 @@ function Customers() {
 
   const options = {
     keys: [
-      "first_name",
-      "last_name",
-      "email",
-      "phone_number",
-      "address_city",
-      "address_state",
-      "property_type",
-      "location_preference",
-      "status",
+      'firstName',
+      'lastName',
+      'email',
+      'phoneNumber',
+      'addressCity',
+      'addressState',
+      'propertyType',
+      'locationPreference',
+      'status',
     ],
     threshold: 0.3,
     location: 0,
@@ -91,7 +91,7 @@ function Customers() {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredUserdata.slice(
     indexOfFirstItem,
-    indexOfLastItem
+    indexOfLastItem,
   );
 
   return (
@@ -110,31 +110,31 @@ function Customers() {
             Istheme={Istheme}
             setIstheme={setIsthem}
           />
-          {Istheme === "All" ? (
+          {Istheme === 'All' ? (
             <Table currentItems={currentItems} Userdata={Userdata} />
           ) : null}
           <div className="mt-4 flex justify-center">
-            {Istheme === "All" ? (
-              <Pagination
+            {Istheme === 'All' ? (
+              <pagination
                 currentPage={currentPage}
                 filteredUserdataLength={filteredUserdata.length}
                 itemsPerPage={itemsPerPage}
                 setCurrentPage={setCurrentPage}
                 indexOfLastItem={indexOfLastItem}
                 handlePrevPage={() =>
-                  SwitchPage(
-                    "prev",
+                  switchPage(
+                    'prev',
                     currentPage,
                     totalPages(filteredUserdata.length, itemsPerPage),
-                    setCurrentPage
+                    setCurrentPage,
                   )
                 }
                 handleNextPage={() =>
-                  SwitchPage(
-                    "next",
+                  switchPage(
+                    'next',
                     currentPage,
                     totalPages(filteredUserdata.length, itemsPerPage),
-                    setCurrentPage
+                    setCurrentPage,
                   )
                 }
               />

@@ -1,4 +1,4 @@
-import { refreshToken, isTokenExpired } from "./auth-data";
+import { refreshToken, isTokenExpired } from './auth-data';
 
 export async function makeApiRequest(url, method, data) {
   let token = localStorage.getItem('token');
@@ -17,7 +17,7 @@ export async function makeApiRequest(url, method, data) {
       method,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `${token}`,
+        Authorization: `${token}`,
       },
       body: data !== null ? JSON.stringify(data) : null,
     });
@@ -27,13 +27,12 @@ export async function makeApiRequest(url, method, data) {
     if (!response.ok) {
       if (responseData && responseData.message) {
         return { error: responseData.message };
-      } else {
-        return { error: 'API request failed' };
       }
+      return { error: 'API request failed' };
     }
 
     return responseData;
   } catch (error) {
-    return { error: 'API request error: ' + error.message };
+    return { error: `API request error: ${error.message}` };
   }
 }

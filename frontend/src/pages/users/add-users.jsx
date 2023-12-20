@@ -7,47 +7,47 @@ import {
   TabsHeader,
   Tab,
   Button,
-} from "@material-tailwind/react";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { addUser, supervisor } from "@/data/users-data";
-import { adminOptions, statusOptions } from "@/data";
-import { useAuth0 } from "@auth0/auth0-react";
+} from '@material-tailwind/react';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+import { addUser, supervisor } from '@/data/users-data';
+import { adminOptions, statusOptions } from '@/data';
 
 export function Addusers() {
   const { user } = useAuth0();
   const animatedComponents = makeAnimated();
   const [Data, setData] = useState({
     username: null,
-    first_name: null,
-    last_name: null,
+    firstName: null,
+    lastName: null,
     email: null,
-    phone_number: null,
-    job_title: null,
+    phoneNumber: null,
+    jobTitle: null,
     department: null,
-    status: "",
-    address: "",
-    is_admin: "0",
+    status: '',
+    address: '',
+    isAdmin: '0',
     password: null,
     confirm_password: null,
-    supervisor_id: "",
+    supervisor_id: '',
   });
   const [Users, setUsers] = useState([]);
   const [Errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const supervisorOptions = Users.map((user) => ({
-    value: user.user_id,
-    label: `${user.first_name} ${user.last_name}`,
+    value: user.userId,
+    label: `${user.firstName} ${user.lastName}`,
   }));
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData((prevData) => ({
       ...prevData,
-      [name]: value === "" ? null : value,
+      [name]: value === '' ? null : value,
     }));
   };
   // password valdiation
@@ -60,38 +60,38 @@ export function Addusers() {
       setErrors((prevErrors) => ({
         ...prevErrors,
         password:
-          "Password must contain 8-16 characters, including uppercase, lowercase, numbers, and special characters.",
+          'Password must contain 8-16 characters, including uppercase, lowercase, numbers, and special characters.',
       }));
     } else {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        password: "",
+        password: '',
       }));
     }
 
     if (password !== confirm_password) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        confirm_password: "Passwords do not match.",
+        confirm_password: 'Passwords do not match.',
       }));
     } else {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        confirm_password: "",
+        confirm_password: '',
       }));
     }
   }
-  //retrieve users for selecting supervisor
+  // retrieve users for selecting supervisor
   useEffect(() => {
     supervisor()
       .then((data) => setUsers(data))
       .catch((error) => console.error(error));
   }, []);
 
-  //handle submit
+  // handle submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (window.confirm("Do you want to submit a new user?")) {
+    if (window.confirm('Do you want to submit a new user?')) {
       const { confirm_password, ...customerdata } = Data; // remove confirm password from state
 
       addUser(customerdata, user.sub)
@@ -99,8 +99,8 @@ export function Addusers() {
           if (result.error) {
             alert(result.error);
           } else {
-            alert("The user is added successfully!");
-            navigate(-1); 
+            alert('The user is added successfully!');
+            navigate(-1);
           }
         })
         .catch((err) => {
@@ -135,18 +135,18 @@ export function Addusers() {
                       <div className="grid grid-cols-6 gap-6">
                         <div className="col-span-6 sm:col-span-3">
                           <label
-                            htmlFor="first_name"
+                            htmlFor="firstName"
                             className="block text-sm font-medium text-gray-700"
                           >
                             First name
                           </label>
                           <input
                             type="text"
-                            name="first_name"
-                            id="first_name"
+                            name="firstName"
+                            id="firstName"
                             autoComplete="given-name"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.first_name || ""}
+                            value={Data.firstName || ''}
                             onChange={handleChange}
                             placeholder="Enter first name"
                             required
@@ -155,18 +155,18 @@ export function Addusers() {
 
                         <div className="col-span-6 sm:col-span-3">
                           <label
-                            htmlFor="last_name"
+                            htmlFor="lastName"
                             className="block text-sm font-medium text-gray-700"
                           >
                             Last name
                           </label>
                           <input
                             type="text"
-                            name="last_name"
-                            id="last_name"
+                            name="lastName"
+                            id="lastName"
                             autoComplete="family-name"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.last_name || ""}
+                            value={Data.lastName || ''}
                             onChange={handleChange}
                             placeholder="Enter last name"
                             required
@@ -186,7 +186,7 @@ export function Addusers() {
                             id="username"
                             autoComplete="username"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.username || ""}
+                            value={Data.username || ''}
                             onChange={handleChange}
                             placeholder="Enter username"
                             required
@@ -195,18 +195,18 @@ export function Addusers() {
 
                         <div className="col-span-6 sm:col-span-3">
                           <label
-                            htmlFor="phone_number"
+                            htmlFor="phoneNumber"
                             className="block text-sm font-medium text-gray-700"
                           >
                             Phone Number
                           </label>
                           <input
                             type="tel"
-                            name="phone_number"
-                            id="phone_number"
-                            autoComplete="phone_number"
+                            name="phoneNumber"
+                            id="phoneNumber"
+                            autoComplete="phoneNumber"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.phone_number || ""}
+                            value={Data.phoneNumber || ''}
                             onChange={handleChange}
                             placeholder="999-999-999"
                             pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
@@ -227,7 +227,7 @@ export function Addusers() {
                             id="email"
                             autoComplete="email"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.email || ""}
+                            value={Data.email || ''}
                             onChange={handleChange}
                             placeholder="Enter email address"
                             required
@@ -247,7 +247,7 @@ export function Addusers() {
                             id="address"
                             autoComplete="street-address"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.address || ""}
+                            value={Data.address || ''}
                             onChange={handleChange}
                             placeholder="Enter address"
                             required
@@ -267,7 +267,7 @@ export function Addusers() {
                             id="department"
                             autoComplete="department"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.department || ""}
+                            value={Data.department || ''}
                             onChange={handleChange}
                             placeholder="Enter department"
                             required
@@ -276,18 +276,18 @@ export function Addusers() {
 
                         <div className="col-span-3">
                           <label
-                            htmlFor="job_title"
+                            htmlFor="jobTitle"
                             className="block text-sm font-medium text-gray-700"
                           >
                             Job Title
                           </label>
                           <input
                             type="text"
-                            name="job_title"
-                            id="job_title"
-                            autoComplete="job_title"
+                            name="jobTitle"
+                            id="jobTitle"
+                            autoComplete="jobTitle"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.job_title || ""}
+                            value={Data.jobTitle || ''}
                             onChange={handleChange}
                             placeholder="Enter job title"
                             required
@@ -308,17 +308,17 @@ export function Addusers() {
                             options={supervisorOptions}
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             value={supervisorOptions.find(
-                              (option) => option.value === Data.supervisor_id
+                              (option) => option.value === Data.supervisor_id,
                             )}
                             onChange={(selectedOption) =>
                               handleChange(
                                 {
                                   target: {
-                                    name: "supervisor_id",
+                                    name: 'supervisor_id',
                                     value: selectedOption.value,
                                   },
                                 },
-                                0
+                                0,
                               )
                             }
                           />
@@ -336,7 +336,7 @@ export function Addusers() {
                             name="password"
                             autoComplete="new-password"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.password || ""}
+                            value={Data.password || ''}
                             onChange={handleChange}
                             onBlur={validatePassword}
                             placeholder="Enter password"
@@ -359,7 +359,7 @@ export function Addusers() {
                             name="confirm_password"
                             autoComplete="new-password"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.confirm_password || ""}
+                            value={Data.confirm_password || ''}
                             onChange={handleChange}
                             onBlur={validatePassword}
                             placeholder="Enter confirm password"
@@ -384,45 +384,45 @@ export function Addusers() {
                             options={statusOptions}
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             value={statusOptions.find(
-                              (option) => option.value === Data.status
+                              (option) => option.value === Data.status,
                             )}
                             onChange={(selectedOption) =>
                               handleChange(
                                 {
                                   target: {
-                                    name: "status",
+                                    name: 'status',
                                     value: selectedOption.value,
                                   },
                                 },
-                                0
+                                0,
                               )
                             }
                           />
                         </div>
                         <div className="col-span-6 sm:col-span-3">
                           <label
-                            htmlFor="is_admin"
+                            htmlFor="isAdmin"
                             className="block text-sm font-medium text-gray-700"
                           >
                             Admin
                           </label>
                           <Select
-                            id="is_admin"
+                            id="isAdmin"
                             name="admin"
                             options={adminOptions}
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             value={adminOptions.find(
-                              (option) => option.value === Data.is_admin
+                              (option) => option.value === Data.isAdmin,
                             )}
                             onChange={(selectedOption) =>
                               handleChange(
                                 {
                                   target: {
-                                    name: "is_admin",
+                                    name: 'isAdmin',
                                     value: selectedOption.value,
                                   },
                                 },
-                                0
+                                0,
                               )
                             }
                           />

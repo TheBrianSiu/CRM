@@ -7,16 +7,17 @@ import {
   TabsHeader,
   Tab,
   Button,
-} from "@material-tailwind/react";
+} from '@material-tailwind/react';
 import {
   HomeIcon,
   ChatBubbleLeftEllipsisIcon,
   Cog6ToothIcon,
-} from "@heroicons/react/24/solid";
-import makeAnimated from "react-select/animated";
-import Select from "react-select";
-import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+} from '@heroicons/react/24/solid';
+import makeAnimated from 'react-select/animated';
+import Select from 'react-select';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 import {
   adminOptions,
   statusOptions,
@@ -24,31 +25,29 @@ import {
   retrieveDataById,
   supervisor,
   updateUser,
-} from "@/data";
-import { useAuth0 } from "@auth0/auth0-react";
+} from '@/data';
 
 export function Usersprofile() {
   const animatedComponents = makeAnimated();
   const [Users, setUsers] = useState([]);
   const [Data, setData] = useState([]);
-  const [initialUsername, setInitialUsername] = useState("");
+  const [initialUsername, setInitialUsername] = useState('');
   const [Errors, setErrors] = useState({});
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth0();
-  
 
   const supervisorOptions = Users.map((user) => ({
-    value: user.user_id,
-    label: `${user.first_name} ${user.last_name}`,
+    value: user.userId,
+    label: `${user.firstName} ${user.lastName}`,
   }));
 
   // change password request
   const Resetpassword = (email) => {
-    if (window.confirm("Do you want to reset/change the password?")) {
+    if (window.confirm('Do you want to reset/change the password?')) {
       changePassword(email)
-        .then(function (data) {
-          alert("Link is sent to user mail box successfully!");
+        .then((data) => {
+          alert('Link is sent to user mail box successfully!');
           navigate(-1); // Navigate back after the fetch is successful
         })
         .catch((err) => {
@@ -64,21 +63,21 @@ export function Usersprofile() {
       .catch((error) => console.error(error));
   }, []);
 
-  //extract data
+  // extract data
   useEffect(() => {
-    retrieveDataById(id,user.sub)
+    retrieveDataById(id, user.sub)
       .then((data) => {
         const dataArray = Array.isArray(data) ? data : [data];
         setData(dataArray);
-        setInitialUsername(dataArray[0]?.username || "");
+        setInitialUsername(dataArray[0]?.username || '');
       })
       .catch((error) => console.error(error));
   }, [id]);
 
-  //handle submit
+  // handle submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (window.confirm("Do you want to submit the form?")) {
+    if (window.confirm('Do you want to submit the form?')) {
       const userToUpdate = Data[0];
       const { username, password, confirm_password, ...userData } =
         userToUpdate; // remove all three
@@ -86,14 +85,14 @@ export function Usersprofile() {
       let updatedData = { ...userData };
       delete updatedData.id;
 
-      //check username has udpated or not
+      // check username has udpated or not
       if (initialUsername !== username) {
         updatedData = { ...updatedData, username };
       }
 
       updateUser(id, updatedData, user.sub)
-        .then(function (data) {
-          alert("Form submitted successfully!");
+        .then((data) => {
+          alert('Form submitted successfully!');
           navigate(-1); // Navigate back after the fetch is successful
         })
         .catch((err) => {
@@ -106,8 +105,8 @@ export function Usersprofile() {
     const { name, value } = e.target;
     setData((prevData) =>
       prevData.map((users, i) =>
-        i === index ? { ...users, [name]: value } : users
-      )
+        i === index ? { ...users, [name]: value } : users,
+      ),
     );
   };
 
@@ -120,7 +119,7 @@ export function Usersprofile() {
         <CardBody className="p-4">
           {Data.map((users, index) => {
             const className = `py-3 px-5 ${
-              index === Data.length - 1 ? "" : "border-b border-blue-gray-50"
+              index === Data.length - 1 ? '' : 'border-b border-blue-gray-50'
             }`;
             return (
               <div>
@@ -186,18 +185,18 @@ export function Usersprofile() {
                             <div className="grid grid-cols-6 gap-6">
                               <div className="col-span-6 sm:col-span-3">
                                 <label
-                                  htmlFor="first_name"
+                                  htmlFor="firstName"
                                   className="block text-sm font-medium text-gray-700"
                                 >
                                   First name
                                 </label>
                                 <input
                                   type="text"
-                                  name="first_name"
-                                  id="first_name"
+                                  name="firstName"
+                                  id="firstName"
                                   autoComplete="given-name"
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={users.first_name || ""}
+                                  value={users.first_name || ''}
                                   onChange={(e) => handleChange(e, index)}
                                   placeholder="Enter first name"
                                   required
@@ -206,18 +205,18 @@ export function Usersprofile() {
 
                               <div className="col-span-6 sm:col-span-3">
                                 <label
-                                  htmlFor="last_name"
+                                  htmlFor="lastName"
                                   className="block text-sm font-medium text-gray-700"
                                 >
                                   Last name
                                 </label>
                                 <input
                                   type="text"
-                                  name="last_name"
-                                  id="last_name"
+                                  name="lastName"
+                                  id="lastName"
                                   autoComplete="family-name"
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={users.last_name || ""}
+                                  value={users.last_name || ''}
                                   onChange={(e) => handleChange(e, index)}
                                   placeholder="Enter last name"
                                   required
@@ -237,7 +236,7 @@ export function Usersprofile() {
                                   id="username"
                                   autoComplete="username"
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={users.username || ""}
+                                  value={users.username || ''}
                                   onChange={(e) => handleChange(e, index)}
                                   placeholder="Enter username"
                                   required
@@ -246,18 +245,18 @@ export function Usersprofile() {
 
                               <div className="col-span-6 sm:col-span-3">
                                 <label
-                                  htmlFor="phone_number"
+                                  htmlFor="phoneNumber"
                                   className="block text-sm font-medium text-gray-700"
                                 >
                                   Phone Number
                                 </label>
                                 <input
                                   type="tel"
-                                  name="phone_number"
-                                  id="phone_number"
-                                  autoComplete="phone_number"
+                                  name="phoneNumber"
+                                  id="phoneNumber"
+                                  autoComplete="phoneNumber"
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={users.phone_number || ""}
+                                  value={users.phone_number || ''}
                                   onChange={(e) => handleChange(e, index)}
                                   placeholder="999-999-999"
                                   pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
@@ -278,7 +277,7 @@ export function Usersprofile() {
                                   id="email"
                                   autoComplete="email"
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={users.email || ""}
+                                  value={users.email || ''}
                                   onChange={(e) => handleChange(e, index)}
                                   placeholder="Enter email address"
                                   readOnly
@@ -300,7 +299,7 @@ export function Usersprofile() {
                                   id="address"
                                   autoComplete="street-address"
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={users.address || ""}
+                                  value={users.address || ''}
                                   onChange={(e) => handleChange(e, index)}
                                   placeholder="Enter address"
                                   required
@@ -320,7 +319,7 @@ export function Usersprofile() {
                                   id="department"
                                   autoComplete="department"
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={users.department || ""}
+                                  value={users.department || ''}
                                   onChange={(e) => handleChange(e, index)}
                                   placeholder="Enter department"
                                   required
@@ -329,18 +328,18 @@ export function Usersprofile() {
 
                               <div className="col-span-3">
                                 <label
-                                  htmlFor="job_title"
+                                  htmlFor="jobTitle"
                                   className="block text-sm font-medium text-gray-700"
                                 >
                                   Job Title
                                 </label>
                                 <input
                                   type="text"
-                                  name="job_title"
-                                  id="job_title"
-                                  autoComplete="job_title"
+                                  name="jobTitle"
+                                  id="jobTitle"
+                                  autoComplete="jobTitle"
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={users.job_title || ""}
+                                  value={users.job_title || ''}
                                   onChange={(e) => handleChange(e, index)}
                                   placeholder="Enter job title"
                                   required
@@ -362,17 +361,17 @@ export function Usersprofile() {
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                   value={supervisorOptions.find(
                                     (option) =>
-                                      option.value === Data[0].supervisor_id
+                                      option.value === Data[0].supervisor_id,
                                   )}
                                   onChange={(selectedOption) =>
                                     handleChange(
                                       {
                                         target: {
-                                          name: "supervisor_id",
+                                          name: 'supervisor_id',
                                           value: selectedOption.value,
                                         },
                                       },
-                                      0
+                                      0,
                                     )
                                   }
                                 />
@@ -391,17 +390,17 @@ export function Usersprofile() {
                                   options={statusOptions}
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                   value={statusOptions.find(
-                                    (option) => option.value === Data[0].status
+                                    (option) => option.value === Data[0].status,
                                   )}
                                   onChange={(selectedOption) =>
                                     handleChange(
                                       {
                                         target: {
-                                          name: "status",
+                                          name: 'status',
                                           value: selectedOption.value,
                                         },
                                       },
-                                      0
+                                      0,
                                     )
                                   }
                                 />
@@ -409,29 +408,29 @@ export function Usersprofile() {
 
                               <div className="col-span-6 sm:col-span-3">
                                 <label
-                                  htmlFor="is_admin"
+                                  htmlFor="isAdmin"
                                   className="block text-sm font-medium text-gray-700"
                                 >
                                   Admin
                                 </label>
                                 <Select
-                                  id="is_admin"
+                                  id="isAdmin"
                                   name="admin"
                                   options={adminOptions}
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                   value={adminOptions.find(
                                     (option) =>
-                                      option.value === Data[0].is_admin
+                                      option.value === Data[0].isAdmin,
                                   )}
                                   onChange={(selectedOption) =>
                                     handleChange(
                                       {
                                         target: {
-                                          name: "is_admin",
+                                          name: 'isAdmin',
                                           value: selectedOption.value,
                                         },
                                       },
-                                      0
+                                      0,
                                     )
                                   }
                                 />

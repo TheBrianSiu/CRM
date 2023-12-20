@@ -3,12 +3,12 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { userRole } from './data';
 
 export const UserRolesContext = createContext({
-    userRoles: [],
-    error: [],
-    isLoading: [],
+  userRoles: [],
+  error: [],
+  isLoading: [],
 });
 
-export const UserRolesProvider = ({children}) => {
+export function UserRolesProvider({ children }) {
   const { user, isAuthenticated } = useAuth0();
   const [userRoles, setUserRoles] = useState([]);
   const [error, setError] = useState();
@@ -20,21 +20,20 @@ export const UserRolesProvider = ({children}) => {
         try {
           const fetchedRoles = await userRole(user.sub);
           if (Array.isArray(fetchedRoles)) {
-            const rolesArray = fetchedRoles.map(role => role.name);
+            const rolesArray = fetchedRoles.map((role) => role.name);
             setUserRoles(rolesArray);
           } else {
             setUserRoles([]);
           }
         } catch (error) {
           setError(error);
-        }
-        finally{
-            setIsloading(false);
+        } finally {
+          setIsloading(false);
         }
       }
     };
 
-    fetchUserRoles(); 
+    fetchUserRoles();
   }, [user, isAuthenticated]);
 
   return (
@@ -42,4 +41,4 @@ export const UserRolesProvider = ({children}) => {
       {children}
     </UserRolesContext.Provider>
   );
-};
+}

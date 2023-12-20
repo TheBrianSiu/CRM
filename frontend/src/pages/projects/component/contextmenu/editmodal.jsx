@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-const EditModal = ({ task, onClose }) => {
+function EditModal({ task, onClose }) {
   const [editedTitle, setEditedTitle] = useState(task.title);
   const [editedDescription, setEditedDescription] = useState(task.description);
 
@@ -13,8 +13,8 @@ const EditModal = ({ task, onClose }) => {
   };
 
   const handleSave = () => {
-    console.log("Edited Title:", editedTitle);
-    console.log("Edited Description:", editedDescription);
+    console.log('Edited Title:', editedTitle);
+    console.log('Edited Description:', editedDescription);
     onClose();
   };
 
@@ -34,6 +34,6 @@ const EditModal = ({ task, onClose }) => {
       </div>
     </div>
   );
-};
+}
 
 export default EditModal;

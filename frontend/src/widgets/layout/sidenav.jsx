@@ -1,24 +1,24 @@
-import PropTypes from "prop-types";
-import { Link, NavLink } from "react-router-dom";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import PropTypes from 'prop-types';
+import { Link, NavLink } from 'react-router-dom';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import {
   Avatar,
   Button,
   IconButton,
   Typography,
-} from "@material-tailwind/react";
-import { useMaterialTailwindController, setOpenSidenav } from "@/context";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect, useState } from "react";
-import { userpermission } from "@/data";
+} from '@material-tailwind/react';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useEffect, useState } from 'react';
+import { useMaterialTailwindController, setOpenSidenav } from '@/context';
+import { userPermission } from '@/data';
 
 export function Sidenav({ brandImg, brandName, routes }) {
   const [controller, dispatch] = useMaterialTailwindController();
   const { sidenavColor, sidenavType, openSidenav } = controller;
   const sidenavTypes = {
-    dark: "bg-gradient-to-br from-blue-gray-800 to-blue-gray-900",
-    white: "bg-white shadow-lg",
-    transparent: "bg-transparent",
+    dark: 'bg-gradient-to-br from-blue-gray-800 to-blue-gray-900',
+    white: 'bg-white shadow-lg',
+    transparent: 'bg-transparent',
   };
   const [routePermissions, setRoutePermissions] = useState([]);
   const { loginWithRedirect, logout, user, isLoading } = useAuth0();
@@ -32,12 +32,12 @@ export function Sidenav({ brandImg, brandName, routes }) {
             let hasPermission = false;
 
             if (page.permissions.length > 0) {
-              hasPermission = await userpermission(user.sub, page.permissions);
+              hasPermission = await userPermission(user.sub, page.permissions);
             } else {
               hasPermission = true;
             }
 
-            let pageName = page.name;
+            const pageName = page.name;
             if (hasPermission) {
               if (!permissions.includes(pageName)) {
                 permissions.push(pageName);
@@ -52,115 +52,113 @@ export function Sidenav({ brandImg, brandName, routes }) {
     }
   }, [routes, user]);
 
-  const renderRoutes = ({ title, pages }, key) => {
-    return (
-      <ul key={key} className="mb-4 flex flex-col gap-1">
-        {title && (
-          <li className="mx-3.5 mb-2 mt-4">
-            <Typography
-              variant="small"
-              color={sidenavType === "dark" ? "white" : "blue-gray"}
-              className="font-black uppercase opacity-75"
-            >
-              {title}
-            </Typography>
-          </li>
-        )}
-        {pages
-          .filter(({ name }) => routePermissions.includes(name))
-          .map(({ icon, name, path }) => (
-            <li key={name}>
-              <NavLink to={`${path}`}>
-                {({ isActive }) => (
-                  <Button
-                    variant={isActive ? "gradient" : "text"}
-                    color={
-                      isActive
-                        ? sidenavColor
-                        : sidenavType === "dark"
-                        ? "white"
-                        : "blue-gray"
-                    }
-                    className="flex items-center gap-4 px-4 capitalize"
-                    fullWidth
-                  >
-                    {icon}
-                    <Typography
-                      color="inherit"
-                      className="font-medium capitalize"
-                    >
-                      {name}
-                    </Typography>
-                  </Button>
-                )}
-              </NavLink>
-            </li>
-          ))}
+  const renderRoutes = ({ title, pages }, key) => (
+    <ul key={key} className="mb-4 flex flex-col gap-1">
+      {title && (
         <li className="mx-3.5 mb-2 mt-4">
           <Typography
             variant="small"
-            color={sidenavType === "dark" ? "white" : "blue-gray"}
+            color={sidenavType === 'dark' ? 'white' : 'blue-gray'}
             className="font-black uppercase opacity-75"
           >
-            Auth Page
+            {title}
           </Typography>
         </li>
-        {!isLoading && !user && (
-          <li key="signin">
-            <Button
-              variant="text"
-              color="white"
-              className="flex items-center gap-4 px-4 capitalize"
-              fullWidth
-              onClick={() => loginWithRedirect()}
-            >
-              {/* {<ArrowRightOnRectangleIcon/>} */}
-              <Typography color="inherit" className="font-medium capitalize">
-                sign in
-              </Typography>
-            </Button>
+      )}
+      {pages
+        .filter(({ name }) => routePermissions.includes(name))
+        .map(({ icon, name, path }) => (
+          <li key={name}>
+            <NavLink to={`${path}`}>
+              {({ isActive }) => (
+                <Button
+                  variant={isActive ? 'gradient' : 'text'}
+                  color={
+                    isActive
+                      ? sidenavColor
+                      : sidenavType === 'dark'
+                        ? 'white'
+                        : 'blue-gray'
+                  }
+                  className="flex items-center gap-4 px-4 capitalize"
+                  fullWidth
+                >
+                  {icon}
+                  <Typography
+                    color="inherit"
+                    className="font-medium capitalize"
+                  >
+                    {name}
+                  </Typography>
+                </Button>
+              )}
+            </NavLink>
           </li>
-        )}
-        {!isLoading && user && (
-          <li key="signout">
-            <Button
-              variant="text"
-              color="white"
-              className="flex items-center gap-4 px-4 capitalize"
-              fullWidth
-              onClick={() =>
-                logout({
-                  logoutParams: { returnTo: window.location.origin },
-                })
-              }
-            >
-              {/* {<ArrowRightOnRectangleIcon/>} */}
-              <Typography color="inherit" className="font-medium capitalize">
-                sign out
-              </Typography>
-            </Button>
-          </li>
-        )}
-      </ul>
-    );
-  };
+        ))}
+      <li className="mx-3.5 mb-2 mt-4">
+        <Typography
+          variant="small"
+          color={sidenavType === 'dark' ? 'white' : 'blue-gray'}
+          className="font-black uppercase opacity-75"
+        >
+          Auth Page
+        </Typography>
+      </li>
+      {!isLoading && !user && (
+        <li key="signin">
+          <Button
+            variant="text"
+            color="white"
+            className="flex items-center gap-4 px-4 capitalize"
+            fullWidth
+            onClick={() => loginWithRedirect()}
+          >
+            {/* {<ArrowRightOnRectangleIcon/>} */}
+            <Typography color="inherit" className="font-medium capitalize">
+              sign in
+            </Typography>
+          </Button>
+        </li>
+      )}
+      {!isLoading && user && (
+        <li key="signout">
+          <Button
+            variant="text"
+            color="white"
+            className="flex items-center gap-4 px-4 capitalize"
+            fullWidth
+            onClick={() =>
+              logout({
+                logoutParams: { returnTo: window.location.origin },
+              })
+            }
+          >
+            {/* {<ArrowRightOnRectangleIcon/>} */}
+            <Typography color="inherit" className="font-medium capitalize">
+              sign out
+            </Typography>
+          </Button>
+        </li>
+      )}
+    </ul>
+  );
 
   return (
     <aside
       className={`${sidenavTypes[sidenavType]} ${
-        openSidenav ? "translate-x-0" : "-translate-x-80"
+        openSidenav ? 'translate-x-0' : '-translate-x-80'
       } fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0`}
     >
       <div
         className={`relative border-b ${
-          sidenavType === "dark" ? "border-white/20" : "border-blue-gray-50"
+          sidenavType === 'dark' ? 'border-white/20' : 'border-blue-gray-50'
         }`}
       >
         <Link to="/" className="flex items-center gap-4 px-8 py-6">
           <Avatar src={brandImg} size="sm" />
           <Typography
             variant="h6"
-            color={sidenavType === "dark" ? "white" : "blue-gray"}
+            color={sidenavType === 'dark' ? 'white' : 'blue-gray'}
           >
             {brandName}
           </Typography>
@@ -179,7 +177,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
       <div className="m-4">
         {routes &&
           routes.map(({ title, pages }, key) =>
-            renderRoutes({ title, pages }, key)
+            renderRoutes({ title, pages }, key),
           )}
       </div>
     </aside>
@@ -187,8 +185,8 @@ export function Sidenav({ brandImg, brandName, routes }) {
 }
 
 Sidenav.defaultProps = {
-  brandImg: "/img/logo-ct.png",
-  brandName: "Scuplin CRM",
+  brandImg: '/img/logo-ct.png',
+  brandName: 'Scuplin CRM',
 };
 
 Sidenav.propTypes = {
@@ -197,6 +195,6 @@ Sidenav.propTypes = {
   routes: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-Sidenav.displayName = "/src/widgets/layout/sidnave.jsx";
+Sidenav.displayName = '/src/widgets/layout/sidnave.jsx';
 
 export default Sidenav;

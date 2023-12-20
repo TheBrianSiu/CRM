@@ -1,19 +1,18 @@
-import { Chip } from "@material-tailwind/react";
-import { deleteUser } from "@/data";
-import { Typography } from "@material-tailwind/react";
-import { formatDate, formatPhoneNumber } from "@/utils/formatting";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useNavigate } from "react-router-dom";
+import { Chip, Typography } from '@material-tailwind/react';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useNavigate } from 'react-router-dom';
+import { deleteUser } from '@/data';
+import { formatDate, formatPhoneNumber } from '@/utils/formatting';
 
 export function Table({ currentItems, Userdata }) {
   const { user } = useAuth0();
   const navigate = useNavigate();
 
   function Deleteuser(id) {
-    if (window.confirm("Do you want to delete the user?")) {
-      deleteUser(id,user.sub)
+    if (window.confirm('Do you want to delete the user?')) {
+      deleteUser(id, user.sub)
         .then(() => {
-          alert("The user is deleted");
+          alert('The user is deleted');
           window.location.reload();
         })
         .catch((error) => console.error(error));
@@ -24,7 +23,7 @@ export function Table({ currentItems, Userdata }) {
     <table className="w-full min-w-[640px] table-auto">
       <thead>
         <tr>
-          {["name", "phone number", "role", "status", "last login", ""].map(
+          {['name', 'phone number', 'role', 'status', 'last login', ''].map(
             (el) => (
               <th
                 key={el}
@@ -45,23 +44,23 @@ export function Table({ currentItems, Userdata }) {
         {currentItems.map(
           (
             {
-              user_id,
-              first_name,
-              last_name,
+              userId,
+              firstName,
+              lastName,
               email,
-              phone_number,
-              job_title,
+              phoneNumber,
+              jobTitle,
               status,
-              last_login,
+              lastLogin,
             },
             key,
           ) => {
             const className = `py-3 px-5 ${
-              key === Userdata.length - 1 ? "" : "border-b border-blue-gray-50"
+              key === Userdata.length - 1 ? '' : 'border-b border-blue-gray-50'
             }`;
-            const p_umber = formatPhoneNumber(phone_number);
+            const p_umber = formatPhoneNumber(phoneNumber);
             return (
-              <tr key={user_id}>
+              <tr key={userId}>
                 <td className={className}>
                   <div className="flex items-center gap-4">
                     <div>
@@ -70,7 +69,7 @@ export function Table({ currentItems, Userdata }) {
                         color="blue-gray"
                         className="font-semibold"
                       >
-                        {first_name + " " + last_name}
+                        {`${firstName} ${lastName}`}
                       </Typography>
                       <Typography className="text-xs font-normal text-blue-gray-500">
                         {email}
@@ -85,33 +84,33 @@ export function Table({ currentItems, Userdata }) {
                 </td>
                 <td className={className}>
                   <Typography className="text-xs font-semibold text-blue-gray-600">
-                    {job_title}
+                    {jobTitle}
                   </Typography>
                 </td>
                 <td className={className}>
                   <Chip
                     variant="gradient"
-                    color={status === "active" ? "green" : "blue-gray"}
-                    value={status === "active" ? "active" : "inactive"}
+                    color={status === 'active' ? 'green' : 'blue-gray'}
+                    value={status === 'active' ? 'active' : 'inactive'}
                     className="px-2 py-0.5 text-center text-[11px] font-medium"
                   />
                 </td>
                 <td className={className}>
                   <Typography className="text-xs font-semibold text-blue-gray-600">
-                    {last_login == null ? null : formatDate(last_login)}
+                    {lastLogin == null ? null : formatDate(lastLogin)}
                   </Typography>
                 </td>
                 <td className={className}>
                   <Typography
                     as="a"
-                    onClick={() => navigate(`edit/${user_id}`)}
+                    onClick={() => navigate(`edit/${userId}`)}
                     className="text-xs font-semibold text-blue-gray-600"
                   >
                     Edit
                   </Typography>
                   <Typography
                     as="a"
-                    onClick={() => Deleteuser(user_id)}
+                    onClick={() => Deleteuser(userId)}
                     className="text-xs font-semibold text-blue-gray-600"
                   >
                     Delete

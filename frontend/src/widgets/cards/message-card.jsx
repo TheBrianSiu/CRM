@@ -1,7 +1,7 @@
-import PropTypes from "prop-types";
-import { Avatar, Typography } from "@material-tailwind/react";
+import PropTypes from 'prop-types';
+import { Avatar, Typography } from '@material-tailwind/react';
 
-export function MessageCard({ img, name, message, action }) {
+export function messageCard({ img, name, message, action }) {
   return (
     <div className="flex items-center justify-between gap-4">
       <div className="flex items-center gap-4">
@@ -28,17 +28,17 @@ export function MessageCard({ img, name, message, action }) {
   );
 }
 
-MessageCard.defaultProps = {
+messageCard.defaultProps = {
   action: null,
 };
 
-MessageCard.propTypes = {
+messageCard.propTypes = {
   img: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   message: PropTypes.node.isRequired,
   action: PropTypes.node,
 };
 
-MessageCard.displayName = "/src/widgets/cards/message-card.jsx";
+messageCard.displayName = '/src/widgets/cards/message-card.jsx';
 
-export default MessageCard;
+export default messageCard;

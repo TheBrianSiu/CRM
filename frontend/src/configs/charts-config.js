@@ -5,7 +5,7 @@ export const chartsConfig = {
     },
   },
   title: {
-    show: "",
+    show: '',
   },
   dataLabels: {
     enabled: false,
@@ -19,9 +19,9 @@ export const chartsConfig = {
     },
     labels: {
       style: {
-        colors: "#fff",
-        fontSize: "13px",
-        fontFamily: "inherit",
+        colors: '#fff',
+        fontSize: '13px',
+        fontFamily: 'inherit',
         fontWeight: 300,
       },
     },
@@ -29,16 +29,16 @@ export const chartsConfig = {
   yaxis: {
     labels: {
       style: {
-        colors: "#fff",
-        fontSize: "13px",
-        fontFamily: "inherit",
+        colors: '#fff',
+        fontSize: '13px',
+        fontFamily: 'inherit',
         fontWeight: 300,
       },
     },
   },
   grid: {
     show: true,
-    borderColor: "#ffffff40",
+    borderColor: '#ffffff40',
     strokeDashArray: 5,
     xaxis: {
       lines: {
@@ -54,7 +54,7 @@ export const chartsConfig = {
     opacity: 0.8,
   },
   tooltip: {
-    theme: "dark",
+    theme: 'dark',
   },
 };
 

@@ -1,0 +1,14 @@
+{
+  "rules": {
+    "camelcase": ["error", { "properties": "always" }]
+    // Other rules...
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "sourceType": "module"
+},
+"ecmaFeatures": {
+  "jsx": true
+}
+  // Other ESLint configurations...
+}

@@ -1,8 +1,7 @@
-import { updatestatus } from "@/data/projects-data";
+import { updateStatus } from '@/data/projects-data';
 
 export const HandleUpdate = (id, status) => {
-  updatestatus(id, status)
-    .catch((err) => {
-      alert(err);
-    });
+  updateStatus(id, status).catch((err) => {
+    alert(err);
+  });
 };

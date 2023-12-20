@@ -1,9 +1,9 @@
-import { useNavigate } from "react-router-dom";
-import "../styles/taskmenu.css";
-import { ContextMenu, MenuItem } from "react-contextmenu";
-import { deleteProjectWithRelatedData } from "@/data/projects-data";
+import { useNavigate } from 'react-router-dom';
+import '../styles/taskmenu.css';
+import { ContextMenu, MenuItem } from 'react-contextmenu';
+import { deleteProjectWithRelatedData } from '@/data/projects-data';
 
-const TaskMenu = ({ task }) => {
+function TaskMenu({ task }) {
   // const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -19,12 +19,12 @@ const TaskMenu = ({ task }) => {
 
   return (
     <div>
-      <ContextMenu id={`contextmenu-${task.project_id}`}>
-        <MenuItem onClick={() => handleEditRedirect(task.project_id)}>
+      <ContextMenu id={`contextmenu-${task.projectId}`}>
+        <MenuItem onClick={() => handleEditRedirect(task.projectId)}>
           <span aria-label="Edit">✏️</span>
           <span>Edit</span>
         </MenuItem>
-        <MenuItem onClick={() => deleteProjectWithRelatedData(task.project_id)}>
+        <MenuItem onClick={() => deleteProjectWithRelatedData(task.projectId)}>
           <span aria-label="Delete">🗑️</span>
           <span>Delete</span>
         </MenuItem>
@@ -34,6 +34,6 @@ const TaskMenu = ({ task }) => {
       )} */}
     </div>
   );
-};
+}
 
 export default TaskMenu;

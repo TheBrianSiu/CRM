@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { useDrag } from "react-dnd";
-import TaskMenu from "../contextmenu/taskmenu";
-import { getEmptyImage } from "react-dnd-html5-backend";
-import { ContextMenuTrigger } from "react-contextmenu";
+import React, { useState, useEffect } from 'react';
+import { useDrag } from 'react-dnd';
+import { getEmptyImage } from 'react-dnd-html5-backend';
+import { ContextMenuTrigger } from 'react-contextmenu';
+import TaskMenu from '../contextmenu/taskmenu';
 
 export function Taskitems({ task, columnId }) {
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
 
   const [{ isDragging }, drag, preview] = useDrag({
-    type: "task",
-    item: task ? { taskId: task.project_id, columnId } : null,
+    type: 'task',
+    item: task ? { taskId: task.projectId, columnId } : null,
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -26,16 +26,16 @@ export function Taskitems({ task, columnId }) {
   }
 
   return (
-    <ContextMenuTrigger id={`contextmenu-${task.project_id}`}>
+    <ContextMenuTrigger id={`contextmenu-${task.projectId}`}>
       <div
         ref={(node) => drag(node)}
         className={`rounded-lg border p-4 shadow-md ${
-          isDragging ? "opacity-50" : ""
+          isDragging ? 'opacity-50' : ''
         }`}
         onClick={() => setIsContextMenuOpen(!isContextMenuOpen)}
       >
         <header className="grid grid-cols-3">
-          <div className="col-span-2 text-sm font-bold">{task.task_name}</div>
+          <div className="col-span-2 text-sm font-bold">{task.taskname}</div>
           <TaskMenu task={task} />
         </header>
         <section>

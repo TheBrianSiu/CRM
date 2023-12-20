@@ -1,15 +1,15 @@
-import { deleteProjectWithRelatedData } from "@/data";
-import { formatNumber } from "@/utils";
-import { Typography, Chip } from "@material-tailwind/react";
-import { useNavigate } from "react-router-dom";
+import { Typography, Chip } from '@material-tailwind/react';
+import { useNavigate } from 'react-router-dom';
+import { deleteProjectWithRelatedData } from '@/data';
+import { formatNumber } from '@/utils';
 
 export function Table({ currentItems, tasks }) {
   const navigate = useNavigate();
   function deleteProject(id) {
-    if (window.confirm("Do you want to delete this item?")) {
+    if (window.confirm('Do you want to delete this item?')) {
       deleteProjectWithRelatedData(id)
         .then(() => {
-          alert("The task is deleted");
+          alert('The task is deleted');
         })
         .catch((error) => console.error(error));
     }
@@ -21,12 +21,12 @@ export function Table({ currentItems, tasks }) {
         <thead>
           <tr>
             {[
-              "Tasks",
-              "Assignees",
-              "Estimated value",
-              "Lead Status",
-              "Priority",
-              "Action",
+              'Tasks',
+              'Assignees',
+              'Estimated value',
+              'Lead Status',
+              'Priority',
+              'Action',
             ].map((el) => (
               <th
                 key={el}
@@ -46,21 +46,21 @@ export function Table({ currentItems, tasks }) {
           {currentItems.map(
             (
               {
-                project_id,
-                task_name,
+                projectId,
+                taskname,
                 assignees,
                 description,
-                est_value,
-                lead_status,
+                estValue,
+                leadStatus,
                 priority,
               },
               key,
             ) => {
               const className = `py-3 px-5 ${
-                key === tasks.length - 1 ? "" : "border-b border-blue-gray-50"
+                key === tasks.length - 1 ? '' : 'border-b border-blue-gray-50'
               }`;
               return (
-                <tr key={project_id}>
+                <tr key={projectId}>
                   <td className={className}>
                     <div className="flex items-center gap-4">
                       <div>
@@ -69,7 +69,7 @@ export function Table({ currentItems, tasks }) {
                           color="blue-gray"
                           className="font-semibold"
                         >
-                          {task_name}
+                          {taskname}
                         </Typography>
                         <Typography className="text-xs font-normal text-blue-gray-500">
                           {description}
@@ -81,35 +81,34 @@ export function Table({ currentItems, tasks }) {
                     <Typography className="text-xs font-semibold text-blue-gray-600">
                       {assignees.map((user, index) => (
                         <span key={user.assignee_id}>
-                          {user.first_name}
-                          {index !== assignees.length - 1 && ", "}
+                          {user.firstName}
+                          {index !== assignees.length - 1 && ', '}
                         </span>
                       ))}
                     </Typography>
                   </td>
                   <td className={className}>
                     <Typography className="text-xs font-semibold text-blue-gray-600">
-                      {"$"}
-                      {formatNumber(est_value)}
+                      ${formatNumber(estValue)}
                     </Typography>
                   </td>
                   <td className={className}>
                     <Chip
                       variant="gradient"
                       color={
-                        lead_status === "new"
-                          ? "gray"
-                          : lead_status === "prospect"
-                          ? "green"
-                          : lead_status === "proposal"
-                          ? "yellow"
-                          : lead_status === "won"
-                          ? "amber"
-                          : lead_status === "lost"
-                          ? "red"
-                          : "orange"
+                        leadStatus === 'new'
+                          ? 'gray'
+                          : leadStatus === 'prospect'
+                            ? 'green'
+                            : leadStatus === 'proposal'
+                              ? 'yellow'
+                              : leadStatus === 'won'
+                                ? 'amber'
+                                : leadStatus === 'lost'
+                                  ? 'red'
+                                  : 'orange'
                       }
-                      value={lead_status}
+                      value={leadStatus}
                       className="px-2 py-0.5 text-center text-[11px] font-medium"
                     />
                   </td>
@@ -121,14 +120,14 @@ export function Table({ currentItems, tasks }) {
                   <td className={className}>
                     <Typography
                       as="a"
-                      onClick={() => navigate(`edit/${project_id}`)}
+                      onClick={() => navigate(`edit/${projectId}`)}
                       className="text-xs font-semibold text-blue-gray-600"
                     >
                       Edit
                     </Typography>
                     <Typography
                       as="a"
-                      onClick={() => deleteProject(project_id)}
+                      onClick={() => deleteProject(projectId)}
                       className="text-xs font-semibold text-blue-gray-600"
                     >
                       Delete

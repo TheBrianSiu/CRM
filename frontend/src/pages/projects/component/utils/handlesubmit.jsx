@@ -1,8 +1,7 @@
-import { addprojects } from "@/data/projects-data";
+import { addProjects } from '@/data/projects-data';
 
 export const HandleSubmit = (taskitem) => {
-  addprojects(taskitem)
-    .catch((err) => {
-      alert(err);
-    });
+  addProjects(taskitem).catch((err) => {
+    alert(err);
+  });
 };
