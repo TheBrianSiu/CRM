@@ -39,7 +39,7 @@ export function Usersprofile() {
 
   const supervisorOptions = Users.map((user) => ({
     value: user.userId,
-    label: `${user.firstName} ${user.lastName}`,
+    label: `${user.first_name} ${user.last_name}`,
   }));
 
   // change password request

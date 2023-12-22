@@ -81,7 +81,7 @@ export function Table({ currentItems, tasks }) {
                     <Typography className="text-xs font-semibold text-blue-gray-600">
                       {assignees.map((user, index) => (
                         <span key={user.assignee_id}>
-                          {user.firstName}
+                          {user.first_name}
                           {index !== assignees.length - 1 && ', '}
                         </span>
                       ))}

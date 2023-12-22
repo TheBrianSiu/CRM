@@ -154,7 +154,7 @@ export function ProjectsProfile() {
                   />
                   <div>
                     <Typography variant="h5" color="blue-gray" className="mb-1">
-                      {task.taskname}
+                      {task.task_name}
                     </Typography>
                     <Typography
                       variant="small"
@@ -195,7 +195,7 @@ export function ProjectsProfile() {
                                 id="taskname"
                                 autoComplete="taskname"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={Data[0].taskname}
+                                value={Data[0].task_name}
                                 onChange={(e) => handleChange(e, 0)}
                                 required
                               />
@@ -232,8 +232,8 @@ export function ProjectsProfile() {
                                 id="duedate"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 value={
-                                  Data[0].duedate
-                                    ? Data[0].duedate.split('T')[0]
+                                  Data[0].due_date
+                                    ? Data[0].due_date.split('T')[0]
                                     : ''
                                 }
                                 onChange={(e) => handleChange(e, 0)}
@@ -288,7 +288,7 @@ export function ProjectsProfile() {
                                 id="estValue"
                                 autoComplete="estValue"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={Data[0].estValue}
+                                value={Data[0].est_value}
                                 onChange={(e) => handleChange(e, 0)}
                               />
                             </div>
@@ -307,7 +307,7 @@ export function ProjectsProfile() {
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 value={taskstatusOptions.find(
                                   (option) =>
-                                    option.value === Data[0].leadStatus,
+                                    option.value === Data[0].lead_status,
                                 )}
                                 onChange={(selectedOption) =>
                                   handleChange(
@@ -365,7 +365,7 @@ export function ProjectsProfile() {
                                 isMulti
                                 options={User.map((user) => ({
                                   value: user.userId,
-                                  label: `${user.firstName} ${user.lastName}`,
+                                  label: `${user.first_name} ${user.last_name}`,
                                 }))}
                                 value={selectedUsers}
                                 onChange={setSelectedUsers}
@@ -384,7 +384,7 @@ export function ProjectsProfile() {
                                 isMulti
                                 options={Cust.map((cust) => ({
                                   value: cust.id,
-                                  label: `${cust.firstName} ${cust.lastName}`,
+                                  label: `${cust.first_name} ${cust.last_name}`,
                                 }))}
                                 value={selectedCust}
                                 onChange={setSelectedCust}
