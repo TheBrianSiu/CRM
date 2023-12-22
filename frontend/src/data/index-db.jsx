@@ -3,7 +3,6 @@ import { fetchProjects } from '@/data/projects-data';
 import { retrieveData } from './users-data';
 import { retrieveCustomers } from './customers-data';
 
-
 // projects
 export const fetchDataAndStoreLocal = async () => {
   const data = await fetchProjects();

@@ -26,6 +26,9 @@ export function formatDaterange(date) {
 }
 
 export function formatNumber(number) {
+  if (typeof number !== 'number' || isNaN(number)) {
+    return 'N/A';
+  }
   if (number >= 1000000000) {
     return `${(number / 1000000000).toFixed(1)} billion`;
   }

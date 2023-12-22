@@ -19,10 +19,10 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { StatisticsCard } from '@/widgets/cards';
 import { StatisticsChart } from '@/widgets/charts';
 import {
-  fetchSalesRecords,
   fetchProjectTable,
   fetchProjectCompletion,
   fetchChartsData,
+  fetchSalesRecords,
 } from '@/data';
 import { formatDaterange, formatNumber } from '@/utils/formatting';
 
