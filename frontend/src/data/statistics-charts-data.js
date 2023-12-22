@@ -1,5 +1,6 @@
 import { API_URL } from '@/settings';
 import { makeApiRequest } from './main-api';
+import { isCachedDataValid, statisticsChartCacheData } from './local-cache';
 
 const API_BASE_URL = API_URL;
 
@@ -55,6 +56,13 @@ function createChart(data, type, name, categoryLabels, itemKey) {
 
 export async function fetchChartsData(year, setStatisticsChartsData, userid) {
   try {
+
+    const cachedSalesData = JSON.parse(localStorage.getItem('chartData'));
+
+    if (isCachedDataValid(cachedSalesData)) {
+      setStatisticsChartsData(cachedSalesData.data);
+    }
+
     const [projectData, salesData, clientsData] = await Promise.all([
       fetchMonthlyProjectData(userid),
       fetchMonthlySalesData(userid),
@@ -107,6 +115,7 @@ export async function fetchChartsData(year, setStatisticsChartsData, userid) {
     ];
 
     setStatisticsChartsData(statisticsChartsData);
+    statisticsChartCacheData(statisticsChartsData);
   } catch (error) {
     console.error(error);
   }

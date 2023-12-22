@@ -4,6 +4,18 @@ import {
   ChartBarIcon,
 } from '@heroicons/react/24/solid';
 import { createStatisticsCard } from './statiscard-data';
+import { cacheExpirationTime } from '@/settings';
+const EXPIRATION_TIME = cacheExpirationTime;
+
+export function isCachedDataValid(cachedData) {
+  return (
+    cachedData &&
+    cachedData.timestamp &&
+    Date.now() - cachedData.timestamp < EXPIRATION_TIME &&
+    cachedData.data &&
+    Array.isArray(cachedData.data)
+  );
+}
 
 export function prepareStatisticsCardsFromCache(cachedData, formatNumber) {
   const statisticsCards = cachedData.data.map((item, index) => {
@@ -48,8 +60,13 @@ export function prepareStatisticsCardsFromCache(cachedData, formatNumber) {
   return statisticsCards;
 }
 
-export function cacheData(data) {
+export function statisticsCardsCacheData(data) {
   const cacheData = data.map((card) => [card.footer.value, card.value]);
   const dataToCache = { data: cacheData, timestamp: Date.now() };
   localStorage.setItem('salesData', JSON.stringify(dataToCache));
+}
+
+export function statisticsChartCacheData(data) {
+  const dataToCache = { data: data, timestamp: Date.now() };
+  localStorage.setItem('chartData', JSON.stringify(dataToCache));
 }

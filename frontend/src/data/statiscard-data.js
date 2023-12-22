@@ -3,12 +3,11 @@ import {
   UserPlusIcon,
   ChartBarIcon,
 } from '@heroicons/react/24/solid';
-import { API_URL, cacheExpirationTime } from '@/settings';
+import { API_URL } from '@/settings';
 import { makeApiRequest } from './main-api';
-import { cacheData, prepareStatisticsCardsFromCache } from './local-cache';
+import { statisticsCardsCacheData, prepareStatisticsCardsFromCache, isCachedDataValid } from './local-cache';
 
 const API_BASE_URL = API_URL;
-const EXPIRATION_TIME = cacheExpirationTime;
 
 export async function fetchSalesRecords(
   formattedStartOfMonth,
@@ -91,21 +90,10 @@ export async function fetchSalesRecords(
     setStatisticsCardsData(statisticsCards);
 
     // Cache the data
-    cacheData(statisticsCards);
+    statisticsCardsCacheData(statisticsCards);
   } catch (error) {
     console.error(error);
   }
-}
-
-function isCachedDataValid(cachedData) {
-  return (
-    cachedData &&
-    cachedData.timestamp &&
-    Date.now() - cachedData.timestamp < EXPIRATION_TIME &&
-    cachedData.data &&
-    Array.isArray(cachedData.data) &&
-    cachedData.data.length === 4
-  );
 }
 
 function prepareStatisticsCards(
