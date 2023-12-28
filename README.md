@@ -1,142 +1,82 @@
-# CRM (Customer Relationship Management) System
+# Scuplin CRM System
 
-CRM is a Customer Relationship Management system that helps businesses manage their interactions and relationships with customers. This system is designed to streamline customer-related processes, improve communication, and enhance customer satisfaction.
+## Overview
 
-![CRM Demo](link-to-demo-screenshot-or-gif)
-
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Features](#features)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
-
-## Introduction
-
-The CRM system is a powerful tool for businesses to manage customer data, track interactions, and optimize their customer service. It provides a centralized platform for storing customer information, managing leads, and tracking sales opportunities.
+Welcome to your Customer Relationship Management (CRM) system! This CRM is designed to streamline and enhance your business processes by providing intuitive interfaces for managing projects, sales records, customers, and users. It leverages modern technologies, including React for the frontend, Node.js and Express for the backend, MySQL for the database, and Auth0 for secure authentication.
 
 ## Features
 
-- Customer Data Management
-- Lead Tracking
-- Opportunity Management
-- Communication History
-- Sales Pipeline Visualization
-- Reports and Analytics
+1. Real-time Dashboard
+The CRM features a dynamic dashboard that provides real-time data on new projects and sales records. Monitor key metrics at a glance and stay informed about the latest developments in your business.
 
-## Getting Started
+2. Customer Management
+Efficiently manage your customer relationships with a user-friendly interface. Perform standard operations such as adding, editing, deleting, and modifying customer information. Keep your customer data organized and accessible.
 
-Follow these steps to set up the CRM system locally for development or testing purposes.
+3. User Management
+Administer user accounts seamlessly. The system allows standard user management operations, including adding, editing, deleting, and modifying user details. Ensure that your team has the right access to the CRM functionalities.
 
-### Prerequisites
+4. Project Management with Drag and Drop
+Track the progress of projects effortlessly with an intuitive project management interface. Utilize the drag and drop feature to switch between different project statuses, such as New, Close, and Proposal. Stay on top of your project pipeline with ease.
 
-Before you begin, make sure you have the following software installed:
+## Demo Access:
+To explore the CRM system, you can access our live demo at Your Demo Link.
 
-- Node.js (version x.x.x)
-- MongoDB (version x.x.x)
+Demo Credentials:
 
-### Installation
+Username: testing@gmail.com
+Password: Aa123456
+Please note that this demo account is for exploration purposes only, and any data entered may be periodically reset.
 
-1. Clone this repository:
+## Getting Started with the Demo:
+1. Visit Your Demo Link.
 
-git clone https://github.com/TheBrianSiu/CRM.git
+2. Click on the "Login" button.
 
-css
-Copy code
+3. Use the provided demo credentials to log in.
 
-2. Change to the project directory:
+## Technologies Used
 
-cd CRM
+### Frontend:
+- React: A JavaScript library for building user interfaces.
+- Drag and Drop: Enhance project management with an intuitive drag-and-drop interface.
+### Backend:
+- Node.js: A runtime environment for executing JavaScript code on the server.
+- Express: A web application framework for Node.js to build robust APIs.
+### Database:
+- MySQL: A relational database management system for storing and retrieving data.
+### Authentication:
+- Auth0: A robust authentication and authorization platform to secure user access.
+Getting Started
 
-markdown
-Copy code
-
-3. Install dependencies:
-
+## Clone the Repository:
+```
+git clone https://github.com/TheBrianSiu/CRM
+```
+```
+cd your-crm-repo
+```
+Install Dependencies:
+```
 npm install
+```
+## Configure Auth0:
+Set up your Auth0 account and configure the necessary credentials.
+Update Auth0 configuration in the backend to enable secure authentication.
 
-csharp
-Copy code
+## Configure MySQL Database:
+Create a MySQL database and configure the connection details in the backend.
 
-4. Configure the application by copying the example configuration file:
-
-cp config.example.js config.js
-
-csharp
-Copy code
-
-Customize the configuration file as needed.
-
-5. Start the application:
-
+## Run the Application:
+```
 npm start
+```
 
-less
-Copy code
+The application will be accessible at http://localhost:3000 by default.
+Contributing
 
-The CRM system will be accessible at `http://localhost:3000`.
-
-## Usage
-
-To use the CRM system, follow these steps:
-
-1. Visit `http://localhost:3000` in your web browser.
-
-2. Log in with your credentials or create a new account.
-
-3. Explore the dashboard, manage customer data, track leads, and utilize the various features provided by the CRM.
-
-## Project Structure
-
-The project is organized into several folders and files. Here's an overview of the project structure:
-
-- **frontend/**: Contains the frontend code for the CRM system.
-- **backend/**: Contains the backend code, including APIs and database configurations.
-- **config.js**: Configuration file for the CRM system.
-- **server.js**: Entry point for the Node.js server.
-- **LICENSE.md**: License information for the project.
-
-You can find more details about each folder and its contents in their respective README files.
-
-## Contributing
-
-We welcome contributions to improve the CRM system. If you would like to contribute, please follow these guidelines:
-
-1. Fork the repository.
-
-2. Create a new branch for your feature or bug fix:
-
-git checkout -b feature/your-feature-name
-
-markdown
-Copy code
-
-3. Make your changes and commit them:
-
-git commit -m "Add your commit message here"
-
-css
-Copy code
-
-4. Push your changes to your forked repository:
-
-git push origin feature/your-feature-name
-
-csharp
-Copy code
-
-5. Create a pull request on the main repository, explaining your changes and their purpose.
+We welcome contributions to enhance and improve the CRM system. Feel free to submit bug reports, feature requests, or contribute directly by creating pull requests.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This CRM system is licensed under the MIT License.
 
-## Acknowledgments
-
-- Mention any individuals or projects that inspired or assisted in the development of this CRM system.
