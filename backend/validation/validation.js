@@ -4,34 +4,34 @@ const validator = require('validator');
 const validateCustomer = (customerData) => {
   const errors = [];
 
-  if (!customerData.firstName || validator.isEmpty(customerData.firstName)) {
+  if (!customerData.first_name || validator.isEmpty(customerData.first_name)) {
     errors.push('First name is required');
   }
-  if (!customerData.lastName || validator.isEmpty(customerData.lastName)) {
+  if (!customerData.last_name || validator.isEmpty(customerData.last_name)) {
     errors.push('Last name is required');
   }
   if (!customerData.email || !validator.isEmail(customerData.email)) {
     errors.push('Email is not valid');
   }
-  if (!customerData.phoneNumber || !validator.isMobilePhone(customerData.phoneNumber, 'any', { strictMode: false })) {
+  if (!customerData.phone_number || !validator.isMobilePhone(customerData.phone_number, 'any', { strictMode: false })) {
     errors.push('Phone number is not valid');
   }
-  if (!customerData.addressCity || validator.isEmpty(customerData.addressCity)) {
+  if (!customerData.address_city || validator.isEmpty(customerData.address_city)) {
     errors.push('City is required');
   }
-  if (!customerData.addressCountry || validator.isEmpty(customerData.addressCountry)) {
+  if (!customerData.address_country || validator.isEmpty(customerData.address_country)) {
     errors.push('Country is required');
   }
-  if (!customerData.addressState || validator.isEmpty(customerData.addressState)) {
+  if (!customerData.address_state || validator.isEmpty(customerData.address_state)) {
     errors.push('State is required');
   }
-  if (!customerData.addressStreet || validator.isEmpty(customerData.addressStreet)) {
+  if (!customerData.address_street || validator.isEmpty(customerData.address_street)) {
     errors.push('Street address is required');
   }
-  if (!customerData.addressZipCode || validator.isEmpty(customerData.addressZipCode)) {
+  if (!customerData.address_zip_code || validator.isEmpty(customerData.address_zip_code)) {
     errors.push('Zip code is required');
   }
-  if (!customerData.assignedAgent || validator.isEmpty(customerData.assignedAgent)) {
+  if (!customerData.assigned_agent || validator.isEmpty(customerData.assigned_agent)) {
     errors.push('Assigned agent is required');
   }
   if (!customerData.bathrooms || !validator.isInt(customerData.bathrooms.toString(), { min: 0 })) {
@@ -43,16 +43,16 @@ const validateCustomer = (customerData) => {
   if (!customerData.budget || !validator.isDecimal(customerData.budget.toString(), { min: 0 })) {
     errors.push('Budget must be a non-negative decimal number');
   }
-  if (!customerData.financingOption || validator.isEmpty(customerData.financingOption)) {
+  if (!customerData.financing_option || validator.isEmpty(customerData.financing_option)) {
     errors.push('Financing option is required');
   }
-  if (!customerData.leadSource || validator.isEmpty(customerData.leadSource)) {
+  if (!customerData.lead_source || validator.isEmpty(customerData.lead_source)) {
     errors.push('Lead source is required');
   }
-  if (!customerData.locationPreference || validator.isEmpty(customerData.locationPreference)) {
+  if (!customerData.location_preference || validator.isEmpty(customerData.location_preference)) {
     errors.push('Location preference is required');
   }
-  if (!customerData.propertyType || validator.isEmpty(customerData.propertyType)) {
+  if (!customerData.property_type || validator.isEmpty(customerData.property_type)) {
     errors.push('Property type is required');
   }
   if (!customerData.timeline || validator.isEmpty(customerData.timeline)) {
@@ -60,7 +60,7 @@ const validateCustomer = (customerData) => {
   }
 
   if (errors.length > 0) {
-    return { isValid: false, errors };
+    return { isValid: false, errors: errors };
   }
 
   return { isValid: true };
@@ -71,16 +71,16 @@ const validateCustomer = (customerData) => {
 const validateUser = (userData) => {
   const errors = [];
 
-  if (!userData.firstName || !validator.isAlpha(userData.firstName, 'en-US', { ignore: ' ' })) {
+  if (!userData.first_name || !validator.isAlpha(userData.first_name, 'en-US', { ignore: ' ' })) {
     errors.push('First name is required and should contain only alphabetic characters');
   }
-  if (!userData.lastName || !validator.isAlpha(userData.lastName, 'en-US', { ignore: ' ' })) {
+  if (!userData.last_name || !validator.isAlpha(userData.last_name, 'en-US', { ignore: ' ' })) {
     errors.push('Last name is required and should contain only alphabetic characters');
   }
   if (!userData.email || !validator.isEmail(userData.email)) {
     errors.push('Email is not valid');
   }
-  if (!userData.phoneNumber || !validator.isMobilePhone(userData.phoneNumber, 'any', { strictMode: false })) {
+  if (!userData.phone_number || !validator.isMobilePhone(userData.phone_number, 'any', { strictMode: false })) {
     errors.push('Phone number is not valid');
   }
   if (!userData.address || validator.isEmpty(userData.address)) {
@@ -89,20 +89,20 @@ const validateUser = (userData) => {
   if (!userData.department || validator.isEmpty(userData.department)) {
     errors.push('Department is required');
   }
-  if (!userData.jobTitle || validator.isEmpty(userData.jobTitle)) {
+  if (!userData.job_title || validator.isEmpty(userData.job_title)) {
     errors.push('Job title is required');
   }
   if (!userData.status || !['active', 'inactive'].includes(userData.status)) {
-    errors.push('Status must be either active or inactive');
+    errors.push('Status must be either active or inative');
   }
-  if (!userData.isAdmin || !['yes', 'no'].includes(userData.isAdmin)) {
-    errors.push('Admin option must be either Yes or No');
+  if (!userData.is_admin || !['yes', 'no'].includes(userData.is_admin)) {
+    errors.push('admin option must be either Yes or No');
   }
   if (userData.username && !validator.isAlphanumeric(userData.username, 'en-US')) {
     errors.push('Username is required and should contain only alphanumeric characters');
   }
   if (errors.length > 0) {
-    return { isValid: false, errors };
+    return { isValid: false, errors: errors };
   }
 
   return { isValid: true };
@@ -112,18 +112,18 @@ const validateUser = (userData) => {
 const validateProject = (custData) => {
   const errors = [];
 
-  if (!custData.taskName || !validator.isAlpha(custData.taskName, 'en-US', { ignore: ' ' })) {
+  if (!custData.task_name || !validator.isAlpha(custData.task_name, 'en-US', { ignore: ' ' })) {
     errors.push('Task name is required and should contain only alphabetic characters');
   }
-  if (custData.estHours && (!validator.isNumeric(custData.estHours.toString()) || custData.estHours < 0)) {
+  if (custData.est_hours && !validator.isNumeric(custData.est_hours.toString()) || custData.est_hours && custData.est_hours < 0) {
     errors.push('Estimated hours should be a numeric value and greater than zero');
   }
-  if (custData.estValue && (!validator.isNumeric(custData.estValue.toString()) || custData.estValue < 0)) {
+  if (custData.est_value && !validator.isNumeric(custData.est_value.toString()) || custData.est_value && custData.est_value < 0) {
     errors.push('Estimated value should be a numeric value and greater than zero');
   }
 
   if (errors.length > 0) {
-    return { isValid: false, errors };
+    return { isValid: false, errors: errors };
   }
 
   return { isValid: true };

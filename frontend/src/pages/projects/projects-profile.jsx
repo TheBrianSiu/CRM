@@ -41,15 +41,15 @@ export function ProjectsProfile() {
 
       updateProjects(id, taskData)
         .then(() => {
-          const generatedid = id;
-          removeAssignees(generatedid);
-          deleteCustomer(generatedid);
+          const generatedId = id;
+          removeAssignees(generatedId);
+          deleteCustomer(generatedId);
 
           if (selectedUsers.length > 0) {
-            handleSelectedUsers(generatedid);
+            handleSelectedUsers(generatedId);
           }
           if (selectedCust.length > 0) {
-            handleSelectedCust(generatedid);
+            handleSelectedCust(generatedId);
           }
 
           alert('The task is updated successfully!');
@@ -62,9 +62,9 @@ export function ProjectsProfile() {
   };
 
   // conditional submit
-  function handleSelectedUsers(generatedid) {
+  function handleSelectedUsers(generatedId) {
     const userProjectData = selectedUsers.map((user) => ({
-      projectId: generatedid,
+      project_id: generatedId,
       assignee_id: user.value,
     }));
 
@@ -83,7 +83,7 @@ export function ProjectsProfile() {
   // conditional submit
   function handleSelectedCust(generatedid) {
     const custProjectData = selectedCust.map((cust) => ({
-      projectId: generatedid,
+      project_id: generatedid,
       customer_id: cust.value,
     }));
 
@@ -364,7 +364,7 @@ export function ProjectsProfile() {
                                 components={animatedComponents}
                                 isMulti
                                 options={User.map((user) => ({
-                                  value: user.userId,
+                                  value: user.user_id,
                                   label: `${user.first_name} ${user.last_name}`,
                                 }))}
                                 value={selectedUsers}

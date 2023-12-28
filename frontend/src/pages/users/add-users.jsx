@@ -1,11 +1,6 @@
 import {
   Card,
   CardBody,
-  Avatar,
-  Typography,
-  Tabs,
-  TabsHeader,
-  Tab,
   Button,
 } from '@material-tailwind/react';
 import Select from 'react-select';
@@ -20,16 +15,17 @@ export function Addusers() {
   const { user } = useAuth0();
   const animatedComponents = makeAnimated();
   const [Data, setData] = useState({
-    username: null,
-    firstName: null,
-    lastName: null,
+    user_name: null,
+    first_name: null,
+    last_name: null,
     email: null,
-    phoneNumber: null,
-    jobTitle: null,
+    phone_number: null,
+    job_title: null,
     department: null,
     status: '',
     address: '',
-    isAdmin: '0',
+    is_admin: '0',
+    is_deleted: '0',
     password: null,
     confirm_password: null,
     supervisor_id: '',
@@ -39,8 +35,8 @@ export function Addusers() {
   const navigate = useNavigate();
 
   const supervisorOptions = Users.map((user) => ({
-    value: user.userId,
-    label: `${user.firstName} ${user.lastName}`,
+    value: user.user_id,
+    label: `${user.first_name} ${user.last_name}`,
   }));
 
   const handleChange = (e) => {
@@ -142,11 +138,11 @@ export function Addusers() {
                           </label>
                           <input
                             type="text"
-                            name="firstName"
+                            name="first_name"
                             id="firstName"
                             autoComplete="given-name"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.firstName || ''}
+                            value={Data.first_name || ''}
                             onChange={handleChange}
                             placeholder="Enter first name"
                             required
@@ -162,11 +158,11 @@ export function Addusers() {
                           </label>
                           <input
                             type="text"
-                            name="lastName"
+                            name="last_name"
                             id="lastName"
                             autoComplete="family-name"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.lastName || ''}
+                            value={Data.last_name || ''}
                             onChange={handleChange}
                             placeholder="Enter last name"
                             required
@@ -182,11 +178,11 @@ export function Addusers() {
                           </label>
                           <input
                             type="text"
-                            name="username"
+                            name="user_name"
                             id="username"
                             autoComplete="username"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.username || ''}
+                            value={Data.user_name || ''}
                             onChange={handleChange}
                             placeholder="Enter username"
                             required
@@ -202,11 +198,11 @@ export function Addusers() {
                           </label>
                           <input
                             type="tel"
-                            name="phoneNumber"
+                            name="phone_number"
                             id="phoneNumber"
                             autoComplete="phoneNumber"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.phoneNumber || ''}
+                            value={Data.phone_number || ''}
                             onChange={handleChange}
                             placeholder="999-999-999"
                             pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
@@ -283,11 +279,11 @@ export function Addusers() {
                           </label>
                           <input
                             type="text"
-                            name="jobTitle"
+                            name="job_title"
                             id="jobTitle"
                             autoComplete="jobTitle"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.jobTitle || ''}
+                            value={Data.job_title || ''}
                             onChange={handleChange}
                             placeholder="Enter job title"
                             required
@@ -408,17 +404,17 @@ export function Addusers() {
                           </label>
                           <Select
                             id="isAdmin"
-                            name="admin"
+                            name="is_admin"
                             options={adminOptions}
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             value={adminOptions.find(
-                              (option) => option.value === Data.isAdmin,
+                              (option) => option.value === Data.is_admin,
                             )}
                             onChange={(selectedOption) =>
                               handleChange(
                                 {
                                   target: {
-                                    name: 'isAdmin',
+                                    name: 'is_admin',
                                     value: selectedOption.value,
                                   },
                                 },

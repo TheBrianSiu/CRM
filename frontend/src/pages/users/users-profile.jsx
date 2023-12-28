@@ -32,7 +32,6 @@ export function Usersprofile() {
   const [Users, setUsers] = useState([]);
   const [Data, setData] = useState([]);
   const [initialUsername, setInitialUsername] = useState('');
-  const [Errors, setErrors] = useState({});
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth0();
@@ -420,13 +419,13 @@ export function Usersprofile() {
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                   value={adminOptions.find(
                                     (option) =>
-                                      option.value === Data[0].isAdmin,
+                                      option.value === Data[0].is_admin,
                                   )}
                                   onChange={(selectedOption) =>
                                     handleChange(
                                       {
                                         target: {
-                                          name: 'isAdmin',
+                                          name: 'is_admin',
                                           value: selectedOption.value,
                                         },
                                       },

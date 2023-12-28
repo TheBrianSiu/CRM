@@ -23,27 +23,28 @@ export function Addcustomers() {
   const { user } = useAuth0();
   const [Data, setData] = useState([
     {
-      firstName: '',
-      lastName: '',
-      phoneNumber: '',
+      first_name: '',
+      last_name: '',
+      phone_number: '',
       email: '',
-      propertyType: '',
-      locationPreference: '',
+      property_type: '',
+      location_preference: '',
       bedrooms: '',
       bathrooms: '',
       budget: '',
-      financingOption: '',
+      financing_option: '',
       timeline: '',
       notes: '',
-      leadSource: '',
+      lead_source: '',
       status: '',
-      assignedAgent: '',
+      assigned_agent: '',
       img: '',
-      addressCountry: '',
-      addressStreet: '',
-      addressZipCode: '',
-      addressCity: '',
-      addressState: '',
+      address_country: '',
+      address_street: '',
+      address_zip_code: '',
+      address_city: '',
+      address_state: '',
+      is_deleted: '0',
     },
   ]);
   const navigate = useNavigate();
@@ -96,13 +97,13 @@ export function Addcustomers() {
                   />
                   <div>
                     <Typography variant="h5" color="blue-gray" className="mb-1">
-                      {customer.firstName} {customer.lastName}
+                      {customer.first_name} {customer.last_name}
                     </Typography>
                     <Typography
                       variant="small"
                       className="font-normal text-blue-gray-600"
                     >
-                      {customer.addressCity},{customer.addressState}
+                      {customer.address_city},{customer.address_state}
                     </Typography>
                   </div>
                 </div>
@@ -151,11 +152,11 @@ export function Addcustomers() {
                               </label>
                               <input
                                 type="text"
-                                name="firstName"
+                                name="first_name"
                                 id="firstName"
                                 autoComplete="given-name"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={customer.firstName}
+                                value={customer.first_name}
                                 onChange={(e) => handleChange(e, index)}
                               />
                             </div>
@@ -169,11 +170,11 @@ export function Addcustomers() {
                               </label>
                               <input
                                 type="text"
-                                name="lastName"
+                                name="last_name"
                                 id="lastName"
                                 autoComplete="family-name"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={customer.lastName}
+                                value={customer.last_name}
                                 onChange={(e) => handleChange(e, index)}
                               />
                             </div>
@@ -205,11 +206,11 @@ export function Addcustomers() {
                               </label>
                               <input
                                 type="tel"
-                                name="phoneNumber"
+                                name="phone_number"
                                 id="phoneNumber"
                                 autoComplete="phoneNumber"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={customer.phoneNumber}
+                                value={customer.phone_number}
                                 onChange={(e) => handleChange(e, index)}
                                 placeholder="999-999-999"
                                 pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
@@ -231,13 +232,13 @@ export function Addcustomers() {
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 value={countryOptions.find(
                                   (option) =>
-                                    option.value === Data[0].addressCountry,
+                                    option.value === Data[0].address_country,
                                 )}
                                 onChange={(selectedOption) =>
                                   handleChange(
                                     {
                                       target: {
-                                        name: 'addressCountry',
+                                        name: 'address_country',
                                         value: selectedOption.value,
                                       },
                                     },
@@ -256,11 +257,11 @@ export function Addcustomers() {
                               </label>
                               <input
                                 type="text"
-                                name="addressStreet"
+                                name="address_street"
                                 id="addressStreet"
                                 autoComplete="street-address"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={customer.addressStreet}
+                                value={customer.address_street}
                                 onChange={(e) => handleChange(e, index)}
                               />
                             </div>
@@ -274,10 +275,10 @@ export function Addcustomers() {
                               </label>
                               <input
                                 type="text"
-                                name="addressCity"
+                                name="address_city"
                                 id="addressCity"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={customer.addressCity}
+                                value={customer.address_city}
                                 onChange={(e) => handleChange(e, index)}
                               />
                             </div>
@@ -291,10 +292,10 @@ export function Addcustomers() {
                               </label>
                               <input
                                 type="text"
-                                name="addressState"
+                                name="address_state"
                                 id="addressState"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={customer.addressState}
+                                value={customer.address_state}
                                 onChange={(e) => handleChange(e, index)}
                               />
                             </div>
@@ -308,11 +309,11 @@ export function Addcustomers() {
                               </label>
                               <input
                                 type="text"
-                                name="addressZipCode"
+                                name="address_zip_code"
                                 id="addressZipCode"
                                 autoComplete="addressZipCode"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={customer.addressZipCode}
+                                value={customer.address_zip_code}
                                 onChange={(e) => handleChange(e, index)}
                               />
                             </div>
@@ -326,10 +327,10 @@ export function Addcustomers() {
                               </label>
                               <input
                                 type="text"
-                                name="locationPreference"
+                                name="location_preference"
                                 id="locationPreference"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={customer.locationPreference}
+                                value={customer.location_preference}
                                 onChange={(e) => handleChange(e, index)}
                               />
                             </div>
@@ -343,11 +344,11 @@ export function Addcustomers() {
                               </label>
                               <input
                                 type="text"
-                                name="propertyType"
+                                name="property_type"
                                 id="propertyType"
                                 autoComplete="property-type"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={customer.propertyType}
+                                value={customer.property_type}
                                 onChange={(e) => handleChange(e, index)}
                               />
                             </div>
@@ -431,11 +432,11 @@ export function Addcustomers() {
                               </label>
                               <input
                                 type="text"
-                                name="financingOption"
+                                name="financing_option"
                                 id="financingOptionS"
                                 autoComplete="financingOptionS"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={customer.financingOption}
+                                value={customer.financing_option}
                                 onChange={(e) => handleChange(e, index)}
                               />
                             </div>
@@ -449,11 +450,11 @@ export function Addcustomers() {
                               </label>
                               <input
                                 type="text"
-                                name="assignedAgent"
+                                name="assigned_agent"
                                 id="assignedAgent"
                                 autoComplete="assignedAgent"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={customer.assignedAgent}
+                                value={customer.assigned_agent}
                                 onChange={(e) => handleChange(e, index)}
                               />
                             </div>
@@ -467,11 +468,11 @@ export function Addcustomers() {
                               </label>
                               <input
                                 type="text"
-                                name="leadSource"
+                                name="lead_source"
                                 id="leadSource"
                                 autoComplete="leadSource"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={customer.leadSource}
+                                value={customer.lead_source}
                                 onChange={(e) => handleChange(e, index)}
                               />
                             </div>

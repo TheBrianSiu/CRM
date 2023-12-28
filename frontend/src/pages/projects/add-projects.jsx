@@ -35,13 +35,13 @@ export function Addprojects() {
   const [selectedCust, setSelectedCust] = useState([]);
   const [Data, setData] = useState([
     {
-      taskname: '',
-      duedate: '',
+      task_name: '',
+      due_date: '',
       description: '',
       attachments: '',
       est_hours: '',
-      estValue: '',
-      leadStatus: '',
+      est_value: '',
+      lead_status: '',
       priority: '',
     },
   ]);
@@ -54,17 +54,19 @@ export function Addprojects() {
 
       addProjects(customerdata)
         .then((data) => {
-          const generatedid = data.id;
+          const generatedId = data.id;
           if (selectedUsers.length > 0) {
-            handleSelectedUsers(generatedid);
+            handleSelectedUsers(generatedId);
           }
           if (selectedCust.length > 0) {
-            handleSelectedCust(generatedid);
+            handleSelectedCust(generatedId);
           }
-          if (selectedUsers.length === 0 && selectedCust.length === 0) {
+          else if (selectedUsers.length === 0 && selectedCust.length === 0) {
             alert('The task is added successfully!');
             navigate(-1);
           }
+          alert('The task is added successfully!');
+          navigate(-1);
         })
         .catch((err) => {
           alert(err);
@@ -73,9 +75,9 @@ export function Addprojects() {
   };
 
   // conditional submit
-  function handleSelectedUsers(generatedid) {
+  function handleSelectedUsers(generatedId) {
     const userProjectData = selectedUsers.map((user) => ({
-      projectId: generatedid,
+      project_id: generatedId,
       assignee_id: user.value,
     }));
 
@@ -92,9 +94,9 @@ export function Addprojects() {
   }
 
   // conditional submit
-  function handleSelectedCust(generatedid) {
+  function handleSelectedCust(generatedId) {
     const custProjectData = selectedCust.map((cust) => ({
-      projectId: generatedid,
+      project_id: generatedId,
       customer_id: cust.value,
     }));
 
@@ -151,7 +153,7 @@ export function Addprojects() {
                   />
                   <div>
                     <Typography variant="h5" color="blue-gray" className="mb-1">
-                      {task.taskname}
+                      {task.task_name}
                     </Typography>
                     <Typography
                       variant="small"
@@ -206,11 +208,11 @@ export function Addprojects() {
                               </label>
                               <input
                                 type="text"
-                                name="taskname"
+                                name="task_name"
                                 id="taskname"
                                 autoComplete="taskname"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={Data[0].taskname}
+                                value={Data[0].task_name}
                                 onChange={(e) => handleChange(e, 0)}
                                 required
                               />
@@ -243,10 +245,10 @@ export function Addprojects() {
                               </label>
                               <input
                                 type="date"
-                                name="duedate"
+                                name="due_date"
                                 id="duedate"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={Data[0].duedate}
+                                value={Data[0].due_date}
                                 onChange={(e) => handleChange(e, 0)}
                                 required
                               />
@@ -297,11 +299,11 @@ export function Addprojects() {
                               </label>
                               <input
                                 type="number"
-                                name="estValue"
+                                name="est_value"
                                 id="estValue"
                                 autoComplete="estValue"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                value={Data[0].estValue}
+                                value={Data[0].est_value}
                                 onChange={(e) => handleChange(e, 0)}
                               />
                             </div>
@@ -315,18 +317,18 @@ export function Addprojects() {
                               </label>
                               <Select
                                 id="leadStatus"
-                                name="leadStatus"
+                                name="lead_status"
                                 options={taskstatusOptions}
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 value={taskstatusOptions.find(
                                   (option) =>
-                                    option.value === Data[0].leadStatus,
+                                    option.value === Data[0].lead_status,
                                 )}
                                 onChange={(selectedOption) =>
                                   handleChange(
                                     {
                                       target: {
-                                        name: 'leadStatus',
+                                        name: 'lead_status',
                                         value: selectedOption.value,
                                       },
                                     },
@@ -377,8 +379,8 @@ export function Addprojects() {
                                 components={animatedComponents}
                                 isMulti
                                 options={User.map((user) => ({
-                                  value: user.userId,
-                                  label: `${user.firstName} ${user.lastName}`,
+                                  value: user.user_id,
+                                  label: `${user.first_name} ${user.last_name}`,
                                 }))}
                                 value={selectedUsers}
                                 onChange={setSelectedUsers}
@@ -398,7 +400,7 @@ export function Addprojects() {
                                 isMulti
                                 options={Cust.map((cust) => ({
                                   value: cust.id,
-                                  label: `${cust.firstName} ${cust.lastName}`,
+                                  label: `${cust.first_name} ${cust.last_name}`,
                                 }))}
                                 value={selectedCust}
                                 onChange={setSelectedCust}

@@ -5,13 +5,13 @@ import { HandleUpdate } from '@/pages/projects/component/utils/handleupdate';
 function TaskBoard({ tasks, columns }) {
   const addTask = (status) => {
     const newTask = {
-      taskname: 'New item',
-      duedate: '',
+      task_name: 'New item',
+      due_date: '',
       description: 'new description',
       attachments: '',
       est_hours: '',
-      estValue: '',
-      leadStatus: status,
+      est_value: '',
+      lead_status: status,
       priority: '',
     };
 

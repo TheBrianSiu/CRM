@@ -115,7 +115,7 @@ router.post('/customers-table/add/:userid', async (req, res) => {
 
   try {
     const dataArray = [Object.values(data)];
-    const sql = 'INSERT INTO CUSTOMERS (first_name, last_name, phone_number, email, property_type, location_preference, bedrooms, bathrooms, budget, financing_option, timeline, notes, lead_source, status, assigned_agent, img, address_country, address_street, address_zip_code, address_city, address_state) VALUES ?';
+    const sql = 'INSERT INTO CUSTOMERS (first_name, last_name, phone_number, email, property_type, location_preference, bedrooms, bathrooms, budget, financing_option, timeline, notes, lead_source, status, assigned_agent, img, address_country, address_street, address_zip_code, address_city, address_state,is_deleted) VALUES ?';
     await db.query(sql, [dataArray]);
     return res.json({ message: 'Customer data added successfully' });
   } catch (error) {

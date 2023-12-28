@@ -110,7 +110,7 @@ router.post("/users-table/add/:userid", async (req, res) => {
 
     userData.user_id = userId;
     const dataValues = Object.values(userData);
-    const sql = `INSERT INTO USERS (username, first_name, last_name, email, phone_number, job_title, department, status, address, is_admin, supervisor_id,user_id) VALUES (?)`;
+    const sql = `INSERT INTO USERS (username, first_name, last_name, email, phone_number, job_title, department, status, address, is_admin, is_deleted, supervisor_id, user_id) VALUES (?)`;
     await db.query(sql, [dataValues]);
     return res.json({ message: "Users data added successfully" });
   } catch (error) {

@@ -231,7 +231,7 @@ export function Customersprofile() {
                                   handleChange(
                                     {
                                       target: {
-                                        name: 'addressCountry',
+                                        name: 'address_country',
                                         value: selectedOption.value,
                                       },
                                     },

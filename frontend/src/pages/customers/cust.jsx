@@ -11,7 +11,7 @@ import { openDB } from 'idb';
 import Fuse from 'fuse.js';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Table } from './component/theme/table';
-import { pagination, totalPages, switchPage } from '@/utils';
+import { Pagination, totalPages, switchPage } from '@/utils';
 import Navbar from './component/utils/navbar';
 import {
   retreiveCustDataLocal,
@@ -115,7 +115,7 @@ function Customers() {
           ) : null}
           <div className="mt-4 flex justify-center">
             {Istheme === 'All' ? (
-              <pagination
+              <Pagination
                 currentPage={currentPage}
                 filteredUserdataLength={filteredUserdata.length}
                 itemsPerPage={itemsPerPage}

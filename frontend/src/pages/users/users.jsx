@@ -9,10 +9,9 @@ import { useNavigate } from 'react-router-dom';
 import { openDB } from 'idb';
 import Fuse from 'fuse.js';
 import { useAuth0 } from '@auth0/auth0-react';
-import { pagination } from '@/utils/pagiantion';
 import Navbar from './component/utils/navbar';
 import { Table } from './component/theme/table';
-import { totalPages } from '@/utils';
+import { totalPages,Pagination } from '@/utils';
 import {
   retreiveUserDataLocal,
   fetchUserDataAndStoreLocal,
@@ -104,7 +103,7 @@ export function Users() {
           ) : null}
           <div className="mt-4 flex justify-center">
             {Istheme === 'All' ? (
-              <pagination
+              <Pagination
                 currentPage={currentPage}
                 filteredUserdataLength={filteredUserdata.length}
                 itemsPerPage={itemsPerPage}

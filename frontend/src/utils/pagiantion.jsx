@@ -1,4 +1,4 @@
-export function pagination({
+export function Pagination({
   currentPage,
   filteredUserdataLength,
   itemsPerPage,
@@ -54,5 +54,3 @@ export function pagination({
     </nav>
   );
 }
-
-export default pagination;

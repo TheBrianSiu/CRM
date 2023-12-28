@@ -10,7 +10,7 @@ import { openDB } from 'idb';
 import Navbar from './component/utils/navbar';
 import TaskBoard from './component/theme/taskboard';
 import Table from './component/theme/table';
-import { switchPage, performSearch, pagination, totalPages } from '@/utils';
+import { switchPage, performSearch, Pagination, totalPages } from '@/utils';
 import { retreiveDataLocal, fetchDataAndStoreLocal } from '@/data/index-db';
 
 function Projects() {
@@ -110,7 +110,7 @@ function Projects() {
           )}
           <div className="mt-4 flex justify-center">
             {Istheme === 'All' ? (
-              <pagination
+              <Pagination
                 currentPage={currentPage}
                 filteredUserdataLength={filteredUserdata.length}
                 itemsPerPage={itemsPerPage}
