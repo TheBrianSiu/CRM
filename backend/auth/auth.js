@@ -61,6 +61,25 @@ async function retreieve_user_permission(userid, permission) {
   }
 }
 
+// retreieve user role
+async function retreieveUserRole(userId) {
+  try {
+    const accessToken = await retrieveToken();
+    const apiEndpoint = `${process.env.AUTH0DOMAIN}/api/v2/users/${userId}/roles`;
+    
+      apiResponse = await axios.get(apiEndpoint, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+    return apiResponse.data;
+  } catch (error) {
+    console.error(`Error retrieving user role: ${error.message}`);
+    throw new Error(`Error retrieving user role: ${error.message}`);
+  }
+}
+
 //insert
 const insertAuth0User = async (email, hashedPassword) => {
   return new Promise(async (resolve, reject) => {
@@ -99,6 +118,33 @@ const insertAuth0User = async (email, hashedPassword) => {
   });
 };
 
+//role assign
+const assignAuth0Role = async (id, roleId) =>{
+  try{
+    const accessToken = await retrieveToken();
+    const apiEndpoint = `${process.env.AUTH0DOMAIN}/api/v2/users/${id}/roles`;
+
+    const data = {
+      roles: [roleId]
+    }
+  
+    const response = await axios.post(apiEndpoint, data, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status !== 204) {
+      console.error("User's role assignment failed. Response:", response.data);
+      throw new Error("User's role assignment failed");
+    }
+  } catch (error) {
+    console.error("An error occurred:", error.message);
+    reject(error);
+  }
+}
+
 //delete
 const deleteAuthUser = async (id) => {
   try {
@@ -129,7 +175,9 @@ const deleteAuthUser = async (id) => {
 
 module.exports = {
   retrieveToken,
+  retreieveUserRole,
   retreieve_user_permission,
+  assignAuth0Role,
   insertAuth0User,
   deleteAuthUser,
 };

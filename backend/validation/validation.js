@@ -95,9 +95,6 @@ const validateUser = (userData) => {
   if (!userData.status || !['active', 'inactive'].includes(userData.status)) {
     errors.push('Status must be either active or inative');
   }
-  if (!userData.is_admin || !['yes', 'no'].includes(userData.is_admin)) {
-    errors.push('admin option must be either Yes or No');
-  }
   if (userData.username && !validator.isAlphanumeric(userData.username, 'en-US')) {
     errors.push('Username is required and should contain only alphanumeric characters');
   }

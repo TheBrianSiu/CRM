@@ -19,25 +19,25 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import {
-  adminOptions,
   statusOptions,
   changePassword,
   retrieveDataById,
   supervisor,
   updateUser,
 } from '@/data';
+import { RolesOptions} from './component/utils/roles-option';
 
 export function Usersprofile() {
   const animatedComponents = makeAnimated();
-  const [Users, setUsers] = useState([]);
-  const [Data, setData] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [data, setData] = useState([]);
   const [initialUsername, setInitialUsername] = useState('');
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth0();
 
-  const supervisorOptions = Users.map((user) => ({
-    value: user.userId,
+  const supervisorOptions = users.map((user) => ({
+    value: user.user_id,
     label: `${user.first_name} ${user.last_name}`,
   }));
 
@@ -77,7 +77,7 @@ export function Usersprofile() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (window.confirm('Do you want to submit the form?')) {
-      const userToUpdate = Data[0];
+      const userToUpdate = data[0];
       const { username, password, confirm_password, ...userData } =
         userToUpdate; // remove all three
 
@@ -116,9 +116,9 @@ export function Usersprofile() {
       </div>
       <Card className="mx-3 -mt-16 mb-6 lg:mx-4">
         <CardBody className="p-4">
-          {Data.map((users, index) => {
+          {data.map((users, index) => {
             const className = `py-3 px-5 ${
-              index === Data.length - 1 ? '' : 'border-b border-blue-gray-50'
+              index === data.length - 1 ? '' : 'border-b border-blue-gray-50'
             }`;
             return (
               <div>
@@ -360,7 +360,7 @@ export function Usersprofile() {
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                   value={supervisorOptions.find(
                                     (option) =>
-                                      option.value === Data[0].supervisor_id,
+                                      option.value === data[0].supervisor_id,
                                   )}
                                   onChange={(selectedOption) =>
                                     handleChange(
@@ -389,7 +389,7 @@ export function Usersprofile() {
                                   options={statusOptions}
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                   value={statusOptions.find(
-                                    (option) => option.value === Data[0].status,
+                                    (option) => option.value === data[0].status,
                                   )}
                                   onChange={(selectedOption) =>
                                     handleChange(
@@ -404,36 +404,7 @@ export function Usersprofile() {
                                   }
                                 />
                               </div>
-
-                              <div className="col-span-6 sm:col-span-3">
-                                <label
-                                  htmlFor="isAdmin"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  Admin
-                                </label>
-                                <Select
-                                  id="isAdmin"
-                                  name="admin"
-                                  options={adminOptions}
-                                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  value={adminOptions.find(
-                                    (option) =>
-                                      option.value === Data[0].is_admin,
-                                  )}
-                                  onChange={(selectedOption) =>
-                                    handleChange(
-                                      {
-                                        target: {
-                                          name: 'is_admin',
-                                          value: selectedOption.value,
-                                        },
-                                      },
-                                      0,
-                                    )
-                                  }
-                                />
-                              </div>
+                              <RolesOptions handleChange={handleChange} selectedRole={data[0].role[0].id} />
                             </div>
                           </div>
 
@@ -444,7 +415,7 @@ export function Usersprofile() {
                                 size="regular"
                                 ripple="light"
                                 onClick={() => {
-                                  Resetpassword(Data[0].email);
+                                  Resetpassword(data[0].email);
                                 }}
                               >
                                 Reset/Change password

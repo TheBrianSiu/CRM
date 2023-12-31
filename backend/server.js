@@ -6,7 +6,6 @@ const authroute = require('./auth/authroutes')
 const cors = require('cors');
 const jwt = require('jsonwebtoken')
 const { app } = require('./dbConfig');
-const { retrieve_and_insert_newuser, retreiveLoginRecord} = require('./auth/auth');
 const express = require('express');
 
 const PORT = process.env.PORT || 3000;

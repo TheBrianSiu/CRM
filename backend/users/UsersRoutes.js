@@ -6,6 +6,8 @@ const {
   insertAuth0User,
   deleteAuthUser,
   retreieve_user_permission,
+  assignAuth0Role,
+  retreieveUserRole,
 } = require("../auth/auth");
 
 //retireve all users
@@ -52,17 +54,20 @@ router.get("/users-table/:id/:userid", async (req, res) => {
   const id = req.params.id;
 
   const hasPermission = await retreieve_user_permission(userid, "read:users");
+  const role = await retreieveUserRole(userid);
 
   if (!hasPermission) {
     return res.status(401).json({ message: "You don't have permission" });
   }
 
-  const sql = `SELECT username,first_name, last_name,email,phone_number,job_title, department,status,address,is_admin,supervisor_id FROM USERS WHERE user_id = ? AND IS_DELETED = 0`;
+  const sql = `SELECT user_id, username,first_name, last_name,email,phone_number,job_title, department,status,address,supervisor_id FROM USERS WHERE user_id = ? AND IS_DELETED = 0`;
   db.query(sql, [id], (err, data) => {
     if (err) {
       return res.status(404).json({ message: "user not found" });
     }
-    return res.json(data);
+
+    const combineData = {...data[0], role}
+    return res.json(combineData);
   });
 });
 
@@ -103,7 +108,7 @@ router.post("/users-table/add/:userid", async (req, res) => {
     // Create a new object with the password property removed and email added
     const userId = await insertAuth0User(data.email, data.password);
 
- if (!userId || userId.errors) {
+    if (!userId || userId.errors) {
       return res.status(403).json({ message: userId.errors });
     }
     const { password, ...userData } = data;
@@ -199,17 +204,25 @@ router.put("/users-table/update/:id/:userid", async (req, res) => {
     }
   }
 
+  if (updatedData.role !== undefined) {
+    try {
+      const result = await assignAuth0Role(updatedData.user_id, updatedData.role);
+    } catch (error) {
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+
+  const { role, ...filteredData } = updatedData;
+
   try {
     let sql = "UPDATE USERS SET";
     const values = [];
 
-    // Iterate over the updatedData object to generate the SQL query
-    Object.keys(updatedData).forEach((key, index) => {
+    Object.keys(filteredData ).forEach((key, index) => {
       if (index > 0) sql += ",";
       sql += ` ${key} = ?`;
-      values.push(updatedData[key]);
+      values.push(filteredData [key]);
     });
-
     sql += " WHERE user_ID = ?";
     values.push(id);
     await db.query(sql, values);
