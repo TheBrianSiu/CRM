@@ -23,7 +23,7 @@ async function retrieveToken() {
 }
 
 // retrieve user permission
-async function retreieve_user_permission(userid, permission) {
+async function retrieveUserPermission(userid, permission) {
   try {
     const cacheKey = `${userid}_${permission}`;
     const accessToken = await retrieveToken();
@@ -62,21 +62,20 @@ async function retreieve_user_permission(userid, permission) {
 }
 
 // retreieve user role
-async function retreieveUserRole(userId) {
+async function retrieveUserRole(userId) {
   try {
     const accessToken = await retrieveToken();
     const apiEndpoint = `${process.env.AUTH0DOMAIN}/api/v2/users/${userId}/roles`;
-    
-      apiResponse = await axios.get(apiEndpoint, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+
+    const apiResponse = await axios.get(apiEndpoint, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     return apiResponse.data;
   } catch (error) {
     console.error(`Error retrieving user role: ${error.message}`);
-    throw new Error(`Error retrieving user role: ${error.message}`);
   }
 }
 
@@ -175,8 +174,8 @@ const deleteAuthUser = async (id) => {
 
 module.exports = {
   retrieveToken,
-  retreieveUserRole,
-  retreieve_user_permission,
+  retreieveUserRole: retrieveUserRole,
+  retreieve_user_permission: retrieveUserPermission,
   assignAuth0Role,
   insertAuth0User,
   deleteAuthUser,

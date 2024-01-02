@@ -80,7 +80,6 @@ export const fetchUserDataAndStoreLocal = async (userid) => {
         jobTitle: user.job_title,
         department: user.department,
         status: user.status,
-        isAdmin: user.is_admin,
         password: user.password,
         lastLogin: user.last_login,
       };

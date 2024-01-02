@@ -191,7 +191,7 @@ export function Usersprofile() {
                                 </label>
                                 <input
                                   type="text"
-                                  name="firstName"
+                                  name="first_name"
                                   id="firstName"
                                   autoComplete="given-name"
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -211,7 +211,7 @@ export function Usersprofile() {
                                 </label>
                                 <input
                                   type="text"
-                                  name="lastName"
+                                  name="last_name"
                                   id="lastName"
                                   autoComplete="family-name"
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -251,7 +251,7 @@ export function Usersprofile() {
                                 </label>
                                 <input
                                   type="tel"
-                                  name="phoneNumber"
+                                  name="phone_number"
                                   id="phoneNumber"
                                   autoComplete="phoneNumber"
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -334,7 +334,7 @@ export function Usersprofile() {
                                 </label>
                                 <input
                                   type="text"
-                                  name="jobTitle"
+                                  name="job_title"
                                   id="jobTitle"
                                   autoComplete="jobTitle"
                                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -404,7 +404,7 @@ export function Usersprofile() {
                                   }
                                 />
                               </div>
-                              <RolesOptions handleChange={handleChange} selectedRole={data[0].role[0].id} />
+                              <RolesOptions handleChange={handleChange} selectedRole={data?.[0]?.role?.[0]?.id} />
                             </div>
                           </div>
 

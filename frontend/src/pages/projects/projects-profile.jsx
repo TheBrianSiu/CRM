@@ -191,7 +191,7 @@ export function ProjectsProfile() {
                               </label>
                               <input
                                 type="text"
-                                name="taskname"
+                                name="task_name"
                                 id="taskname"
                                 autoComplete="taskname"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -228,7 +228,7 @@ export function ProjectsProfile() {
                               </label>
                               <input
                                 type="date"
-                                name="duedate"
+                                name="due_date"
                                 id="duedate"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 value={
@@ -284,7 +284,7 @@ export function ProjectsProfile() {
                               </label>
                               <input
                                 type="number"
-                                name="estValue"
+                                name="est_value"
                                 id="estValue"
                                 autoComplete="estValue"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -302,7 +302,7 @@ export function ProjectsProfile() {
                               </label>
                               <Select
                                 id="leadStatus"
-                                name="leadStatus"
+                                name="lead_status"
                                 options={taskstatusOptions}
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 value={taskstatusOptions.find(
@@ -313,7 +313,7 @@ export function ProjectsProfile() {
                                   handleChange(
                                     {
                                       target: {
-                                        name: 'leadStatus',
+                                        name: 'lead_status',
                                         value: selectedOption.value,
                                       },
                                     },

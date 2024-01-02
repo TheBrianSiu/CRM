@@ -9,12 +9,13 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { addUser, supervisor } from '@/data/users-data';
-import { adminOptions, statusOptions } from '@/data';
+import { statusOptions } from '@/data';
+import { RolesOptions } from './component/utils/roles-option';
 
 export function Addusers() {
   const { user } = useAuth0();
   const animatedComponents = makeAnimated();
-  const [Data, setData] = useState({
+  const [data, setData] = useState({
     user_name: null,
     first_name: null,
     last_name: null,
@@ -24,7 +25,7 @@ export function Addusers() {
     department: null,
     status: '',
     address: '',
-    is_admin: '0',
+    role:null,
     is_deleted: '0',
     password: null,
     confirm_password: null,
@@ -48,7 +49,7 @@ export function Addusers() {
   };
   // password valdiation
   function validatePassword() {
-    const { password, confirm_password } = Data;
+    const { password, confirm_password } = data;
     const passwordPattern =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$/;
 
@@ -88,7 +89,7 @@ export function Addusers() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (window.confirm('Do you want to submit a new user?')) {
-      const { confirm_password, ...customerdata } = Data; // remove confirm password from state
+      const { confirm_password, ...customerdata } = data; // remove confirm password from state
 
       addUser(customerdata, user.sub)
         .then((result) => {
@@ -142,7 +143,7 @@ export function Addusers() {
                             id="firstName"
                             autoComplete="given-name"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.first_name || ''}
+                            value={data.first_name || ''}
                             onChange={handleChange}
                             placeholder="Enter first name"
                             required
@@ -162,7 +163,7 @@ export function Addusers() {
                             id="lastName"
                             autoComplete="family-name"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.last_name || ''}
+                            value={data.last_name || ''}
                             onChange={handleChange}
                             placeholder="Enter last name"
                             required
@@ -182,7 +183,7 @@ export function Addusers() {
                             id="username"
                             autoComplete="username"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.user_name || ''}
+                            value={data.user_name || ''}
                             onChange={handleChange}
                             placeholder="Enter username"
                             required
@@ -202,7 +203,7 @@ export function Addusers() {
                             id="phoneNumber"
                             autoComplete="phoneNumber"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.phone_number || ''}
+                            value={data.phone_number || ''}
                             onChange={handleChange}
                             placeholder="999-999-999"
                             pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
@@ -223,7 +224,7 @@ export function Addusers() {
                             id="email"
                             autoComplete="email"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.email || ''}
+                            value={data.email || ''}
                             onChange={handleChange}
                             placeholder="Enter email address"
                             required
@@ -243,7 +244,7 @@ export function Addusers() {
                             id="address"
                             autoComplete="street-address"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.address || ''}
+                            value={data.address || ''}
                             onChange={handleChange}
                             placeholder="Enter address"
                             required
@@ -263,7 +264,7 @@ export function Addusers() {
                             id="department"
                             autoComplete="department"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.department || ''}
+                            value={data.department || ''}
                             onChange={handleChange}
                             placeholder="Enter department"
                             required
@@ -283,7 +284,7 @@ export function Addusers() {
                             id="jobTitle"
                             autoComplete="jobTitle"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.job_title || ''}
+                            value={data.job_title || ''}
                             onChange={handleChange}
                             placeholder="Enter job title"
                             required
@@ -304,7 +305,7 @@ export function Addusers() {
                             options={supervisorOptions}
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             value={supervisorOptions.find(
-                              (option) => option.value === Data.supervisor_id,
+                              (option) => option.value === data.supervisor_id,
                             )}
                             onChange={(selectedOption) =>
                               handleChange(
@@ -332,7 +333,7 @@ export function Addusers() {
                             name="password"
                             autoComplete="new-password"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.password || ''}
+                            value={data.password || ''}
                             onChange={handleChange}
                             onBlur={validatePassword}
                             placeholder="Enter password"
@@ -341,7 +342,7 @@ export function Addusers() {
                           />
                           {Errors.password && (
                             <p className="text-red-500">
-                              {Errors.confirm_password}
+                              {Errors.password}
                             </p>
                           )}
                         </div>
@@ -355,15 +356,15 @@ export function Addusers() {
                             name="confirm_password"
                             autoComplete="new-password"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={Data.confirm_password || ''}
+                            value={data.confirm_password || ''}
                             onChange={handleChange}
                             onBlur={validatePassword}
                             placeholder="Enter confirm password"
                             pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
                             required
                           />
-                          {Errors.password && (
-                            <p className="text-red-500">{Errors.password}</p>
+                          {Errors.confirm_password && (
+                            <p className="text-red-500">{Errors.confirm_password}</p>
                           )}
                         </div>
 
@@ -380,7 +381,7 @@ export function Addusers() {
                             options={statusOptions}
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             value={statusOptions.find(
-                              (option) => option.value === Data.status,
+                              (option) => option.value === data.status,
                             )}
                             onChange={(selectedOption) =>
                               handleChange(
@@ -395,34 +396,7 @@ export function Addusers() {
                             }
                           />
                         </div>
-                        <div className="col-span-6 sm:col-span-3">
-                          <label
-                            htmlFor="isAdmin"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Admin
-                          </label>
-                          <Select
-                            id="isAdmin"
-                            name="is_admin"
-                            options={adminOptions}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            value={adminOptions.find(
-                              (option) => option.value === Data.is_admin,
-                            )}
-                            onChange={(selectedOption) =>
-                              handleChange(
-                                {
-                                  target: {
-                                    name: 'is_admin',
-                                    value: selectedOption.value,
-                                  },
-                                },
-                                0,
-                              )
-                            }
-                          />
-                        </div>
+                        <RolesOptions handleChange={handleChange} selectedRole={data.role}/>
                       </div>
                     </div>
                     <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">

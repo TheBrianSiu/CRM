@@ -145,7 +145,7 @@ export function Customersprofile() {
                               </label>
                               <input
                                 type="text"
-                                name="firstName"
+                                name="first_name"
                                 id="firstName"
                                 autoComplete="given-name"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -163,7 +163,7 @@ export function Customersprofile() {
                               </label>
                               <input
                                 type="text"
-                                name="lastName"
+                                name="last_name"
                                 id="lastName"
                                 autoComplete="family-name"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -199,7 +199,7 @@ export function Customersprofile() {
                               </label>
                               <input
                                 type="tel"
-                                name="phoneNumber"
+                                name="phone_number"
                                 id="phoneNumber"
                                 autoComplete="phoneNumber"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -250,7 +250,7 @@ export function Customersprofile() {
                               </label>
                               <input
                                 type="text"
-                                name="addressStreet"
+                                name="address_street"
                                 id="addressStreet"
                                 autoComplete="street-address"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -268,7 +268,7 @@ export function Customersprofile() {
                               </label>
                               <input
                                 type="text"
-                                name="addressCity"
+                                name="address_city"
                                 id="addressCity"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 value={customer.address_city}
@@ -285,7 +285,7 @@ export function Customersprofile() {
                               </label>
                               <input
                                 type="text"
-                                name="addressState"
+                                name="address_state"
                                 id="addressState"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 value={customer.address_state}
@@ -302,7 +302,7 @@ export function Customersprofile() {
                               </label>
                               <input
                                 type="text"
-                                name="addressZipCode"
+                                name="address_zip_code"
                                 id="addressZipCode"
                                 autoComplete="addressZipCode"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -320,7 +320,7 @@ export function Customersprofile() {
                               </label>
                               <input
                                 type="text"
-                                name="locationPreference"
+                                name="location_preference"
                                 id="locationPreference"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 value={customer.location_preference}
@@ -337,7 +337,7 @@ export function Customersprofile() {
                               </label>
                               <input
                                 type="text"
-                                name="propertyType"
+                                name="property_type"
                                 id="propertyType"
                                 autoComplete="property-type"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -418,16 +418,16 @@ export function Customersprofile() {
 
                             <div className="col-span-6 sm:col-span-3 lg:col-span-2">
                               <label
-                                htmlFor="financingOptionS"
+                                htmlFor="financingOption"
                                 className="block text-sm font-medium text-gray-700"
                               >
                                 Financing option
                               </label>
                               <input
                                 type="text"
-                                name="financingOption"
-                                id="financingOptionS"
-                                autoComplete="financingOptionS"
+                                name="financing_option"
+                                id="financingOption"
+                                autoComplete="financingOption"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 value={customer.financing_option}
                                 onChange={(e) => handleChange(e, index)}
@@ -443,7 +443,7 @@ export function Customersprofile() {
                               </label>
                               <input
                                 type="text"
-                                name="assignedAgent"
+                                name="assigned_agent"
                                 id="assignedAgent"
                                 autoComplete="assignedAgent"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -461,7 +461,7 @@ export function Customersprofile() {
                               </label>
                               <input
                                 type="text"
-                                name="leadSource"
+                                name="lead_source"
                                 id="leadSource"
                                 autoComplete="leadSource"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"

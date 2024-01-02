@@ -54,7 +54,7 @@ router.get("/users-table/:id/:userid", async (req, res) => {
   const id = req.params.id;
 
   const hasPermission = await retreieve_user_permission(userid, "read:users");
-  const role = await retreieveUserRole(userid);
+  const role = await retreieveUserRole(id);
 
   if (!hasPermission) {
     return res.status(401).json({ message: "You don't have permission" });
@@ -65,8 +65,7 @@ router.get("/users-table/:id/:userid", async (req, res) => {
     if (err) {
       return res.status(404).json({ message: "user not found" });
     }
-
-    const combineData = {...data[0], role}
+    const combineData = {...data[0], role: role || null }
     return res.json(combineData);
   });
 });
@@ -111,11 +110,14 @@ router.post("/users-table/add/:userid", async (req, res) => {
     if (!userId || userId.errors) {
       return res.status(403).json({ message: userId.errors });
     }
-    const { password, ...userData } = data;
+
+    await assignAuth0Role(userId,data.role);
+
+    const { password, role, ...userData } = data;
 
     userData.user_id = userId;
     const dataValues = Object.values(userData);
-    const sql = `INSERT INTO USERS (username, first_name, last_name, email, phone_number, job_title, department, status, address, is_admin, is_deleted, supervisor_id, user_id) VALUES (?)`;
+    const sql = `INSERT INTO USERS (username, first_name, last_name, email, phone_number, job_title, department, status, address, is_deleted, supervisor_id, user_id) VALUES (?)`;
     await db.query(sql, [dataValues]);
     return res.json({ message: "Users data added successfully" });
   } catch (error) {
