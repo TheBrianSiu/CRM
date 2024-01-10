@@ -4,9 +4,14 @@ const projectroute = require('./projects/projectroutes');
 const dashboardroute = require('./dashbaord/dashboardroutes');
 const authroute = require('./auth/authroutes')
 const cors = require('cors');
-const jwt = require('jsonwebtoken')
 const { app } = require('./dbConfig');
-const express = require('express');
+const { expressjwt: jwt } = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
+
+const authConfig = {
+  domain: process.env.auth0domain,
+  audience: process.env.audience,
+};
 
 const PORT = process.env.PORT || 3000;
 
@@ -24,59 +29,25 @@ const corsOptions = {
   },
 };
 
-//JWT token generation
-app.post('/generate-token', (req, res) => {
-  const clientID = req.body.clientID; 
-  const clientSecret = req.body.clientSecret; 
-
-  if (clientID === process.env.SERVERID && clientSecret === process.env.SERVERSECRET) {
-
-    const payload = {
-      user_id: 65748, 
-      role: 'frontend_user', 
-      exp: Math.floor(Date.now() / 1000) + 86400,
-    };
-
-    const token = jwt.sign(payload, process.env.SECRETKEY);
-
-    res.json({ token });
-  } else {
-    res.status(401).json({ message: 'Unauthorized client' });
-  }
+// Auth0 access token checker
+const authCheck = jwt({
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `${authConfig.domain}/.well-known/jwks.json`,
+  }),
+  audience: authConfig.audience,
+  issuer: `${authConfig.domain}/`,
+  algorithms: ['RS256'],
 });
-
-
-//JWT token verfication
-app.use(express.json());
-
-app.use((req, res,next)=>{
-
-  const token = req.header('Authorization');
-
-  if (req.path === '/generate-token') {
-    return next();
-  }
-
-  if(!token){
-    res.status(401).json({message: 'Authentication required'})
-  }
-
-  jwt.verify(token, process.env.SECRETKEY, (err, user) =>{
-
-    if(err){
-      return res.status(403).json({message: "Invalid token"})
-    }
-    req.user = user;
-    next();
-  })
-
-})
 
 app.get('/', (req, res) => {
   return res.json("from backend");
 });
 
 // Define routes
+app.use(authCheck);
 app.use('/', cors(corsOptions), authroute);
 app.use('/', cors(corsOptions), usersroute);     
 app.use('/', cors(corsOptions), custroute);      

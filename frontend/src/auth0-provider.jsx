@@ -1,13 +1,15 @@
 import { Auth0Provider } from '@auth0/auth0-react';
-import { clientId, domain } from './settings';
+import {audience, clientId, domain, scope } from './settings';
 
-function Auth0ProviderWithHistory({ children }) {
+function Auth0ProviderWithHistory({ children }) {  
   return (
     <Auth0Provider
       domain={domain}
       clientId={clientId}
       authorizationParams={{
         redirect_uri: window.location.origin,
+        audience: audience,
+        scope: scope
       }}
     >
       {children}

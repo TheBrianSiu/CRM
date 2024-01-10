@@ -1,23 +1,11 @@
-import { refreshToken, isTokenExpired } from './auth-data';
-
 export async function makeApiRequest(url, method, data) {
-  let token = localStorage.getItem('token');
-
-  if (!token || isTokenExpired(token)) {
-    try {
-      token = await refreshToken();
-    } catch (error) {
-      console.error(error);
-      return { error: 'Token refresh failed' };
-    }
-  }
-
+  const token = sessionStorage.getItem("token");
   try {
     const response = await fetch(url, {
       method,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `${token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: data !== null ? JSON.stringify(data) : null,
     });
