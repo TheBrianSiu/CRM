@@ -90,9 +90,14 @@ export function Usersprofile() {
       }
 
       updateUser(id, updatedData, user.sub)
-        .then((data) => {
-          alert('Form submitted successfully!');
-          navigate(-1); // Navigate back after the fetch is successful
+        .then((result) => {
+          if(result.error){
+            alert(result.error);
+          }
+          else{
+            alert('Form submitted successfully!');
+            navigate(-1); // Navigate back after the fetch is successful
+          }
         })
         .catch((err) => {
           alert(err);

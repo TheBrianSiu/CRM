@@ -189,8 +189,9 @@ router.put("/users-table/update/:id/:userid", async (req, res) => {
   }
 
   const validation = validateUser(updatedData);
+
   if (!validation.isValid) {
-    return res.status(400).json(validation.errors);
+    return res.status(400).json({message : validation.errors});
   }
 
   if (updatedData.username !== undefined) {
@@ -202,7 +203,7 @@ router.put("/users-table/update/:id/:userid", async (req, res) => {
           .json("Username already exists. Please choose a different username.");
       }
     } catch (error) {
-      return res.status(500).json({ message: "Internal Server Error" });
+      return res.status(500).json({ message: "Internal Server Error : username checker" });
     }
   }
 
@@ -210,7 +211,7 @@ router.put("/users-table/update/:id/:userid", async (req, res) => {
     try {
       const result = await assignAuth0Role(updatedData.user_id, updatedData.role);
     } catch (error) {
-      return res.status(500).json({ message: "Internal Server Error" });
+      return res.status(500).json({ message: "Internal Server Error : role assigment" });
     }
   }
 

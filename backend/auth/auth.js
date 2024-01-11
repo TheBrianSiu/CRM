@@ -140,7 +140,6 @@ const assignAuth0Role = async (id, roleId) =>{
     }
   } catch (error) {
     console.error("An error occurred:", error.message);
-    reject(error);
   }
 }
 
