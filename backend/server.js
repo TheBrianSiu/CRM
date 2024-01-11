@@ -9,8 +9,8 @@ const { expressjwt: jwt } = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 
 const authConfig = {
-  domain: process.env.auth0domain,
-  audience: process.env.audience,
+  domain: process.env.AUTH0DOMAIN,
+  audience: process.env.AUDIENCE,
 };
 
 const PORT = process.env.PORT || 3000;
@@ -42,7 +42,7 @@ const authCheck = jwt({
   algorithms: ['RS256'],
 });
 
-app.get('/', (req, res) => {
+app.get('/', (res) => {
   return res.json("from backend");
 });
 

@@ -101,5 +101,6 @@ export async function updateUser(id, updatedData, userid) {
   if (result.error) {
     return { error: `Failed to update user: ${result.error}` };
   }
+  fetchUserDataAndStoreLocal(userid);
   return result;
 }
