@@ -96,9 +96,9 @@ export function Table({ currentItems, Userdata }) {
                   />
                 </td>
                 <td className={className}>
-                  <Typography className="text-xs font-semibold text-blue-gray-600">
+                  {lastLogin != null ? (<Typography className="text-xs font-semibold text-blue-gray-600">
                     {lastLogin == null ? null : formatDate(lastLogin)}
-                  </Typography>
+                  </Typography>): null}
                 </td>
                 <td className={className}>
                   <Typography

@@ -126,7 +126,7 @@ export function Usersprofile() {
               index === data.length - 1 ? '' : 'border-b border-blue-gray-50'
             }`;
             return (
-              <div>
+              <div key={index}>
                 <div className="mb-10 flex items-center justify-between gap-6">
                   <div className="flex items-center gap-6">
                     <Avatar
@@ -417,8 +417,8 @@ export function Usersprofile() {
                             <div className=" px-4 py-3 text-left sm:px-6">
                               <Button
                                 variant="text"
-                                size="regular"
-                                ripple="light"
+                                size="md"
+                                ripple={true}
                                 onClick={() => {
                                   Resetpassword(data[0].email);
                                 }}
@@ -430,9 +430,8 @@ export function Usersprofile() {
                               <Button
                                 type="submit"
                                 color="indigo"
-                                buttonType="filled"
-                                size="regular"
-                                ripple="light"
+                                size="md"
+                                ripple={true}
                               >
                                 Save
                               </Button>
