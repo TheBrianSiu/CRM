@@ -21,9 +21,11 @@ import {
   taskstatusOptions,
   supervisor,
 } from '@/data';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export function ProjectsProfile() {
   const animatedComponents = makeAnimated();
+  const {user} = useAuth0();
   const { id } = useParams();
   const navigate = useNavigate();
   const [Cust, setCust] = useState([]);
@@ -43,7 +45,7 @@ export function ProjectsProfile() {
         .then(() => {
           const generatedId = id;
           removeAssignees(generatedId);
-          deleteCustomer(generatedId);
+          deleteCustomer(generatedId,user.sub);
 
           if (selectedUsers.length > 0) {
             handleSelectedUsers(generatedId);
