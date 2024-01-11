@@ -19,8 +19,9 @@ export async function changePassword(email) {
 export async function userRole(userId) {
   const result = await makeApiRequest(
     `${API_BASE_URL}/userrolesrequest/${userId}`,
-    'PUT',
+    'GET',
   );
+
   if (result.error) {
     return { error: `Failed to retrieve user role ${result.error}` };
   }

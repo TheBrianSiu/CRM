@@ -96,7 +96,7 @@ export function Usersprofile() {
           }
           else{
             alert('Form submitted successfully!');
-            navigate(-1); // Navigate back after the fetch is successful
+            navigate(-1); 
           }
         })
         .catch((err) => {
