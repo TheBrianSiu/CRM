@@ -71,12 +71,6 @@ export function ProjectsProfile() {
     }));
 
     addAssignees(userProjectData)
-      .then(() => {
-        if (selectedCust.length === 0) {
-          alert('The task is updated successfully!');
-          navigate(-1);
-        }
-      })
       .catch((err) => {
         alert(err);
       });
@@ -90,12 +84,6 @@ export function ProjectsProfile() {
     }));
 
     addCustomers(custProjectData)
-      .then(() => {
-        if (selectedUsers.length === 0) {
-          alert('The task is updated successfully!');
-          navigate(-1);
-        }
-      })
       .catch((err) => {
         alert(err);
       });

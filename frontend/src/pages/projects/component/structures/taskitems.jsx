@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDrag } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { ContextMenuTrigger } from 'react-contextmenu';
 import TaskMenu from '../contextmenu/taskmenu';
+import { useContextMenu } from 'react-contexify';
+import 'react-contexify/dist/ReactContexify.css';
 
 export function Taskitems({ task, columnId }) {
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
@@ -25,8 +26,20 @@ export function Taskitems({ task, columnId }) {
     return null;
   }
 
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+    show({
+      event: e,
+    });
+  };
+
+  const { show } = useContextMenu({
+    id: task.projectId
+  });
+
+
   return (
-    <ContextMenuTrigger id={`contextmenu-${task.projectId}`}>
+    <div onContextMenu={handleContextMenu}>
       <div
         ref={(node) => drag(node)}
         className={`rounded-lg border p-4 shadow-md ${
@@ -45,8 +58,10 @@ export function Taskitems({ task, columnId }) {
           <div className="text-sm">{task.priority}</div>
         </footer>
       </div>
-    </ContextMenuTrigger>
+      </div>
   );
 }
 
 export default Taskitems;
+
+
