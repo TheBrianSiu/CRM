@@ -55,9 +55,9 @@ export function Columns({ column, tasks, updateTaskStatus, addTask }) {
         }}
       >
         <div className="flex-1">
-          {column.taskIds.map((taskId) => {
+          {column.taskIds.map((taskId,index) => {
             const task = tasks.find((task) => task.projectId === taskId);
-            return <Taskitems task={task} columnId={column.id} />;
+            return <Taskitems key={index} task={task} columnId={column.id} />;
           })}
         </div>
       </div>

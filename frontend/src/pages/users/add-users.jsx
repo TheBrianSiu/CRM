@@ -403,9 +403,8 @@ export function Addusers() {
                       <Button
                         type="submit"
                         color="indigo"
-                        buttonType="filled"
-                        size="regular"
-                        ripple="light"
+                        size="md"
+                        ripple={true}
                       >
                         Add User
                       </Button>
