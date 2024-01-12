@@ -71,12 +71,6 @@ export function ProjectsProfile() {
     }));
 
     addAssignees(userProjectData)
-      .then(() => {
-        if (selectedCust.length === 0) {
-          alert('The task is updated successfully!');
-          navigate(-1);
-        }
-      })
       .catch((err) => {
         alert(err);
       });
@@ -90,12 +84,6 @@ export function ProjectsProfile() {
     }));
 
     addCustomers(custProjectData)
-      .then(() => {
-        if (selectedUsers.length === 0) {
-          alert('The task is updated successfully!');
-          navigate(-1);
-        }
-      })
       .catch((err) => {
         alert(err);
       });
@@ -144,8 +132,8 @@ export function ProjectsProfile() {
       </div>
       <Card className="mx-3 -mt-16 mb-6 lg:mx-4">
         <CardBody className="p-4">
-          {Data.map((task) => (
-            <div>
+          {Data.map((task,index) => (
+            <div key={index}>
               <div className="mb-10 flex items-center justify-between gap-6">
                 <div className="flex items-center gap-6">
                   <Avatar

@@ -86,7 +86,7 @@ export function Addcustomers() {
       <Card className="mx-3 -mt-16 mb-6 lg:mx-4">
         <CardBody className="p-4">
           {Data.map((customer, index) => (
-            <div>
+            <div key={index}>
               <div className="mb-10 flex items-center justify-between gap-6">
                 <div className="flex items-center gap-6">
                   <Avatar
